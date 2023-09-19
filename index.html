@@ -163,7 +163,8 @@
                                         });
 
                                         const html = $('#render-container').formRender('html');
-                                        const wrappedContent = wrapContentWithFormTemplate(html);
+                                        const transformedHTML = transformHTML(html);
+                                        const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                                         $('#render-container').html(wrappedContent);
                                     } 
 
@@ -185,7 +186,8 @@
                         });
 
                         const html = $('#render-container').formRender('html');
-                        const wrappedContent = wrapContentWithFormTemplate(html);
+                        const transformedHTML = transformHTML(html);
+                        const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                         $('#render-container').html(wrappedContent);
                     } 
 
