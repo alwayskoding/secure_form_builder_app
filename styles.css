@@ -1,0 +1,11 @@
+body {
+    padding: 0;
+    margin: 10px 0;
+    background: #f2f2f2 url('https://formbuilder.online/assets/img/noise.png');
+  }
+  
+  .save-all-wrap {
+    text-align: center;
+    padding: 20px;
+  }
+  
