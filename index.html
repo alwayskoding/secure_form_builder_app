@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +9,6 @@
 </head>
 <body>
     <div id="fb-editor"></div>
-    <button id="toggleFormType">Toggle Mailbox Form</button>
-    <button id="toggleAttachmentBtn">Add Attachment Button</button>
     <div id="render-container"></div>
     <button id="copyHTMLBtn" style="display:none;">Copy HTML</button>
     <textarea id="htmlOutput" style="display:none;"></textarea>
@@ -108,35 +105,58 @@
                                 description: 'Enter a RegExp for validation'
                             }
                         }
-                    }
+                    },
+                    actionButtons: [
+                        {
+                            id: 'toggleFormType',
+                            className: 'btn btn-info',
+                            label: window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form",
+                            type: 'button',
+                            events: {
+                                click: function() {
+                                    window.isMailboxForm = !window.isMailboxForm;
+                                    this.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
+                                }
+                            }
+                        },
+                        {
+                            id: 'toggleAttachmentBtn',
+                            className: 'btn btn-warning',
+                            label: 'Add Attachment to Form',
+                            type: 'button',
+                            events: {
+                                click: function() {
+                                    toggleAttachmentStatus(this);
+                                }
+                            }
+                        },
+                        {
+                            id: 'saveTemplate',
+                            className: 'btn btn-success',
+                            label: 'Save Template',
+                            type: 'button',
+                            events: {
+                                click: function() {
+                                    var formData = formBuilder.actions.getData('json', true);
+
+                                    if (formData) {
+                                        $('#render-container').formRender({
+                                            formData: formData
+                                        });
+
+                                        const html = $('#render-container').formRender('html');
+                                        const wrappedContent = wrapContentWithFormTemplate(html);
+                                        $('#render-container').html(wrappedContent);
+                                    } 
+
+                                    $('#copyHTMLBtn').show();
+                                }
+                            }
+                        }
+                    ]
                 };
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
-
-                $('#toggleFormType').on('click', function() {
-                    window.isMailboxForm = !window.isMailboxForm;
-                    $(this).text(window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form");
-                });
-
-                $('#toggleAttachmentBtn').on('click', function() {
-                    toggleAttachmentStatus(this);
-                });
-
-                $('body').on('click', '.save-template', function() {
-                    var formData = formBuilder.actions.getData('json', true);
-
-                    if (formData) {
-                        $('#render-container').formRender({
-                            formData: formData
-                        });
-
-                        const html = $('#render-container').formRender('html');
-                        const wrappedContent = wrapContentWithFormTemplate(html);
-                        $('#render-container').html(wrappedContent);
-                    } 
-
-                    $('#copyHTMLBtn').show();
-                });
 
                 $('#copyHTMLBtn').click(function() {
                     var formData = formBuilder.actions.getData('json', true);

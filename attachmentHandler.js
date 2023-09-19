@@ -2,10 +2,6 @@
 var hasAttachment = false;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-    // Event listener for toggling attachment
-    document.getElementById('toggleAttachmentBtn').addEventListener('click', function() {
-        toggleAttachmentStatus(this);
-    });
 
     window.addAttachmentToForm = function(content) {
         let formStart = '<form action="' + (window.isMailboxForm ? "/app/secureForms/submitFormAsMessage" : "/app/secureForms/submit") + 
