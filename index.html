@@ -6,6 +6,26 @@
     <title>Secure Form Builder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <style>
+       .save-template {
+            display: none !important;
+        }
+
+        div#fb-editor {
+            padding: 160px;
+        }
+
+        div#render-container {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .special {
+            margin-top: 20px !important;
+        }
+    </style>
+    
 </head>
 <body>
     <div id="fb-editor"></div>
@@ -132,7 +152,7 @@
                         },
                         {
                             id: 'saveTemplate',
-                            className: 'btn btn-success',
+                            className: 'btn btn-success special',
                             label: 'Save Template',
                             type: 'button',
                             events: {
