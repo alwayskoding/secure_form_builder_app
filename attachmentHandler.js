@@ -1,11 +1,10 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
-    // Declare a global variable to check if the form has an attachment or not
-    var hasAttachment = false;
+// Declare a global variable to check if the form has an attachment or not
+var hasAttachment = false;
 
+document.addEventListener("DOMContentLoaded", function(event) { 
     // Event listener for toggling attachment
     document.getElementById('toggleAttachmentBtn').addEventListener('click', function() {
-        hasAttachment = !hasAttachment;  // Toggle the attachment status
-        this.innerText = hasAttachment ? "Remove Attachment from Form" : "Add Attachment to Form";
+        toggleAttachmentStatus(this);
     });
 
     window.addAttachmentToForm = function(content) {
@@ -35,3 +34,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return formStart + formContent + formEnd;
     }
 });
+
+function toggleAttachmentStatus(buttonElement) {
+    hasAttachment = !hasAttachment;  // Toggle the attachment status
+    buttonElement.innerText = hasAttachment ? "Remove Attachment from Form" : "Add Attachment to Form";
+}
