@@ -163,7 +163,8 @@
                                     console.log("toggleFormType button clicked. Previous state:", window.isMailboxForm);
                                     window.isMailboxForm = !window.isMailboxForm;
                                     console.log("New state:", window.isMailboxForm);
-                                    this.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
+                                    console.log(this + 'is the thing on the left of this text a button cause it should be for form button');
+                                    this.innerText = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
                                 }
                             }
                         },
@@ -174,6 +175,7 @@
                             type: 'button',
                             events: {
                                 click: function() {
+                                    console.log(this + 'is the thing on the left of this text a button cause it should be');
                                     toggleAttachmentStatus(this);
                                 }
                             }
