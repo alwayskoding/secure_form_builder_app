@@ -23,7 +23,7 @@
             border: 1px solid #e1dfdf;
             padding: 2em;
         }
-        
+
         button#copyHTMLBtn {
             position: fixed;
             bottom: 0;
@@ -51,7 +51,8 @@
             width: 800px;
             border-bottom: 1px solid #e1dfdf;
             margin-bottom: 50px !important;
-            padding-bottom: 50px;
+            padding-bottom: 15px;
+            margin-top: 270px !important;
         }
 
         
@@ -224,9 +225,19 @@
                                     } 
 
                                     $('#copyHTMLBtn').show();
+
+                                    // Scroll to the .form_preview_section element
+                                    var targetElement = document.querySelector('.form_preview_section');
+                                    if (targetElement) {
+                                        targetElement.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'start'
+                                        });
+                                    }
                                 }
                             }
                         }
+
                     ]
                 };
 
