@@ -51,7 +51,7 @@
 <body>
     <div class="top_info">
         <h1>Secure Forms Made Easy</h1>
-        <p>Simply drag and drop and item from the right onto the form preview on the left.</p>
+        <p>Simply drag and drop an item from the right onto the form preview on the left.</p>
     </div>
     
     <div id="fb-editor"></div>
@@ -160,7 +160,9 @@
                             type: 'button',
                             events: {
                                 click: function() {
+                                    console.log("toggleFormType button clicked. Previous state:", window.isMailboxForm);
                                     window.isMailboxForm = !window.isMailboxForm;
+                                    console.log("New state:", window.isMailboxForm);
                                     this.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
                                 }
                             }

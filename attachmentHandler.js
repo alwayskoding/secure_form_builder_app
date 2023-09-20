@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function toggleAttachmentStatus(buttonElement) {
+    console.log("toggleAttachmentStatus called. Previous state:", hasAttachment);
     hasAttachment = !hasAttachment;  // Toggle the attachment status
+    console.log("New state:", hasAttachment);
     buttonElement.innerText = hasAttachment ? "Remove Attachment from Form" : "Add Attachment to Form";
 }
