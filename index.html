@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <style>
-       .save-template {
-            display: none !important;
+
+        body {
+            padding: 160px !important;
         }
 
-        div#fb-editor {
-            padding: 160px;
+       .save-template {
+            display: none !important;
         }
 
         div#render-container {
@@ -21,11 +22,38 @@
             margin: 0 auto;
         }
 
+        button#copyHTMLBtn {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #35363a;
+            color: #ffffff;
+            padding: 15px 24px;
+            outline: none;
+            border: 0;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: 20px;
+            font-family: Helvetica;
+        }
+
+        .top_info {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #e1dfdf;
+            padding-bottom: 20px;
+        }
+
         
     </style>
     
 </head>
 <body>
+    <div class="top_info">
+        <h1>Secure Forms Made Easy</h1>
+        <p>Simply drag and drop and item from the right onto the form preview on the left.</p>
+    </div>
+    
     <div id="fb-editor"></div>
     <div id="render-container"></div>
     <button id="copyHTMLBtn" style="display:none;">Copy HTML</button>
