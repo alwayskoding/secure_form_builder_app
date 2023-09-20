@@ -163,8 +163,10 @@
                                     console.log("toggleFormType button clicked. Previous state:", window.isMailboxForm);
                                     window.isMailboxForm = !window.isMailboxForm;
                                     console.log("New state:", window.isMailboxForm);
-                                    console.log(this);
-                                    this.innerText = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
+                                    
+                                    // Getting a reference to the button using its ID
+                                    var toggleButton = document.getElementById('toggleFormType');
+                                    toggleButton.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
                                 }
                             }
                         },
@@ -175,8 +177,10 @@
                             type: 'button',
                             events: {
                                 click: function() {
-                                    console.log(this);
-                                    toggleAttachmentStatus(this);
+                                    // Getting a reference to the button using its ID
+                                    var attachmentButton = document.getElementById('toggleAttachmentBtn');
+                                    
+                                    toggleAttachmentStatus(attachmentButton);
                                 }
                             }
                         },
