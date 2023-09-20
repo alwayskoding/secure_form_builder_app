@@ -165,7 +165,8 @@
                                     console.log("New state:", window.isMailboxForm);
                                     
                                     // Getting a reference to the button using its ID
-                                    var toggleButton = document.getElementById('toggleFormType');
+                                    var toggleButton = document.querySelector("[id$='-toggleAttachmentBtn-action']");
+
                                     toggleButton.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
                                 }
                             }
@@ -178,7 +179,8 @@
                             events: {
                                 click: function() {
                                     // Getting a reference to the button using its ID
-                                    var attachmentButton = document.getElementById('toggleAttachmentBtn');
+                                    var attachmentButton = document.querySelector("[id$='-toggleAttachmentBtn-action']");
+
                                     
                                     toggleAttachmentStatus(attachmentButton);
                                 }
