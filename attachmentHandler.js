@@ -16,7 +16,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         let attachmentSection = '';
         if (hasAttachment) {
-            attachmentSection = '<script src="/lib/secureForms/attachments.js"></script>' +
+            attachmentSection = '<script src="/lib/secureForms/attachments.js"' +
+            (window.location.hostname === 'alwayskoding.github.io' ? ' data-skip="true"' : '') +
+            '></script>' +
             '<div id="sf:attachmentsContainer"></div>' +
             '<button id="sf:addAttachment" class="btn">Add Attachment</button>';
         }
@@ -29,6 +31,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return formStart + formContent + formEnd;
     }
+
+    // Skip the execution of scripts with the 'data-skip' attribute on GitHub Pages
+    const scriptsToSkip = document.querySelectorAll('script[data-skip="true"]');
+    scriptsToSkip.forEach(script => {
+        script.type = "text/plain"; // Changing the type will prevent the script from being executed by the browser
+    });
+    
 });
 
 function toggleAttachmentStatus(buttonElement) {
