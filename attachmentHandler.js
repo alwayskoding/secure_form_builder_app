@@ -3,6 +3,13 @@ var hasAttachment = false;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
 
+    if (window.location.hostname === "alwayskoding.github.io") {
+        const scriptTag = document.querySelector('script[src="/lib/secureForms/attachments.js"]');
+        if (scriptTag) {
+            scriptTag.remove();
+        }
+    }
+
     window.addAttachmentToForm = function(content) {
         let formStart = '<form action="' + (window.isMailboxForm ? "/app/secureForms/submitFormAsMessage" : "/app/secureForms/submit") + 
         '" method="POST" enctype="multipart/form-data" name="form_name_goes_here">' +
