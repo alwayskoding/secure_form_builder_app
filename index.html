@@ -273,20 +273,22 @@
 
                     var htmlContent = $('#render-container').html();
 
-                    // Find the position where you want to insert the script
-                    const scriptToAdd = '<scr' + 'ipt src="/lib/secureForms/attachments.js"></scr' + 'ipt>';
-                    const insertionPoint = htmlContent.indexOf('<div id="sf:attachmentsContainer">');
+                    if (hasAttachment) {
+                        // If attachments are included, add the attachments.js script
+                        const scriptToAdd = '<scr' + 'ipt src="/lib/secureForms/attachments.js"></scr' + 'ipt>';
+                        const insertionPoint = htmlContent.indexOf('<div id="sf:attachmentsContainer">');
 
-                    if (insertionPoint !== -1) {
-                        // Insert the script right before the desired point
-                        htmlContent = [
-                            htmlContent.slice(0, insertionPoint),
-                            scriptToAdd,
-                            htmlContent.slice(insertionPoint)
-                        ].join('');
-                    } else {
-                        // If for some reason the insertion point is not found, append the script to the end
-                        htmlContent += scriptToAdd;
+                        if (insertionPoint !== -1) {
+                            // Insert the script right before the desired point
+                            htmlContent = [
+                                htmlContent.slice(0, insertionPoint),
+                                scriptToAdd,
+                                htmlContent.slice(insertionPoint)
+                            ].join('');
+                        } else {
+                            // If for some reason the insertion point is not found, append the script to the end
+                            htmlContent += scriptToAdd;
+                        }
                     }
 
                     navigator.clipboard.writeText(htmlContent).then(function() {
@@ -297,6 +299,7 @@
 
                     $('#htmlOutput').hide();
                 });
+
 
 
 
