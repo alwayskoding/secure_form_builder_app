@@ -196,6 +196,8 @@
                                             if (result.isConfirmed) {
                                                 // Store the mailbox ID temporarily
                                                 window.mailboxID = result.value;
+                                                console.log("Stored Mailbox ID:", window.mailboxID);
+
                                             }
                                         });
                                     }
@@ -247,6 +249,8 @@
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     mailboxInput.value = result.value;
+                                                    console.log("Setting mailbox ID for:", mailboxInput, "with value:", window.mailboxID);
+
                                                 } else {
                                                     // If the user cancels, you can either prevent form saving or save it anyway.
                                                     // I'm stopping the save process in this example:
