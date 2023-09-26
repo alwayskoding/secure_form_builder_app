@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let formStart = '<form action="' + (window.isMailboxForm ? "/app/secureForms/submitFormAsMessage" : "/app/secureForms/submit") + 
         '" method="POST" enctype="multipart/form-data" name="form_name_goes_here">' +
         '<input type="hidden" value="form_name_goes_here" name="sf:form_name" />' +
-        '<input type="hidden" name="sf:success_page" value="/success_page_link_goes_here" />' +
-        '<input type="hidden" name="sf:failure_page" value="/failure_page_link_goes_here" />';
+        '<input type="hidden" name="sf:success_page" value="/p_page.cfm?pptitle=success%5Fsponsor%5Fpage" />' +
+        '<input type="hidden" name="sf:failure_page" value="/p_page.cfm?pptitle=failure%5Fsponsor%5Fpage" />';
 
         if (window.isMailboxForm) {
             formStart += '<input type="hidden" name="sf:recipient_mailbox" value="mailbox_id_number_goes_here">';
