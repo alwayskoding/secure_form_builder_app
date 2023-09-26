@@ -194,14 +194,12 @@
                                             showCancelButton: true
                                         }).then((result) => {
                                             if (result.isConfirmed) {
-                                                // Update the hidden input's value
-                                                const mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                if (mailboxInput) {
-                                                    mailboxInput.value = result.value;
-                                                }
+                                                // Store the mailbox ID temporarily
+                                                window.mailboxID = result.value;
                                             }
                                         });
                                     }
+
                                     
                                     // Getting a reference to the button using its ID
                                     var toggleButton = document.querySelector("[id$='-toggleFormType-action']");
@@ -233,7 +231,12 @@
                                 click: function() {
                                     if (window.isMailboxForm) {
                                         const mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
+                                        // If the hidden input is available and we have stored the mailboxID
+                                        if (mailboxInput && window.mailboxID) {
+                                            mailboxInput.value = window.mailboxID;
+                                            // Optionally, clear the global variable after using it
+                                            delete window.mailboxID;
+                                        } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
                                             // If the value isn't a number, prompt the user again
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
@@ -252,6 +255,7 @@
                                             });
                                         }
                                     }
+
 
                                     var formData = formBuilder.actions.getData('json', true);
 
