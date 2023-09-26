@@ -88,6 +88,15 @@
             jQuery(function($) {
                 window.isMailboxForm = false;
 
+
+                function removeAttachmentScriptTagOnSave() {
+                    console.log("script should have been removed for now until copy button is clicked");
+                    const scriptTag = document.querySelector('script[src="/lib/secureForms/attachments.js"]');
+                    if (scriptTag) {
+                        scriptTag.remove();
+                    }
+                }
+
                 var options = {
                     dataType: 'json',
                     fields: [
