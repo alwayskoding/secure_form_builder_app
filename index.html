@@ -196,11 +196,10 @@
                                             if (result.isConfirmed) {
                                                 // Store the mailbox ID temporarily
                                                 window.mailboxID = result.value;
-                                                console.log("Stored Mailbox ID:", window.mailboxID);
-
                                             }
                                         });
                                     }
+
 
                                     
                                     // Getting a reference to the button using its ID
@@ -232,23 +231,24 @@
                             events: {
                                 click: function() {
                                     if (window.isMailboxForm) {
-                                        console.log("Mailbox form detected");
-                                        
-                                        const mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        
-                                        console.log("Mailbox Input:", mailboxInput);
+                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                        const renderedFormDiv = document.querySelector('.rendered-form');
 
-                                        if (mailboxInput && window.mailboxID) {
-                                            console.log("Updating Mailbox Input with stored ID:", window.mailboxID);
-                                            
+                                        // If the hidden input is not present in the DOM, create and insert it before the rendered form.
+                                        if (!mailboxInput) {
+                                            mailboxInput = document.createElement('input');
+                                            mailboxInput.type = 'hidden';
+                                            mailboxInput.name = 'sf:recipient_mailbox';
+                                            renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
+                                        }
+
+                                        // If the hidden input is available and we have stored the mailboxID
+                                        if (window.mailboxID) {
                                             mailboxInput.value = window.mailboxID;
-                                            
                                             // Optionally, clear the global variable after using it
                                             delete window.mailboxID;
-
-                                        } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
-                                            console.log("Prompting user for Mailbox ID again because current value is not a number.");
-                                            
+                                        } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                            // If the value isn't a number, prompt the user again
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
                                                 input: 'text',
@@ -259,19 +259,13 @@
                                                 if (result.isConfirmed) {
                                                     mailboxInput.value = result.value;
                                                     console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
-
                                                 } else {
                                                     // If the user cancels, you can either prevent form saving or save it anyway.
                                                     // I'm stopping the save process in this example:
                                                     return;
                                                 }
                                             });
-
-                                        } else {
-                                            console.log("Neither conditions met for updating Mailbox ID.");
                                         }
-                                    } else {
-                                        console.log("Not a Mailbox form.");
                                     }
 
 
