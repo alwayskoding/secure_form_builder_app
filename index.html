@@ -222,7 +222,10 @@
                                         const transformedHTML = transformHTML(html);
                                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                                         $('#render-container').html(wrappedContent);
-                                    } 
+                                    }
+
+                                    // Call the function to remove the attachments.js script tag
+                                    removeAttachmentScriptTagOnSave();
 
                                     $('#copyHTMLBtn').show();
 
@@ -237,6 +240,7 @@
                                 }
                             }
                         }
+
 
                     ]
                 };
