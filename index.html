@@ -232,14 +232,23 @@
                             events: {
                                 click: function() {
                                     if (window.isMailboxForm) {
+                                        console.log("Mailbox form detected");
+                                        
                                         const mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        // If the hidden input is available and we have stored the mailboxID
+                                        
+                                        console.log("Mailbox Input:", mailboxInput);
+
                                         if (mailboxInput && window.mailboxID) {
+                                            console.log("Updating Mailbox Input with stored ID:", window.mailboxID);
+                                            
                                             mailboxInput.value = window.mailboxID;
+                                            
                                             // Optionally, clear the global variable after using it
                                             delete window.mailboxID;
+
                                         } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
-                                            // If the value isn't a number, prompt the user again
+                                            console.log("Prompting user for Mailbox ID again because current value is not a number.");
+                                            
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
                                                 input: 'text',
@@ -249,7 +258,7 @@
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     mailboxInput.value = result.value;
-                                                    console.log("Setting mailbox ID for:", mailboxInput, "with value:", window.mailboxID);
+                                                    console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
 
                                                 } else {
                                                     // If the user cancels, you can either prevent form saving or save it anyway.
@@ -257,8 +266,14 @@
                                                     return;
                                                 }
                                             });
+
+                                        } else {
+                                            console.log("Neither conditions met for updating Mailbox ID.");
                                         }
+                                    } else {
+                                        console.log("Not a Mailbox form.");
                                     }
+
 
 
                                     var formData = formBuilder.actions.getData('json', true);
