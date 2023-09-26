@@ -81,7 +81,7 @@
     <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
     <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
     <script src="transform.js"></script>
-    <script src="attachmentHandler.js" async defer></script>
+    <script src="attachmentHandler.js" defer></script>
 
     <script>
         function mainScript() {
@@ -243,6 +243,16 @@
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
+                function ensureAttachmentScriptBeforeCopy() {
+                        const renderContainer = document.getElementById('render-container');
+                        if (!renderContainer.querySelector('script[src="attachmentHandler.js"]')) {
+                            // If the script isn't present, append it
+                            const scriptTag = document.createElement('script');
+                            scriptTag.src = 'attachmentHandler.js';
+                            renderContainer.appendChild(scriptTag);
+                        }
+                    }
+
                 $('#copyHTMLBtn').click(function() {
                     var formData = formBuilder.actions.getData('json', true);
 
@@ -257,6 +267,9 @@
                         $('#render-container').html(wrappedContent);
                     } 
 
+                    // Ensure that the attachments.js script is present in the copied content
+                    ensureAttachmentScriptBeforeCopy();
+
                     var htmlContent = $('#render-container').html();
 
                     navigator.clipboard.writeText(htmlContent).then(function() {
@@ -267,6 +280,7 @@
 
                     $('#htmlOutput').hide();
                 });
+
 
                 function wrapContentWithFormTemplate(content) {
                     return addAttachmentToForm(content);
