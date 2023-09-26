@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         let attachmentSection = '';
         if (hasAttachment) {
-            attachmentSection = '<script src="/lib/secureForms/attachments.js"></script>' +
+            attachmentSection = 
             '<div id="sf:attachmentsContainer"></div>' +
             '<button id="sf:addAttachment" class="btn">Add Attachment</button>';
         }
