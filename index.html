@@ -85,7 +85,6 @@
 
     <script>
         function mainScript() {
-            jQuery(function($) {
                 window.isMailboxForm = false;
 
 
@@ -256,17 +255,9 @@
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
-                function ensureAttachmentScriptBeforeCopy() {
-                        const renderContainer = document.getElementById('render-container');
-                        if (!renderContainer.querySelector('script[src="attachmentHandler.js"]')) {
-                            // If the script isn't present, append it
-                            const scriptTag = document.createElement('script');
-                            scriptTag.src = 'attachmentHandler.js';
-                            renderContainer.appendChild(scriptTag);
-                        }
-                    }
+                
 
-                $('#copyHTMLBtn').click(function() {
+                    $('#copyHTMLBtn').click(function() {
                     var formData = formBuilder.actions.getData('json', true);
 
                     if (formData) {
@@ -278,12 +269,14 @@
                         const transformedHTML = transformHTML(html);
                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                         $('#render-container').html(wrappedContent);
-                    } 
-
-                    // Ensure that the attachments.js script is present in the copied content
-                    ensureAttachmentScriptBeforeCopy();
+                    }
 
                     var htmlContent = $('#render-container').html();
+
+                    // Manually add the attachments.js script to the copied content
+                    const scriptToAdd = '<scr' + 'ipt src="/lib/secureForms/attachments.js"></scr' + 'ipt>';
+
+                    htmlContent += scriptToAdd;
 
                     navigator.clipboard.writeText(htmlContent).then(function() {
                         alert('HTML copied to clipboard!');
@@ -293,6 +286,7 @@
 
                     $('#htmlOutput').hide();
                 });
+
 
 
                 function wrapContentWithFormTemplate(content) {
