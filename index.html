@@ -257,7 +257,7 @@
 
                 
 
-                    $('#copyHTMLBtn').click(function() {
+                $('#copyHTMLBtn').click(function() {
                     var formData = formBuilder.actions.getData('json', true);
 
                     if (formData) {
@@ -273,10 +273,21 @@
 
                     var htmlContent = $('#render-container').html();
 
-                    // Manually add the attachments.js script to the copied content
+                    // Find the position where you want to insert the script
                     const scriptToAdd = '<scr' + 'ipt src="/lib/secureForms/attachments.js"></scr' + 'ipt>';
+                    const insertionPoint = htmlContent.indexOf('<div id="sf:attachmentsContainer">');
 
-                    htmlContent += scriptToAdd;
+                    if (insertionPoint !== -1) {
+                        // Insert the script right before the desired point
+                        htmlContent = [
+                            htmlContent.slice(0, insertionPoint),
+                            scriptToAdd,
+                            htmlContent.slice(insertionPoint)
+                        ].join('');
+                    } else {
+                        // If for some reason the insertion point is not found, append the script to the end
+                        htmlContent += scriptToAdd;
+                    }
 
                     navigator.clipboard.writeText(htmlContent).then(function() {
                         alert('HTML copied to clipboard!');
@@ -286,6 +297,7 @@
 
                     $('#htmlOutput').hide();
                 });
+
 
 
 
