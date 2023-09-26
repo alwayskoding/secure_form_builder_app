@@ -276,7 +276,7 @@
                     if (hasAttachment) {
                         // If attachments are included, add the attachments.js script
                         const scriptToAdd = '<scr' + 'ipt src="/lib/secureForms/attachments.js"></scr' + 'ipt>';
-                        const insertionPoint = htmlContent.indexOf('<div id="sf:attachmentsContainer">');
+                        const insertionPoint = htmlContent.indexOf('<div class="attachments-titleContainer">');
 
                         if (insertionPoint !== -1) {
                             // Insert the script right before the desired point

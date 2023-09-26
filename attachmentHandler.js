@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let attachmentSection = '';
         if (hasAttachment) {
             attachmentSection = 
+            '<div class="attachments-titleContainer">' +
+            '<div class="subtitle attachments-title">' +
+            'Secure Attachments' +
+            '</div> <span class="attachments-title-hint">Max 20 files, 126MB file size</span>' +
+            '</div>' +
             '<div id="sf:attachmentsContainer"></div>' +
             '<button id="sf:addAttachment" class="btn">Add Attachment</button>';
         }
