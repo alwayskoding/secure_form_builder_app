@@ -235,7 +235,7 @@
                                         const renderedFormDiv = document.querySelector('.rendered-form');
 
                                         // If the hidden input is not present in the DOM, create and insert it before the rendered form.
-                                        if (!mailboxInput) {
+                                        if (!mailboxInput && renderedFormDiv) { // Make sure renderedFormDiv exists
                                             mailboxInput = document.createElement('input');
                                             mailboxInput.type = 'hidden';
                                             mailboxInput.name = 'sf:recipient_mailbox';
@@ -243,11 +243,11 @@
                                         }
 
                                         // If the hidden input is available and we have stored the mailboxID
-                                        if (window.mailboxID) {
+                                        if (window.mailboxID && mailboxInput) { // Ensure mailboxInput exists before setting its value
                                             mailboxInput.value = window.mailboxID;
                                             // Optionally, clear the global variable after using it
                                             delete window.mailboxID;
-                                        } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                        } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
                                             // If the value isn't a number, prompt the user again
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
