@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         '<input type="hidden" name="sf:failure_page" value="/failure_page_link_goes_here" />';
 
         if (window.isMailboxForm) {
-            formStart += '<input type="hidden" name="sf:recipient_mailbox" value="mailbox_id_number_goes_here">';
+            formStart += `<input type="hidden" name="sf:recipient_mailbox" value="${window.mailboxID || 'mailbox_id_number_goes_here'}">`;
+
         }
 
         let attachmentSection = '';
