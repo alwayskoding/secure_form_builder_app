@@ -224,20 +224,25 @@
                             }
                         },
                         {
-                            id: 'saveTemplate',
-                            className: 'btn btn-success special',
-                            label: 'Save Template',
-                            type: 'button',
-                            events: {
-                                click: function() {
+                            "id": "saveTemplate",
+                            "className": "btn btn-success special",
+                            "label": "Save Template",
+                            "type": "button",
+                            "events": {
+                                "click": function() {
+                                    let currentMailboxID = null;
+                                    const existingMailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                    if (existingMailboxInput) {
+                                        currentMailboxID = existingMailboxInput.value;
+                                    }
+
                                     if (window.isMailboxForm) {
                                         console.log('Mailbox form detected');
-
+                                        
                                         let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
                                         const renderedFormDiv = document.querySelector('.rendered-form');
                                         console.log('Mailbox Input:', mailboxInput);
 
-                                        // If the hidden input is not present in the DOM, create and insert it before the rendered form.
                                         if (!mailboxInput && renderedFormDiv) { 
                                             console.log('Inserting new mailbox input');
                                             mailboxInput = document.createElement('input');
@@ -246,11 +251,9 @@
                                             renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
                                         }
 
-                                        // If the hidden input is available and we have stored the mailboxID
                                         if (mailboxInput && window.mailboxID) {
                                             console.log('Updating mailbox input with stored value:', window.mailboxID);
                                             mailboxInput.value = window.mailboxID;
-                                            // Optionally, clear the global variable after using it
                                             delete window.mailboxID;
                                         } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
                                             console.log('Prompting for new mailbox ID');
@@ -265,8 +268,6 @@
                                                     mailboxInput.value = result.value;
                                                     console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
                                                 } else {
-                                                    // If the user cancels, you can either prevent form saving or save it anyway.
-                                                    // I'm stopping the save process in this example:
                                                     return;
                                                 }
                                             });
@@ -274,9 +275,6 @@
                                             console.log('Neither conditions met for updating Mailbox ID.');
                                         }
                                     }
-
-
-
 
                                     var formData = formBuilder.actions.getData('json', true);
 
@@ -291,9 +289,12 @@
                                         $('#render-container').html(wrappedContent);
                                     } 
 
-                                    $('#copyHTMLBtn').show();
+                                    const newMailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                    if (newMailboxInput && currentMailboxID) {
+                                        newMailboxInput.value = currentMailboxID;
+                                    }
 
-                                    // Scroll to the .form_preview_section element
+                                    $('#copyHTMLBtn').show();
                                     var targetElement = document.querySelector('.form_preview_section');
                                     if (targetElement) {
                                         targetElement.scrollIntoView({
@@ -304,6 +305,7 @@
                                 }
                             }
                         }
+
 
 
                     ]
