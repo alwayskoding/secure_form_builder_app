@@ -199,7 +199,7 @@
 
                                                 const renderedFormDiv = document.querySelector('.rendered-form');
                                                 let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                // Create the hidden input here if it doesn't already exist
+                                                
                                                 if (!mailboxInput && renderedFormDiv) { 
                                                     console.log('Inserting new mailbox input');
                                                     mailboxInput = document.createElement('input');
@@ -207,9 +207,23 @@
                                                     mailboxInput.name = 'sf:recipient_mailbox';
                                                     renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
                                                 }
+                                                
+                                                // If mailboxInput exists, update its value with the new mailbox ID
+                                                if (mailboxInput) {
+                                                    console.log('Updating mailbox input with new value:', window.mailboxID);
+                                                    mailboxInput.value = window.mailboxID;
+                                                }
                                             }
                                         });
+                                    } else {
+                                        // If it is a normal form, remove the hidden mailbox input if it exists
+                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                        if (mailboxInput) {
+                                            console.log('Removing mailbox input as it is a normal form');
+                                            mailboxInput.remove();
+                                        }
                                     }
+
                                     
                                     // Getting a reference to the button using its ID
                                     var toggleButton = document.querySelector("[id$='-toggleFormType-action']");
