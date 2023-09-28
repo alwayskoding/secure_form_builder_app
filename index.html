@@ -173,7 +173,7 @@
                         }
                     },
                     actionButtons: [
-                        {
+                    {
                             id: 'toggleFormType',
                             className: 'btn btn-info',
                             label: window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form",
@@ -196,11 +196,20 @@
                                             if (result.isConfirmed) {
                                                 // Store the mailbox ID temporarily
                                                 window.mailboxID = result.value;
+
+                                                const renderedFormDiv = document.querySelector('.rendered-form');
+                                                let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                                // Create the hidden input here if it doesn't already exist
+                                                if (!mailboxInput && renderedFormDiv) { 
+                                                    console.log('Inserting new mailbox input');
+                                                    mailboxInput = document.createElement('input');
+                                                    mailboxInput.type = 'hidden';
+                                                    mailboxInput.name = 'sf:recipient_mailbox';
+                                                    renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
+                                                }
                                             }
                                         });
                                     }
-
-
                                     
                                     // Getting a reference to the button using its ID
                                     var toggleButton = document.querySelector("[id$='-toggleFormType-action']");
@@ -230,49 +239,36 @@
                             "type": "button",
                             "events": {
                                 "click": function() {
-                                    let currentMailboxID = null;
-                                    const existingMailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                    if (existingMailboxInput) {
-                                        currentMailboxID = existingMailboxInput.value;
-                                    }
-
                                     if (window.isMailboxForm) {
                                         console.log('Mailbox form detected');
                                         
                                         let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        const renderedFormDiv = document.querySelector('.rendered-form');
                                         console.log('Mailbox Input:', mailboxInput);
 
-                                        if (!mailboxInput && renderedFormDiv) { 
-                                            console.log('Inserting new mailbox input');
-                                            mailboxInput = document.createElement('input');
-                                            mailboxInput.type = 'hidden';
-                                            mailboxInput.name = 'sf:recipient_mailbox';
-                                            renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
-                                        }
-
-                                        if (mailboxInput && window.mailboxID) {
-                                            console.log('Updating mailbox input with stored value:', window.mailboxID);
-                                            mailboxInput.value = window.mailboxID;
-                                            delete window.mailboxID;
-                                        } else if (mailboxInput && !/^\d+$/.test(mailboxInput.value)) {
-                                            console.log('Prompting for new mailbox ID');
-                                            Swal.fire({
-                                                title: 'Enter Mailbox ID',
-                                                input: 'text',
-                                                inputLabel: 'Mailbox ID',
-                                                inputPlaceholder: 'Enter the Mailbox ID here',
-                                                showCancelButton: true
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    mailboxInput.value = result.value;
-                                                    console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
-                                                } else {
-                                                    return;
-                                                }
-                                            });
+                                        if (mailboxInput) {
+                                            if (window.mailboxID) {
+                                                console.log('Updating mailbox input with stored value:', window.mailboxID);
+                                                mailboxInput.value = window.mailboxID;
+                                                delete window.mailboxID;
+                                            } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                                console.log('Prompting for new mailbox ID');
+                                                Swal.fire({
+                                                    title: 'Enter Mailbox ID',
+                                                    input: 'text',
+                                                    inputLabel: 'Mailbox ID',
+                                                    inputPlaceholder: 'Enter the Mailbox ID here',
+                                                    showCancelButton: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        mailboxInput.value = result.value;
+                                                        console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
+                                                    } else {
+                                                        return;
+                                                    }
+                                                });
+                                            }
                                         } else {
-                                            console.log('Neither conditions met for updating Mailbox ID.');
+                                            console.log('Mailbox input not found. Ensure it is created when toggling to mailbox form.');
                                         }
                                     }
 
@@ -287,11 +283,6 @@
                                         const transformedHTML = transformHTML(html);
                                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                                         $('#render-container').html(wrappedContent);
-                                    } 
-
-                                    const newMailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                    if (newMailboxInput && currentMailboxID) {
-                                        newMailboxInput.value = currentMailboxID;
                                     }
 
                                     $('#copyHTMLBtn').show();
@@ -305,9 +296,6 @@
                                 }
                             }
                         }
-
-
-
                     ]
                 };
 

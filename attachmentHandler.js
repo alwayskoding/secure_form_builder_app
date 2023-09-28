@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         if (window.isMailboxForm) {
             formStart += `<input type="hidden" name="sf:recipient_mailbox" value="${window.mailboxID || 'mailbox_id_number_goes_here'}">`;
-
         }
 
         let attachmentSection = '';
@@ -30,6 +29,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         return formStart + formContent + formEnd;
     }
+
+    // Dispatch a custom event to signal that the function is ready
+    var functionReadyEvent = new Event('functionReady');
+    document.dispatchEvent(functionReadyEvent);
+
 });
 
 function toggleAttachmentStatus(buttonElement) {
