@@ -263,7 +263,7 @@
                                             if (window.mailboxID) {
                                                 console.log('Updating mailbox input with stored value:', window.mailboxID);
                                                 mailboxInput.value = window.mailboxID;
-                                                delete window.mailboxID;
+                                                
                                             } else if (!/^\d+$/.test(mailboxInput.value)) {
                                                 console.log('Prompting for new mailbox ID');
                                                 Swal.fire({
