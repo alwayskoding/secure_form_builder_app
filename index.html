@@ -274,8 +274,11 @@
                                                     showCancelButton: true
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
+                                                        // Reselect mailboxInput from the DOM
+                                                        mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                                        // Now update its value
                                                         mailboxInput.value = result.value;
-                                                        console.log("Setting mailbox ID for:", mailboxInput, "with value:", result.value);
+                                                        console.log('Updated mailboxInput:', mailboxInput, 'with value:', result.value);
                                                     } else {
                                                         return;
                                                     }
@@ -310,6 +313,7 @@
                                 }
                             }
                         }
+
                     ]
                 };
 
