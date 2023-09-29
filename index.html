@@ -89,54 +89,47 @@
                 window.isMailboxForm = false;
 
                 var options = {
-                    fieldRemoveWarn: true,
                     dataType: 'json',
                     fields: [
                         {
                             label: "Email",
                             type: "text",
                             subtype: "email",
-                            icon: "✉",
-                            category: "Contact Information"
+                            icon: "✉"
                         },
                         {
                             label: "Phone Number",
                             type: "text",
                             subtype: "tel",
-                            icon: "☎",
-                            category: "Contact Information"
+                            icon: "☎"
                         },
                         {
                             label: "Member First Name",
                             type: "text",
                             name: "member_first_name",
                             placeholder: "Will be auto-filled with Member's First Name",
-                            value: "|member.first_name|",
-                            category: "Member Information"
+                            value: "|member.first_name|"
                         },
                         {
                             label: "Member Middle Name",
                             type: "text",
                             name: "member_middle_name",
                             placeholder: "Will be auto-filled with Member's Middle Name",
-                            value: "|member.middle_name|",
-                            category: "Member Information"
+                            value: "|member.middle_name|"
                         },
                         {
                             label: "Member Last Name",
                             type: "text",
                             name: "member_last_name",
                             placeholder: "Will be auto-filled with Member's Last Name",
-                            value: "|member.last_name|",
-                            category: "Member Information"
+                            value: "|member.last_name|"
                         },
                         {
                             label: "Member ID",
                             type: "text",
                             name: "member_ID",
                             placeholder: "Will be auto-filled with Member's ID",
-                            value: "|member.memberId|",
-                            category: "Member Information"
+                            value: "|member.memberId|"
                         },
                         {
                             label: "Member Email",
@@ -144,32 +137,28 @@
                             subtype: "email",
                             name: "member_email",
                             placeholder: "Will be auto-filled with Member's Email",
-                            value: "|member.email|",
-                            category: "Member Information"
+                            value: "|member.email|"
                         },
                         {
                             label: "Member Birthdate",
                             type: "text",
                             name: "member_birthdate",
                             placeholder: "Will be auto-filled with Member's Birthdate",
-                            value: "|member.birthdate|",
-                            category: "Member Information"
+                            value: "|member.birthdate|"
                         },
                         {
                             label: "Member Benefit Plan ID",
                             type: "text",
                             name: "member_benefit_plan_id",
                             placeholder: "Will be auto-filled with Member's Benefit Plan ID",
-                            value: "|member.benefit_plan_id|",
-                            category: "Member Information"
+                            value: "|member.benefit_plan_id|"
                         },
                         {
                             label: "Member Benefit Plan Name",
                             type: "text",
                             name: "member_benefit_plan_name",
                             placeholder: "Will be auto-filled with Member's Benefit Plan Name",
-                            value: "|member.benefit_plan_name|",
-                            category: "Member Information"
+                            value: "|member.benefit_plan_name|"
                         }
                     ],
                     typeUserAttrs: {
@@ -285,41 +274,42 @@
             });
         }
 
+
+
+
+
+        var fieldCategories = {
+            "Email": "Contact Information",
+            "Phone Number": "Contact Information",
+            "Member First Name": "Member Information",
+            "Member Last Name": "Member Information"
+            //... other field-label-to-category mappings
+        };
+
+        function findCategoryByLabel(label) {
+            return fieldCategories[label] || null;
+        }
+
         //Create categories for input option panel on right of UI
         function createCategories() {
             var categories = {};
-            
+
             // Loop through each field and organize by category
             $('.frmb-control > li').each(function() {
                 var field = $(this);
                 var label = field.find('span').text();
-                var category = findCategoryByLabel(label); // Implement this function
-                
-                if (category) { // Check if the category exists
-                    if (!categories[category]) {
-                        categories[category] = $('<li class="category"></li>').text(category);
-                        field.before(categories[category]);
-                    }
-                    
-                    categories[category].after(field);
+                var category = findCategoryByLabel(label);
+
+                if (category) {
+                if (!categories[category]) {
+                    categories[category] = $('<li class="category"></li>').text(category);
+                    field.before(categories[category]);
+                }
+
+                categories[category].after(field);
                 }
             });
         }
-
-
-        //Find the categories you assinged each input to 
-        function findCategoryByLabel(label) {
-            // Use your 'fields' array to find the category by label
-            // Example implementation (adjust as needed):
-            for (var field of options.fields) {
-                if (field.label === label) {
-                    return field.category;
-                }
-            }
-            return null;
-        }
-
-        document.addEventListener('DOMContentLoaded', mainScript);
 
         // Adjust the event listener to incorporate the new functionality
         document.addEventListener('DOMContentLoaded', function() {
