@@ -6,6 +6,8 @@
     <title>Secure Form Builder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
 
@@ -82,6 +84,7 @@
     <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
     <script src="transform.js"></script>
     <script src="attachmentHandler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function mainScript() {
@@ -170,7 +173,7 @@
                         }
                     },
                     actionButtons: [
-                        {
+                    {
                             id: 'toggleFormType',
                             className: 'btn btn-info',
                             label: window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form",
@@ -181,10 +184,49 @@
                                     window.isMailboxForm = !window.isMailboxForm;
                                     console.log("New state:", window.isMailboxForm);
                                     
+                                    // Check if the form is now set as a mailbox form
+                                    if (window.isMailboxForm) {
+                                        Swal.fire({
+                                            title: 'Enter Mailbox ID',
+                                            input: 'text',
+                                            inputLabel: 'Mailbox ID',
+                                            inputPlaceholder: 'Enter the Mailbox ID here',
+                                            showCancelButton: true
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Store the mailbox ID temporarily
+                                                window.mailboxID = result.value;
+
+                                                const renderedFormDiv = document.querySelector('.rendered-form');
+                                                let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                                
+                                                if (!mailboxInput && renderedFormDiv) { 
+                                                    console.log('Inserting new mailbox input');
+                                                    mailboxInput = document.createElement('input');
+                                                    mailboxInput.type = 'hidden';
+                                                    mailboxInput.name = 'sf:recipient_mailbox';
+                                                    renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
+                                                }
+                                                
+                                                // If mailboxInput exists, update its value with the new mailbox ID
+                                                if (mailboxInput) {
+                                                    console.log('Updating mailbox input with new value:', window.mailboxID);
+                                                    mailboxInput.value = window.mailboxID;
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        // If it is a normal form, remove the hidden mailbox input if it exists
+                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                        if (mailboxInput) {
+                                            console.log('Removing mailbox input as it is a normal form');
+                                            mailboxInput.remove();
+                                        }
+                                    }
+
+                                    
                                     // Getting a reference to the button using its ID
                                     var toggleButton = document.querySelector("[id$='-toggleFormType-action']");
-
-
                                     toggleButton.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
                                 }
                             }
@@ -205,12 +247,48 @@
                             }
                         },
                         {
-                            id: 'saveTemplate',
-                            className: 'btn btn-success special',
-                            label: 'Save Template',
-                            type: 'button',
-                            events: {
-                                click: function() {
+                            "id": "saveTemplate",
+                            "className": "btn btn-success special",
+                            "label": "Save Template",
+                            "type": "button",
+                            "events": {
+                                "click": function() {
+                                    if (window.isMailboxForm) {
+                                        console.log('Mailbox form detected');
+                                        
+                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                        console.log('Mailbox Input:', mailboxInput);
+
+                                        if (mailboxInput) {
+                                            if (window.mailboxID) {
+                                                console.log('Updating mailbox input with stored value:', window.mailboxID);
+                                                mailboxInput.value = window.mailboxID;
+                                                
+                                            } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                                console.log('Prompting for new mailbox ID');
+                                                Swal.fire({
+                                                    title: 'Enter Mailbox ID',
+                                                    input: 'text',
+                                                    inputLabel: 'Mailbox ID',
+                                                    inputPlaceholder: 'Enter the Mailbox ID here',
+                                                    showCancelButton: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Reselect mailboxInput from the DOM
+                                                        mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                                        // Now update its value
+                                                        mailboxInput.value = result.value;
+                                                        console.log('Updated mailboxInput:', mailboxInput, 'with value:', result.value);
+                                                    } else {
+                                                        return;
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            console.log('Mailbox input not found. Ensure it is created when toggling to mailbox form.');
+                                        }
+                                    }
+
                                     var formData = formBuilder.actions.getData('json', true);
 
                                     if (formData) {
@@ -222,11 +300,9 @@
                                         const transformedHTML = transformHTML(html);
                                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                                         $('#render-container').html(wrappedContent);
-                                    } 
+                                    }
 
                                     $('#copyHTMLBtn').show();
-
-                                    // Scroll to the .form_preview_section element
                                     var targetElement = document.querySelector('.form_preview_section');
                                     if (targetElement) {
                                         targetElement.scrollIntoView({
@@ -274,52 +350,7 @@
             });
         }
 
-
-
-
-
-        var fieldCategories = {
-            "Email": "Contact Information",
-            "Phone Number": "Contact Information",
-            "Member First Name": "Member Information",
-            "Member Last Name": "Member Information"
-            //... other field-label-to-category mappings
-        };
-
-        function findCategoryByLabel(label) {
-            return fieldCategories[label] || null;
-        }
-
-        //Create categories for input option panel on right of UI
-        function createCategories() {
-            var categories = {};
-
-            // Loop through each field and organize by category
-            $('.frmb-control > li').each(function() {
-                var field = $(this);
-                var label = field.find('span').text();
-                var category = findCategoryByLabel(label);
-
-                if (category) {
-                if (!categories[category]) {
-                    categories[category] = $('<li class="category"></li>').text(category);
-                    field.before(categories[category]);
-                }
-
-                categories[category].after(field);
-                }
-            });
-        }
-
-        // Adjust the event listener to incorporate the new functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            mainScript();
-
-            // Wait until the Form Builder has finished loading
-            setTimeout(function() {
-                createCategories();
-            }, 1000); // Adjust the timeout as needed
-        });
+        document.addEventListener('DOMContentLoaded', mainScript);
     </script>
 </body>
 </html>
