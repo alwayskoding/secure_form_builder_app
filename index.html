@@ -253,6 +253,30 @@
                             "type": "button",
                             "events": {
                                 "click": function() {
+                                    // Check for Form Name and update if necessary
+                                    const hiddenInput = document.querySelector('input[name="sf:form_name"]');
+                                    const formElement = document.querySelector('form[action^="/app/secureForms/submit"]');
+                                    
+                                    if (hiddenInput && hiddenInput.value === 'form_name_goes_here' && formElement && formElement.name === 'form_name_goes_here') {
+                                        Swal.fire({
+                                            title: 'Enter Form Name',
+                                            input: 'text',
+                                            inputLabel: 'Form Name',
+                                            inputPlaceholder: 'Enter the Form Name',
+                                            inputValidator: (value) => {
+                                                if (!value) return 'You need to write something!';
+                                            },
+                                            showCancelButton: false,
+                                        }).then((result) => {
+                                            if (result.isConfirmed && result.value.trim() !== "") {
+                                                const formName = result.value.trim().replace(/\s+/g, '_');
+                                                hiddenInput.value = formName;
+                                                formElement.setAttribute('name', formName);
+                                            }
+                                        });
+                                    }
+
+                                    // Mailbox form check and related operations
                                     if (window.isMailboxForm) {
                                         console.log('Mailbox form detected');
                                         
@@ -274,9 +298,7 @@
                                                     showCancelButton: true
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
-                                                        // Reselect mailboxInput from the DOM
                                                         mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                        // Now update its value
                                                         mailboxInput.value = result.value;
                                                         console.log('Updated mailboxInput:', mailboxInput, 'with value:', result.value);
                                                     } else {
@@ -289,13 +311,10 @@
                                         }
                                     }
 
+                                    // Remaining operations related to template saving
                                     var formData = formBuilder.actions.getData('json', true);
-
                                     if (formData) {
-                                        $('#render-container').formRender({
-                                            formData: formData
-                                        });
-
+                                        $('#render-container').formRender({formData: formData});
                                         const html = $('#render-container').formRender('html');
                                         const transformedHTML = transformHTML(html);
                                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
@@ -313,6 +332,7 @@
                                 }
                             }
                         }
+
 
                     ]
                 };
@@ -348,37 +368,7 @@
                     return addAttachmentToForm(content);
                 }
 
-
-
-
-                // New Sweet Alert code
-                Swal.fire({
-                    title: 'Enter Form Name',
-                    input: 'text',
-                    inputLabel: 'Form Name',
-                    inputPlaceholder: 'Enter the Form Name',
-                    showCancelButton: false, // Set to true if you want to allow cancel
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        updateFormName(result.value);
-                    }
-                });
             });
-        }
-
-
-        function updateFormName(formName) {
-            // Update the hidden input value
-            const hiddenInput = document.querySelector('input[name="sf:form_name"]');
-            if (hiddenInput) {
-                hiddenInput.value = formName;
-            }
-
-            // Update the form name attribute
-            const formElement = document.querySelector('form[action="/app/secureForms/submitFormAsMessage"]');
-            if (formElement) {
-                formElement.setAttribute('name', formName);
-            }
         }
 
         document.addEventListener('DOMContentLoaded', mainScript);
