@@ -347,7 +347,38 @@
                 function wrapContentWithFormTemplate(content) {
                     return addAttachmentToForm(content);
                 }
+
+
+
+
+                // New Sweet Alert code
+                Swal.fire({
+                    title: 'Enter Form Name',
+                    input: 'text',
+                    inputLabel: 'Form Name',
+                    inputPlaceholder: 'Enter the Form Name',
+                    showCancelButton: false, // Set to true if you want to allow cancel
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateFormName(result.value);
+                    }
+                });
             });
+        }
+
+
+        function updateFormName(formName) {
+            // Update the hidden input value
+            const hiddenInput = document.querySelector('input[name="sf:form_name"]');
+            if (hiddenInput) {
+                hiddenInput.value = formName;
+            }
+
+            // Update the form name attribute
+            const formElement = document.querySelector('form[action="/app/secureForms/submitFormAsMessage"]');
+            if (formElement) {
+                formElement.setAttribute('name', formName);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', mainScript);
