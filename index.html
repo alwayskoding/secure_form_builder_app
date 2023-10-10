@@ -257,6 +257,12 @@
                             const hiddenInput = document.querySelector('input[name="sf:form_name"]');
                             const formElement = document.querySelector('form');
 
+                            console.log('hiddenInput:', hiddenInput);
+                            console.log('hiddenInput.value:', hiddenInput ? hiddenInput.value : null);
+                            console.log('formElement:', formElement);
+                            console.log('formElement.name:', formElement ? formElement.name : null);
+
+
                             if (hiddenInput && hiddenInput.value === 'form_name_goes_here' && formElement && formElement.name === 'form_name_goes_here') {
                                 Swal.fire({
                                 title: 'Enter Form Name',
