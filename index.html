@@ -247,89 +247,93 @@
                             }
                         },
                         {
-                        "id": "saveTemplate",
-                        "className": "btn btn-success special",
-                        "label": "Save Template",
-                        "type": "button",
-                        "events": {
-                            "click": function() {
-                                var checkExist = setInterval(function() {
-                                    const hiddenInput = document.querySelector('input[name="sf:form_name"]');
-                                    const formElement = document.querySelector('form');
-                                    
-                                    if (hiddenInput && formElement) {
-                                        clearInterval(checkExist); // Clear interval when elements are found
-                                        
-                                        console.log('hiddenInput:', hiddenInput);
-                                        console.log('hiddenInput.value:', hiddenInput.value);
-                                        console.log('formElement:', formElement);
-                                        console.log('formElement.name:', formElement.name);
+                            "id": "saveTemplate",
+                            "className": "btn btn-success special",
+                            "label": "Save Template",
+                            "type": "button",
+                            "events": {
+                                "click": function() {
+                                    window.globalFormName = window.globalFormName || 'form_name_goes_here'; // Initialize if not already set
 
-                                        if (hiddenInput.value === 'form_name_goes_here' && formElement.name === 'form_name_goes_here') {
-                                            Swal.fire({
-                                                title: 'Enter Form Name',
-                                                input: 'text',
-                                                inputLabel: 'Form Name',
-                                                inputPlaceholder: 'Enter the Form Name',
-                                                inputValidator: (value) => {
-                                                    if (!value) return 'You need to write something!';
-                                                },
-                                                showCancelButton: false,
-                                            }).then((result) => {
-                                                if (result.isConfirmed && result.value.trim() !== "") {
-                                                    const formName = result.value.trim().replace(/\s+/g, '_');
-                                                    hiddenInput.value = formName;
-                                                    formElement.setAttribute('name', formName);
-                                                }
-                                            });
+                                    var checkExist = setInterval(function() {
+                                        const hiddenInput = document.querySelector('input[name="sf:form_name"]');
+                                        const formElement = document.querySelector('form');
+
+                                        if (hiddenInput && formElement) {
+                                            clearInterval(checkExist); // Clear interval when elements are found
+                                            
+                                            console.log('hiddenInput:', hiddenInput);
+                                            console.log('hiddenInput.value:', hiddenInput.value);
+                                            console.log('formElement:', formElement);
+                                            console.log('formElement.name:', formElement.name);
+
+                                            if (hiddenInput.value === 'form_name_goes_here' && formElement.name === 'form_name_goes_here') {
+                                                Swal.fire({
+                                                    title: 'Enter Form Name',
+                                                    input: 'text',
+                                                    inputLabel: 'Form Name',
+                                                    inputPlaceholder: 'Enter the Form Name',
+                                                    inputValidator: (value) => {
+                                                        if (!value) return 'You need to write something!';
+                                                    },
+                                                    showCancelButton: false,
+                                                }).then((result) => {
+                                                    if (result.isConfirmed && result.value.trim() !== "") {
+                                                        const formName = result.value.trim().replace(/\s+/g, '_');
+                                                        hiddenInput.value = formName;
+                                                        formElement.setAttribute('name', formName);
+                                                        window.globalFormName = formName; // update the global variable
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }, 100); // check every 100ms
+
+                                    // Mailbox form check and related operations
+                                    if (window.isMailboxForm) {
+                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                        if (mailboxInput) {
+                                            if (window.mailboxID) {
+                                                mailboxInput.value = window.mailboxID;
+                                            } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                                Swal.fire({
+                                                    title: 'Enter Mailbox ID',
+                                                    input: 'text',
+                                                    inputLabel: 'Mailbox ID',
+                                                    inputPlaceholder: 'Enter the Mailbox ID here',
+                                                    showCancelButton: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
+                                                        mailboxInput.value = result.value;
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
-                                }, 100); // check every 100ms
 
-                                // Mailbox form check and related operations
-                                if (window.isMailboxForm) {
-                                    let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                    if (mailboxInput) {
-                                        if (window.mailboxID) {
-                                            mailboxInput.value = window.mailboxID;
-                                        } else if (!/^\d+$/.test(mailboxInput.value)) {
-                                            Swal.fire({
-                                                title: 'Enter Mailbox ID',
-                                                input: 'text',
-                                                inputLabel: 'Mailbox ID',
-                                                inputPlaceholder: 'Enter the Mailbox ID here',
-                                                showCancelButton: true
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                    mailboxInput.value = result.value;
-                                                }
-                                            });
-                                        }
+                                    // Remaining operations related to template saving
+                                    const formData = formBuilder.actions.getData('json', true);
+                                    if (formData) {
+                                        $('#render-container').formRender({formData: formData});
+                                        const html = $('#render-container').formRender('html');
+                                        const transformedHTML = transformHTML(html);
+                                        const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
+                                        $('#render-container').html(wrappedContent);
                                     }
-                                }
 
-                                // Remaining operations related to template saving
-                                const formData = formBuilder.actions.getData('json', true);
-                                if (formData) {
-                                    $('#render-container').formRender({formData: formData});
-                                    const html = $('#render-container').formRender('html');
-                                    const transformedHTML = transformHTML(html);
-                                    const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
-                                    $('#render-container').html(wrappedContent);
-                                }
-
-                                $('#copyHTMLBtn').show();
-                                const targetElement = document.querySelector('.form_preview_section');
-                                if (targetElement) {
-                                    targetElement.scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'start'
-                                    });
+                                    $('#copyHTMLBtn').show();
+                                    const targetElement = document.querySelector('.form_preview_section');
+                                    if (targetElement) {
+                                        targetElement.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'start'
+                                        });
+                                    }
                                 }
                             }
                         }
-                    }
+
 
 
 
