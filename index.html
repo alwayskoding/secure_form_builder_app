@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
     <style>
 
@@ -82,9 +82,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
     <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+    <!--The 2 below are Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
+    <!-- Load Storage Module Script -->
+    <script src="js/localStorageModule.js"></script>
+    <!-- Load Form Handler Module Script -->
+    <script src="js/formHandlerModule.js"></script>
     <script src="transform.js"></script>
     <script src="attachmentHandler.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
+    <!--aside fromt localStorage.js, formHandlerModule.js and init.js there isn't any other code that was mixed in to make the local storage templates save stuff work-->
+    <script src="js/init.js"></script>
+</body>
 
     <script>
         function mainScript() {
