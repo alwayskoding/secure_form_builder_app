@@ -62,6 +62,7 @@
 
         /* CSS grid layout for form builder */
         /* Define a grid container for each input set */
+        /* Define a grid container for each input set */
         .input-set {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -79,7 +80,10 @@
             /* Spacing between grid items */
         }
 
-        
+
+
+
+
 
 
 
@@ -440,6 +444,7 @@
                 //where I inserted the InpuSets on April 19th 2024 to test if this would be good for template optiosn
                 inputSets: [{
                         label: 'Two Inputs in a Row',
+                        className: 'input-set', // Apply the input-set class to this input set
                         fields: [{
                                 type: 'text',
                                 label: 'Input 1',
@@ -456,6 +461,7 @@
                     },
                     {
                         label: 'Three Inputs in a Row',
+                        className: 'input-set-three', // Apply the input-set-three class to this input set
                         fields: [{
                                 type: 'text',
                                 label: 'Input 1',
