@@ -60,18 +60,21 @@
         /*Styles For CSS Grid Predefined Layouts Update*/
 
 
+        /* CSS grid layout for form builder */
         .form-builder-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            /* 3 columns */
+            /* Three equal columns */
             gap: 10px;
+            /* Spacing between fields */
         }
 
-        .grid-item {
+
+        .grid-cell {
             border: 1px solid #ccc;
+            /* Just to show the cell boundaries, optional */
             padding: 10px;
         }
-
 
         /*End of Styles for CSS Grid Predefined Layouts Update*/
     </style>
@@ -108,8 +111,7 @@
     <script src="formHandlerModule.js"></script>
     <script src="transform.js">
     </script>
-    <script
-        src="attachmentHandler.js">
+    <script src="attachmentHandler.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
@@ -257,7 +259,7 @@
                                         'input[name="sf:recipient_mailbox"]');
                                     if (mailboxInput) {
                                         console.log(
-                                        'Removing mailbox input as it is a normal form');
+                                            'Removing mailbox input as it is a normal form');
                                         mailboxInput.remove();
                                     }
                                 }
@@ -312,7 +314,7 @@
                                                 inputPlaceholder: 'Enter the Form Name',
                                                 inputValidator: (value) => {
                                                     if (!value)
-                                                    return 'You need to write something!';
+                                                        return 'You need to write something!';
                                                 },
                                                 showCancelButton: false,
                                             }).then((result) => {
@@ -320,14 +322,14 @@
                                                     .value.trim() !== "") {
                                                     const formName = result.value
                                                         .trim().replace(/\s+/g,
-                                                        '_');
+                                                            '_');
                                                     hiddenInput.value = formName;
                                                     formElement.setAttribute('name',
                                                         formName);
                                                     window.globalFormName =
-                                                    formName;
+                                                        formName;
                                                     $('#changeFormNameBtn')
-                                                .show(); // Show change name button when a name is set
+                                                        .show(); // Show change name button when a name is set
                                                 }
                                             });
                                         }
@@ -352,7 +354,7 @@
                                                 if (result.isConfirmed) {
                                                     mailboxInput = document.querySelector(
                                                         'input[name="sf:recipient_mailbox"]'
-                                                        );
+                                                    );
                                                     mailboxInput.value = result.value;
                                                 }
                                             });
@@ -402,11 +404,11 @@
                                     input: 'text',
                                     inputLabel: 'New Form Name',
                                     inputValue: hiddenInput
-                                    .value, // Provide the current name as a default value
+                                        .value, // Provide the current name as a default value
                                     inputPlaceholder: 'Enter a new Form Name',
                                     inputValidator: (value) => {
                                         if (!value)
-                                        return 'You need to write something!';
+                                            return 'You need to write something!';
                                     },
                                     showCancelButton: true,
                                 }).then((result) => {
@@ -427,7 +429,17 @@
 
 
 
-                ]
+                ],
+                //NEW SECTION ADDED HERE TO TEST LAYOUT FEATURE - WAS PUT HERE AFTER CREATING NEW GRID_CSS_LAYOUT_TEMPLATE_SETUP BRANCH
+                // Add layoutTemplates property with custom layout function
+                layoutTemplates: {
+                    default: function (field, label, help, data) {
+                        // Wrap each field with the grid layout
+                        return $('<div class="form-builder-grid"></div>').append(
+                            $('<div class="grid-cell"></div>').append(label, field, help)
+                        );
+                    }
+                }
             };
 
             var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
