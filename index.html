@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
+
 
     <style>
-
         body {
             padding: 160px !important;
         }
 
-       .save-template {
+        .save-template {
             display: none !important;
         }
 
@@ -57,25 +57,41 @@
             margin-top: 270px !important;
         }
 
-        
+        /*Styles For CSS Grid Predefined Layouts Update*/
 
-        
+
+        .form-builder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns */
+            gap: 10px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+
+        /*End of Styles for CSS Grid Predefined Layouts Update*/
     </style>
-    
+
 </head>
+
 <body>
     <div class="top_info">
         <h1>Secure Forms Made Easy</h1>
         <p>Simply drag and drop an item from the right onto the form preview on the left.</p>
     </div>
-    
+
     <div id="fb-editor"></div>
     <div class="form_preview_section">
         <h1>Here is your generated form.</h1>
-        <p>Click the "add attachment to form" or "toggle mailbox form" buttons if needed and simply hit the Copy HTML button and add your finished secure form to content.</p>
+        <p>Click the "add attachment to form" or "toggle mailbox form" buttons if needed and simply hit the Copy HTML
+            button and add your finished secure form to content.</p>
         <button id="saveTemplateBtn">Save Template</button>
         <button id="loadTemplateBtn">Load Template</button>
-        
+
     </div>
     <div id="render-container"></div>
     <button id="copyHTMLBtn" style="display:none;">Copy HTML</button>
@@ -90,332 +106,366 @@
     <script src="localStorageModule.js"></script>
     <!-- Load Form Handler Module Script -->
     <script src="formHandlerModule.js"></script>
-    <script src="transform.js"></script>
-    <script src="attachmentHandler.js"></script>
+    <script src="transform.js">
+    </script>
+    <script
+        src="attachmentHandler.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
     <!--aside fromt localStorage.js, formHandlerModule.js and init.js there isn't any other code that was mixed in to make the local storage templates save stuff work-->
     <script src="init.js"></script>
 </body>
 
-    <script>
-        function mainScript() {
-            jQuery(function($) {
-                window.isMailboxForm = false;
+<script>
+    function mainScript() {
+        jQuery(function ($) {
+            window.isMailboxForm = false;
 
-                var options = {
-                    dataType: 'json',
-                    fields: [
-                        {
-                            label: "Email",
-                            type: "text",
-                            subtype: "email",
-                            icon: "✉"
-                        },
-                        {
-                            label: "Phone Number",
-                            type: "text",
-                            subtype: "tel",
-                            icon: "☎"
-                        },
-                        {
-                            label: "Member First Name",
-                            type: "text",
-                            name: "member_first_name",
-                            placeholder: "Will be auto-filled with Member's First Name",
-                            value: "|member.first_name|"
-                        },
-                        {
-                            label: "Member Middle Name",
-                            type: "text",
-                            name: "member_middle_name",
-                            placeholder: "Will be auto-filled with Member's Middle Name",
-                            value: "|member.middle_name|"
-                        },
-                        {
-                            label: "Member Last Name",
-                            type: "text",
-                            name: "member_last_name",
-                            placeholder: "Will be auto-filled with Member's Last Name",
-                            value: "|member.last_name|"
-                        },
-                        {
-                            label: "Member ID",
-                            type: "text",
-                            name: "member_ID",
-                            placeholder: "Will be auto-filled with Member's ID",
-                            value: "|member.memberId|"
-                        },
-                        {
-                            label: "Member Email",
-                            type: "text",
-                            subtype: "email",
-                            name: "member_email",
-                            placeholder: "Will be auto-filled with Member's Email",
-                            value: "|member.email|"
-                        },
-                        {
-                            label: "Member Birthdate",
-                            type: "text",
-                            name: "member_birthdate",
-                            placeholder: "Will be auto-filled with Member's Birthdate",
-                            value: "|member.birthdate|"
-                        },
-                        {
-                            label: "Member Benefit Plan ID",
-                            type: "text",
-                            name: "member_benefit_plan_id",
-                            placeholder: "Will be auto-filled with Member's Benefit Plan ID",
-                            value: "|member.benefit_plan_id|"
-                        },
-                        {
-                            label: "Member Benefit Plan Name",
-                            type: "text",
-                            name: "member_benefit_plan_name",
-                            placeholder: "Will be auto-filled with Member's Benefit Plan Name",
-                            value: "|member.benefit_plan_name|"
+            var options = {
+                dataType: 'json',
+                fields: [{
+                        label: "Email",
+                        type: "text",
+                        subtype: "email",
+                        icon: "✉"
+                    },
+                    {
+                        label: "Phone Number",
+                        type: "text",
+                        subtype: "tel",
+                        icon: "☎"
+                    },
+                    {
+                        label: "Member First Name",
+                        type: "text",
+                        name: "member_first_name",
+                        placeholder: "Will be auto-filled with Member's First Name",
+                        value: "|member.first_name|"
+                    },
+                    {
+                        label: "Member Middle Name",
+                        type: "text",
+                        name: "member_middle_name",
+                        placeholder: "Will be auto-filled with Member's Middle Name",
+                        value: "|member.middle_name|"
+                    },
+                    {
+                        label: "Member Last Name",
+                        type: "text",
+                        name: "member_last_name",
+                        placeholder: "Will be auto-filled with Member's Last Name",
+                        value: "|member.last_name|"
+                    },
+                    {
+                        label: "Member ID",
+                        type: "text",
+                        name: "member_ID",
+                        placeholder: "Will be auto-filled with Member's ID",
+                        value: "|member.memberId|"
+                    },
+                    {
+                        label: "Member Email",
+                        type: "text",
+                        subtype: "email",
+                        name: "member_email",
+                        placeholder: "Will be auto-filled with Member's Email",
+                        value: "|member.email|"
+                    },
+                    {
+                        label: "Member Birthdate",
+                        type: "text",
+                        name: "member_birthdate",
+                        placeholder: "Will be auto-filled with Member's Birthdate",
+                        value: "|member.birthdate|"
+                    },
+                    {
+                        label: "Member Benefit Plan ID",
+                        type: "text",
+                        name: "member_benefit_plan_id",
+                        placeholder: "Will be auto-filled with Member's Benefit Plan ID",
+                        value: "|member.benefit_plan_id|"
+                    },
+                    {
+                        label: "Member Benefit Plan Name",
+                        type: "text",
+                        name: "member_benefit_plan_name",
+                        placeholder: "Will be auto-filled with Member's Benefit Plan Name",
+                        value: "|member.benefit_plan_name|"
+                    }
+                ],
+                typeUserAttrs: {
+                    text: {
+                        pattern: {
+                            label: 'Pattern',
+                            description: 'Enter a RegExp for validation'
                         }
-                    ],
-                    typeUserAttrs: {
-                        text: {
-                            pattern: {
-                                label: 'Pattern',
-                                description: 'Enter a RegExp for validation'
+                    }
+                },
+                actionButtons: [{
+                        id: 'toggleFormType',
+                        className: 'btn btn-info',
+                        label: window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form",
+                        type: 'button',
+                        events: {
+                            click: function () {
+                                console.log("toggleFormType button clicked. Previous state:", window
+                                    .isMailboxForm);
+                                window.isMailboxForm = !window.isMailboxForm;
+                                console.log("New state:", window.isMailboxForm);
+
+                                // Check if the form is now set as a mailbox form
+                                if (window.isMailboxForm) {
+                                    Swal.fire({
+                                        title: 'Enter Mailbox ID',
+                                        input: 'text',
+                                        inputLabel: 'Mailbox ID',
+                                        inputPlaceholder: 'Enter the Mailbox ID here',
+                                        showCancelButton: true
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Store the mailbox ID temporarily
+                                            window.mailboxID = result.value;
+
+                                            const renderedFormDiv = document.querySelector(
+                                                '.rendered-form');
+                                            let mailboxInput = document.querySelector(
+                                                'input[name="sf:recipient_mailbox"]');
+
+                                            if (!mailboxInput && renderedFormDiv) {
+                                                console.log('Inserting new mailbox input');
+                                                mailboxInput = document.createElement(
+                                                    'input');
+                                                mailboxInput.type = 'hidden';
+                                                mailboxInput.name = 'sf:recipient_mailbox';
+                                                renderedFormDiv.parentNode.insertBefore(
+                                                    mailboxInput, renderedFormDiv);
+                                            }
+
+                                            // If mailboxInput exists, update its value with the new mailbox ID
+                                            if (mailboxInput) {
+                                                console.log(
+                                                    'Updating mailbox input with new value:',
+                                                    window.mailboxID);
+                                                mailboxInput.value = window.mailboxID;
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    // If it is a normal form, remove the hidden mailbox input if it exists
+                                    let mailboxInput = document.querySelector(
+                                        'input[name="sf:recipient_mailbox"]');
+                                    if (mailboxInput) {
+                                        console.log(
+                                        'Removing mailbox input as it is a normal form');
+                                        mailboxInput.remove();
+                                    }
+                                }
+
+
+                                // Getting a reference to the button using its ID
+                                var toggleButton = document.querySelector(
+                                    "[id$='-toggleFormType-action']");
+                                toggleButton.innerHTML = window.isMailboxForm ?
+                                    "Set as Normal Form" : "Toggle Mailbox Form";
                             }
                         }
                     },
-                    actionButtons: [
                     {
-                            id: 'toggleFormType',
-                            className: 'btn btn-info',
-                            label: window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form",
-                            type: 'button',
-                            events: {
-                                click: function() {
-                                    console.log("toggleFormType button clicked. Previous state:", window.isMailboxForm);
-                                    window.isMailboxForm = !window.isMailboxForm;
-                                    console.log("New state:", window.isMailboxForm);
-                                    
-                                    // Check if the form is now set as a mailbox form
-                                    if (window.isMailboxForm) {
-                                        Swal.fire({
-                                            title: 'Enter Mailbox ID',
-                                            input: 'text',
-                                            inputLabel: 'Mailbox ID',
-                                            inputPlaceholder: 'Enter the Mailbox ID here',
-                                            showCancelButton: true
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                // Store the mailbox ID temporarily
-                                                window.mailboxID = result.value;
+                        id: 'toggleAttachmentBtn',
+                        className: 'btn btn-warning',
+                        label: 'Add Attachment to Form',
+                        type: 'button',
+                        events: {
+                            click: function () {
+                                // Getting a reference to the button using its ID
+                                var attachmentButton = document.querySelector(
+                                    "[id$='-toggleAttachmentBtn-action']");
 
-                                                const renderedFormDiv = document.querySelector('.rendered-form');
-                                                let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                
-                                                if (!mailboxInput && renderedFormDiv) { 
-                                                    console.log('Inserting new mailbox input');
-                                                    mailboxInput = document.createElement('input');
-                                                    mailboxInput.type = 'hidden';
-                                                    mailboxInput.name = 'sf:recipient_mailbox';
-                                                    renderedFormDiv.parentNode.insertBefore(mailboxInput, renderedFormDiv);
-                                                }
-                                                
-                                                // If mailboxInput exists, update its value with the new mailbox ID
-                                                if (mailboxInput) {
-                                                    console.log('Updating mailbox input with new value:', window.mailboxID);
-                                                    mailboxInput.value = window.mailboxID;
-                                                }
-                                            }
-                                        });
-                                    } else {
-                                        // If it is a normal form, remove the hidden mailbox input if it exists
-                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        if (mailboxInput) {
-                                            console.log('Removing mailbox input as it is a normal form');
-                                            mailboxInput.remove();
-                                        }
-                                    }
 
-                                    
-                                    // Getting a reference to the button using its ID
-                                    var toggleButton = document.querySelector("[id$='-toggleFormType-action']");
-                                    toggleButton.innerHTML = window.isMailboxForm ? "Set as Normal Form" : "Toggle Mailbox Form";
-                                }
+                                toggleAttachmentStatus(attachmentButton);
                             }
-                        },
-                        {
-                            id: 'toggleAttachmentBtn',
-                            className: 'btn btn-warning',
-                            label: 'Add Attachment to Form',
-                            type: 'button',
-                            events: {
-                                click: function() {
-                                    // Getting a reference to the button using its ID
-                                    var attachmentButton = document.querySelector("[id$='-toggleAttachmentBtn-action']");
-
-                                    
-                                    toggleAttachmentStatus(attachmentButton);
-                                }
-                            }
-                        },
-                        {
-                            "id": "saveTemplate",
-                            "className": "btn btn-success special",
-                            "label": "Save Template",
-                            "type": "button",
-                            "events": {
-                                "click": function() {
-                                    var checkExist = setInterval(function() {
-                                        const hiddenInput = document.querySelector('input[name="sf:form_name"]');
-                                        const formElement = document.querySelector('form');
-                                        
-                                        if (hiddenInput && formElement) {
-                                            clearInterval(checkExist); 
-                                            
-                                            // Prompt for name only if not previously set
-                                            if (hiddenInput.value === 'form_name_goes_here' && formElement.name === 'form_name_goes_here') {
-                                                Swal.fire({
-                                                    title: 'Enter Form Name',
-                                                    input: 'text',
-                                                    inputLabel: 'Form Name',
-                                                    inputPlaceholder: 'Enter the Form Name',
-                                                    inputValidator: (value) => {
-                                                        if (!value) return 'You need to write something!';
-                                                    },
-                                                    showCancelButton: false,
-                                                }).then((result) => {
-                                                    if (result.isConfirmed && result.value.trim() !== "") {
-                                                        const formName = result.value.trim().replace(/\s+/g, '_');
-                                                        hiddenInput.value = formName;
-                                                        formElement.setAttribute('name', formName);
-                                                        window.globalFormName = formName;
-                                                        $('#changeFormNameBtn').show();  // Show change name button when a name is set
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }, 100); 
-
-                                    // Mailbox form check and related operations
-                                    if (window.isMailboxForm) {
-                                        let mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                        if (mailboxInput) {
-                                            if (window.mailboxID) {
-                                                mailboxInput.value = window.mailboxID;
-                                            } else if (!/^\d+$/.test(mailboxInput.value)) {
-                                                Swal.fire({
-                                                    title: 'Enter Mailbox ID',
-                                                    input: 'text',
-                                                    inputLabel: 'Mailbox ID',
-                                                    inputPlaceholder: 'Enter the Mailbox ID here',
-                                                    showCancelButton: true
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        mailboxInput = document.querySelector('input[name="sf:recipient_mailbox"]');
-                                                        mailboxInput.value = result.value;
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }
-
-                                    // Remaining operations related to template saving
-                                    const formData = formBuilder.actions.getData('json', true);
-                                    if (formData) {
-                                        $('#render-container').formRender({formData: formData});
-                                        const html = $('#render-container').formRender('html');
-                                        const transformedHTML = transformHTML(html);
-                                        const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
-                                        $('#render-container').html(wrappedContent);
-                                    }
-
-                                    $('#copyHTMLBtn').show();
-                                    const targetElement = document.querySelector('.form_preview_section');
-                                    if (targetElement) {
-                                        targetElement.scrollIntoView({
-                                            behavior: 'smooth',
-                                            block: 'start'
-                                        });
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "id": "changeFormNameBtn",
-                            "className": "btn btn-warning special",
-                            "label": "Change Form Name",
-                            "type": "button",
-                            "events": {
-                                "click": function() {
-                                    const hiddenInput = document.querySelector('input[name="sf:form_name"]');
+                        }
+                    },
+                    {
+                        "id": "saveTemplate",
+                        "className": "btn btn-success special",
+                        "label": "Save Template",
+                        "type": "button",
+                        "events": {
+                            "click": function () {
+                                var checkExist = setInterval(function () {
+                                    const hiddenInput = document.querySelector(
+                                        'input[name="sf:form_name"]');
                                     const formElement = document.querySelector('form');
-                                    
-                                    // Assuming that when this button is clicked, hiddenInput and formElement are available.
-                                    Swal.fire({
-                                        title: 'Change Form Name',
-                                        input: 'text',
-                                        inputLabel: 'New Form Name',
-                                        inputValue: hiddenInput.value,  // Provide the current name as a default value
-                                        inputPlaceholder: 'Enter a new Form Name',
-                                        inputValidator: (value) => {
-                                            if (!value) return 'You need to write something!';
-                                        },
-                                        showCancelButton: true,
-                                    }).then((result) => {
-                                        if (result.isConfirmed && result.value.trim() !== "") {
-                                            const formName = result.value.trim().replace(/\s+/g, '_');
-                                            hiddenInput.value = formName;
-                                            formElement.setAttribute('name', formName);
-                                            window.globalFormName = formName;
+
+                                    if (hiddenInput && formElement) {
+                                        clearInterval(checkExist);
+
+                                        // Prompt for name only if not previously set
+                                        if (hiddenInput.value === 'form_name_goes_here' &&
+                                            formElement.name === 'form_name_goes_here') {
+                                            Swal.fire({
+                                                title: 'Enter Form Name',
+                                                input: 'text',
+                                                inputLabel: 'Form Name',
+                                                inputPlaceholder: 'Enter the Form Name',
+                                                inputValidator: (value) => {
+                                                    if (!value)
+                                                    return 'You need to write something!';
+                                                },
+                                                showCancelButton: false,
+                                            }).then((result) => {
+                                                if (result.isConfirmed && result
+                                                    .value.trim() !== "") {
+                                                    const formName = result.value
+                                                        .trim().replace(/\s+/g,
+                                                        '_');
+                                                    hiddenInput.value = formName;
+                                                    formElement.setAttribute('name',
+                                                        formName);
+                                                    window.globalFormName =
+                                                    formName;
+                                                    $('#changeFormNameBtn')
+                                                .show(); // Show change name button when a name is set
+                                                }
+                                            });
                                         }
+                                    }
+                                }, 100);
+
+                                // Mailbox form check and related operations
+                                if (window.isMailboxForm) {
+                                    let mailboxInput = document.querySelector(
+                                        'input[name="sf:recipient_mailbox"]');
+                                    if (mailboxInput) {
+                                        if (window.mailboxID) {
+                                            mailboxInput.value = window.mailboxID;
+                                        } else if (!/^\d+$/.test(mailboxInput.value)) {
+                                            Swal.fire({
+                                                title: 'Enter Mailbox ID',
+                                                input: 'text',
+                                                inputLabel: 'Mailbox ID',
+                                                inputPlaceholder: 'Enter the Mailbox ID here',
+                                                showCancelButton: true
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    mailboxInput = document.querySelector(
+                                                        'input[name="sf:recipient_mailbox"]'
+                                                        );
+                                                    mailboxInput.value = result.value;
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                // Remaining operations related to template saving
+                                const formData = formBuilder.actions.getData('json', true);
+                                if (formData) {
+                                    $('#render-container').formRender({
+                                        formData: formData
+                                    });
+                                    const html = $('#render-container').formRender('html');
+                                    const transformedHTML = transformHTML(html);
+                                    const wrappedContent = wrapContentWithFormTemplate(
+                                        transformedHTML);
+                                    $('#render-container').html(wrappedContent);
+                                }
+
+                                $('#copyHTMLBtn').show();
+                                const targetElement = document.querySelector(
+                                    '.form_preview_section');
+                                if (targetElement) {
+                                    targetElement.scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'start'
                                     });
                                 }
                             }
                         }
+                    },
+                    {
+                        "id": "changeFormNameBtn",
+                        "className": "btn btn-warning special",
+                        "label": "Change Form Name",
+                        "type": "button",
+                        "events": {
+                            "click": function () {
+                                const hiddenInput = document.querySelector(
+                                    'input[name="sf:form_name"]');
+                                const formElement = document.querySelector('form');
+
+                                // Assuming that when this button is clicked, hiddenInput and formElement are available.
+                                Swal.fire({
+                                    title: 'Change Form Name',
+                                    input: 'text',
+                                    inputLabel: 'New Form Name',
+                                    inputValue: hiddenInput
+                                    .value, // Provide the current name as a default value
+                                    inputPlaceholder: 'Enter a new Form Name',
+                                    inputValidator: (value) => {
+                                        if (!value)
+                                        return 'You need to write something!';
+                                    },
+                                    showCancelButton: true,
+                                }).then((result) => {
+                                    if (result.isConfirmed && result.value.trim() !== "") {
+                                        const formName = result.value.trim().replace(/\s+/g,
+                                            '_');
+                                        hiddenInput.value = formName;
+                                        formElement.setAttribute('name', formName);
+                                        window.globalFormName = formName;
+                                    }
+                                });
+                            }
+                        }
+                    }
 
 
 
 
 
 
-                    ]
-                };
+                ]
+            };
 
-                var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
+            var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
-                $('#copyHTMLBtn').click(function() {
-                    var formData = formBuilder.actions.getData('json', true);
+            $('#copyHTMLBtn').click(function () {
+                var formData = formBuilder.actions.getData('json', true);
 
-                    if (formData) {
-                        $('#render-container').formRender({
-                            formData: formData
-                        });
-
-                        const html = $('#render-container').formRender('html');
-                        const transformedHTML = transformHTML(html);
-                        const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
-                        $('#render-container').html(wrappedContent);
-                    } 
-
-                    var htmlContent = $('#render-container').html();
-
-                    navigator.clipboard.writeText(htmlContent).then(function() {
-                        alert('HTML copied to clipboard!');
-                    }).catch(function(err) {
-                        alert('Failed to copy text: ', err);
+                if (formData) {
+                    $('#render-container').formRender({
+                        formData: formData
                     });
 
-                    $('#htmlOutput').hide();
-                });
-
-                function wrapContentWithFormTemplate(content) {
-                    return addAttachmentToForm(content);
+                    const html = $('#render-container').formRender('html');
+                    const transformedHTML = transformHTML(html);
+                    const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
+                    $('#render-container').html(wrappedContent);
                 }
 
-            });
-        }
+                var htmlContent = $('#render-container').html();
 
-        document.addEventListener('DOMContentLoaded', mainScript);
-    </script>
+                navigator.clipboard.writeText(htmlContent).then(function () {
+                    alert('HTML copied to clipboard!');
+                }).catch(function (err) {
+                    alert('Failed to copy text: ', err);
+                });
+
+                $('#htmlOutput').hide();
+            });
+
+            function wrapContentWithFormTemplate(content) {
+                return addAttachmentToForm(content);
+            }
+
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', mainScript);
+</script>
 </body>
+
 </html>
