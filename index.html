@@ -61,20 +61,27 @@
 
 
         /* CSS grid layout for form builder */
-        .form-builder-grid {
+        /* Define a grid container for each input set */
+        .input-set {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* Two columns in the grid */
+            grid-gap: 10px;
+            /* Spacing between grid items */
+        }
+
+        /* Define a grid container for each input set */
+        .input-set-three {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            /* Three equal columns */
-            gap: 10px;
-            /* Spacing between fields */
+            /* Three columns in the grid */
+            grid-gap: 10px;
+            /* Spacing between grid items */
         }
 
+        
 
-        .grid-cell {
-            border: 1px solid #ccc;
-            /* Just to show the cell boundaries, optional */
-            padding: 10px;
-        }
+
 
         /*End of Styles for CSS Grid Predefined Layouts Update*/
     </style>
@@ -430,16 +437,46 @@
 
 
                 ],
-                //NEW SECTION ADDED HERE TO TEST LAYOUT FEATURE - WAS PUT HERE AFTER CREATING NEW GRID_CSS_LAYOUT_TEMPLATE_SETUP BRANCH
-                // Add layoutTemplates property with custom layout function
-                layoutTemplates: {
-                    default: function (field, label, help, data) {
-                        // Wrap each field with the grid layout
-                        return $('<div class="form-builder-grid"></div>').append(
-                            $('<div class="grid-cell"></div>').append(label, field, help)
-                        );
+                //where I inserted the InpuSets on April 19th 2024 to test if this would be good for template optiosn
+                inputSets: [{
+                        label: 'Two Inputs in a Row',
+                        fields: [{
+                                type: 'text',
+                                label: 'Input 1',
+                                className: 'form-control',
+                                name: 'input1'
+                            },
+                            {
+                                type: 'text',
+                                label: 'Input 2',
+                                className: 'form-control',
+                                name: 'input2'
+                            }
+                        ]
+                    },
+                    {
+                        label: 'Three Inputs in a Row',
+                        fields: [{
+                                type: 'text',
+                                label: 'Input 1',
+                                className: 'form-control',
+                                name: 'input1'
+                            },
+                            {
+                                type: 'text',
+                                label: 'Input 2',
+                                className: 'form-control',
+                                name: 'input2'
+                            },
+                            {
+                                type: 'text',
+                                label: 'Input 3',
+                                className: 'form-control',
+                                name: 'input3'
+                            }
+                        ]
                     }
-                }
+                ]
             };
 
             var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
