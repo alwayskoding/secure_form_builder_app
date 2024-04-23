@@ -91,11 +91,12 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            flex-direction: row !important;
         }
 
         .form-field {
             flex: 1;
-            min-width: 100px;
+            min-width: 200px;
             /* adjust this value as needed */
         }
 
@@ -108,6 +109,13 @@
             border: 1px solid #ddd;
             padding: 10px;
             box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+        }
+
+        /* puts the inputs options menu over top of the side by side li’s so its not hidden behind them anymore*/
+        .form-wrap.form-builder .frmb .form-elements {
+            position: relative;
+            z-index: 99 !important;
+
         }
 
         /*End of Update 001 Above - also removed an extra closing body tag I noticed after init.js script below*/
@@ -281,7 +289,7 @@
                                                         '.rendered-form');
                                                 let mailboxInput = document.querySelector(
                                                     'input[name="sf:recipient_mailbox"]'
-                                                    );
+                                                );
 
                                                 if (!mailboxInput && renderedFormDiv) {
                                                     console.log(
@@ -359,7 +367,7 @@
                                             if (hiddenInput.value ===
                                                 'form_name_goes_here' &&
                                                 formElement.name === 'form_name_goes_here'
-                                                ) {
+                                            ) {
                                                 Swal.fire({
                                                     title: 'Enter Form Name',
                                                     input: 'text',
@@ -378,7 +386,7 @@
                                                             .trim().replace(/\s+/g,
                                                                 '_');
                                                         hiddenInput.value =
-                                                        formName;
+                                                            formName;
                                                         formElement.setAttribute(
                                                             'name',
                                                             formName);
@@ -605,8 +613,10 @@
                 var stageWrap = document.querySelector('.stage-wrap');
                 if (stageWrap) {
                     stageWrap.addEventListener('contextmenu', function (event) {
+                        console.log('inside statewrap area');
                         var targetElement = event.target.closest('.form-field');
                         if (targetElement) {
+                            console.log(event.target);
                             showContextMenu(event, targetElement);
                         }
                     });
@@ -616,7 +626,7 @@
 
 
 
-                
+
 
             }); //end of jquery wrapper
         } //end of mainScript
