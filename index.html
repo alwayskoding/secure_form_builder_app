@@ -113,6 +113,13 @@
             /* indicates a resize cursor */
         }
 
+        /* This CSS rule will make the resize handle visible when hovering over the field */
+        .form-field:hover .resize-handle {
+            display: block;
+            /* Make sure this corresponds with how you hide it by default */
+        }
+
+
 
         /* puts the inputs options menu over top of the side by side li’s so its not hidden behind them anymore*/
         .form-wrap.form-builder .frmb .form-elements {
@@ -172,6 +179,8 @@
         function mainScript() {
             jQuery(function ($) {
                 window.isMailboxForm = false;
+
+               
 
                 var options = {
                     dataType: 'json',
@@ -537,7 +546,6 @@
 
                     //UPDATE 002 - SCRIPT TO ATTACH RESIZE HANDLES TO NEW CHILDREN OF STAGE
                     onAddField: function (fieldId) {
-                        // Get the field using the unique ID
                         const field = document.getElementById(fieldId);
                         if (field) {
                             // Append the resize handle div to this form-field
@@ -545,22 +553,36 @@
                             resizeHandle.classList.add('resize-handle');
                             field.appendChild(resizeHandle);
 
+                            // Initially hide the handle
+                            resizeHandle.style.display = 'none';
+
                             // Make the field resizable using jQuery UI's resizable method
                             $(field).resizable({
                                 handles: {
                                     'e': resizeHandle
                                 },
-                                // Optional: specify the resize stop event if you want to do something when resizing stops
                                 stop: function (event, ui) {
-                                    // Do something when resizing is complete
+                                    // Update your internal state with the new size here
+                                    // e.g., formBuilder.actions.setData(newData);
                                 }
                             });
                         }
                     }
+
                     //END OF RESIZE HANDLE UPDATE 002 SCRIPT
                 };
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
+
+                 // Update 002 - Inside your mainScript or after form builder initialization
+                 $('.stage-wrap').on('mouseenter', '.form-field', function () {
+                    // Show the handle for the current field
+                    $(this).find('.resize-handle').show();
+                }).on('mouseleave', '.form-field', function () {
+                    // Hide the handle when not hovering
+                    $(this).find('.resize-handle').hide();
+                });
+                //End of Update 002 Above
 
                 $('#copyHTMLBtn').click(function () {
                     var formData = formBuilder.actions.getData('json', true);
