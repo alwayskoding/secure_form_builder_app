@@ -546,8 +546,10 @@
 
                     //UPDATE 002 - SCRIPT TO ATTACH RESIZE HANDLES TO NEW CHILDREN OF STAGE
                     onAddField: function (fieldId) {
+                        console.log('onaddfield just ran');
                         const field = document.getElementById(fieldId);
                         if (field) {
+                            console.log('a field should be present so it should have added a div that has a class of resize-handle');
                             // Append the resize handle div to this form-field
                             const resizeHandle = document.createElement('div');
                             resizeHandle.classList.add('resize-handle');
