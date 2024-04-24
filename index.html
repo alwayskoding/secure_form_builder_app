@@ -87,7 +87,8 @@
         .stage-wrap {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            /* gap: 10px; */
+            /*I removed this because it was messing with bootstrap classes falling over*/
             flex-direction: row !important;
         }
 
@@ -100,10 +101,10 @@
             
         } */
 
-        
-        
 
-       
+
+
+
 
 
 
@@ -539,7 +540,7 @@
                     ], //where the April 19th 2024 test to try out inputSets code ends
 
                     //UPDATE 002 - SCRIPT TO ATTACH RESIZE HANDLES TO NEW CHILDREN OF STAGE
-                    
+
 
 
                     //END OF RESIZE HANDLE UPDATE 002 SCRIPT
@@ -547,9 +548,28 @@
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
-                // Update 002 - Inside your mainScript or after form builder initialization
-                
-                //End of Update 002 Above
+                // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
+                // Listen for changes to the class input field within the 'editing' li element
+                $(document).on('input', 'li.editing .fld-className', function () {
+                    // Get the new classes from the input
+                    var newClasses = $(this).val();
+
+                    // Use closest to find the specific 'li.editing' that contains the changed input
+                    var editingLi = $(this).closest('li.editing');
+
+                    // Immediately apply the new classes to the 'li.editing'
+                    if (editingLi.length) {
+                        // Remove any previous Bootstrap grid classes
+                        editingLi.removeClass(function (index, className) {
+                            return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(
+                            ' ');
+                        });
+
+                        // Add the new classes from the fld-className input
+                        editingLi.addClass(newClasses);
+                    }
+                });
+                //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
                     var formData = formBuilder.actions.getData('json', true);
