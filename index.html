@@ -550,33 +550,24 @@
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
-                $(document).on('focusout', 'li.editing .fld-className', function () {
-                    // Get the new class names, removing any extra whitespace
-                    var newClasses = $(this).val().trim();
-
-                    // Find the nearest ancestor 'li' with the class 'editing' 
-                    var editingLi = $(this).closest('li.editing');
-
+                function updateEditingLiClasses() {
+                    var editingLi = $('li.editing');
                     if (editingLi.length) {
-                        // First, make a copy of the 'editing' class to reapply later
-                        var isEditing = editingLi.hasClass('editing');
+                        // Get the class names from the fld-className input
+                        var newClasses = editingLi.find('.fld-className').val().trim();
 
-                        // Remove all classes except for the ones that form-builder relies on
+                        // Update the classes on the editing LI
                         editingLi.removeClass(function (index, className) {
-                            // Create a regex pattern to match all classes except for 'form-field', 'form-builder', and 'editing'
+                            // This regex excludes the classes form-field, form-builder, and editing from being removed
                             return (className.match(
-                                /(?!^\bform-field\b|\bform-builder\b|\bediting\b)\b\w+\b/g
-                                ) || []).join(' ');
-                        });
-
-                        // Add the new classes from the 'fld-className' input field
-                        editingLi.addClass(newClasses);
-
-                        // Reapply the 'editing' class if it was there before
-                        if (isEditing) {
-                            editingLi.addClass('editing');
-                        }
+                                /(?!^form-field\b|^form-builder\b|^editing\b)\S+/g) || []).join(' ');
+                        }).addClass(newClasses);
                     }
+                }
+
+                // Attach the event handler to the close-field button
+                $(document).on('click', '.close-field', function () {
+                    updateEditingLiClasses();
                 });
                 //End of Update 003 Above
 
