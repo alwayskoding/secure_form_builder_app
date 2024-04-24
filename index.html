@@ -550,25 +550,25 @@
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
-                $(document).on('input', 'li.editing .fld-className', function () {
-                    // Get the new classes from the input
-                    var newClasses = $(this).val();
+                $(document).on('change', 'li.editing .fld-className', function () {
+                    // Get the new class names, removing any extra whitespace
+                    var newClasses = $(this).val().trim();
 
-                    // Use closest to find the specific 'li.editing' that contains the changed input
+                    // Find the nearest ancestor 'li' with the class 'editing' 
                     var editingLi = $(this).closest('li.editing');
 
-                    // Immediately apply the new classes to the 'li.editing'
                     if (editingLi.length) {
-                        // Remove any previous Bootstrap grid classes
+                        // First, remove any class names that are not 'form-field', which is a class we want to keep
                         editingLi.removeClass(function (index, className) {
-                            return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(
-                            ' ');
+                            // Create a regex pattern to match all classes except 'form-field' and remove them
+                            return (className.match(/(?!^form-field\b)^.*$/gm) || []).join(' ');
                         });
 
-                        // Add the new classes from the fld-className input
+                        // Now, add the new class names from the 'fld-className' input field
                         editingLi.addClass(newClasses);
                     }
                 });
+
                 //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
