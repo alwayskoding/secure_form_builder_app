@@ -588,55 +588,56 @@
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
                 // Show the grid class bar when hovering over a form-field element
-                var hideGridClassBarTimeout;
-
+                // When mouse enters any form-field, display the gridClassBar for that field.
                 $(document).on('mouseenter', '.form-field', function () {
-                    clearTimeout(
-                        hideGridClassBarTimeout); // Clear timeout when hovering over form-field
                     var $this = $(this);
                     var offset = $this.offset();
+                    var width = $this.outerWidth();
 
-                    // Position the gridClassBar over the element
+                    // Position the gridClassBar on top of the form field
                     $('#gridClassBar').css({
-                        'top': offset.top,
-                        'left': offset.left
+                        'top': offset.top + 'px', // Position at the top of the form field
+                        'left': (offset.left + width) +
+                            'px' // Position to the right of the form field
                     }).show();
 
-                    // Set a data attribute on the gridClassBar to keep track of the current element
+                    // Store the current form field in the data of the gridClassBar
                     $('#gridClassBar').data('target', $this);
-                }).on('mouseleave', '.form-field', function () {
-                    // Set a timeout to hide the grid class bar after some milliseconds
-                    hideGridClassBarTimeout = setTimeout(function () {
-                        $('#gridClassBar').hide();
-                    }, 300); // 300 milliseconds delay before hiding
                 });
 
-                // Make sure the gridClassBar doesn't hide when you are hovering over it
-                $('#gridClassBar').on('mouseenter', function () {
-                    clearTimeout(hideGridClassBarTimeout);
-                }).on('mouseleave', function () {
-                    hideGridClassBarTimeout = setTimeout(function () {
+                // When mouse leaves the form-field, hide the gridClassBar.
+                $(document).on('mouseleave', '.form-field', function (e) {
+                    // If the mouse is not moving towards the gridClassBar, hide it.
+                    if (!$(e.relatedTarget).closest('#gridClassBar').length) {
                         $('#gridClassBar').hide();
-                    }, 300);
+                    }
                 });
 
-                // Add the selected grid class to the form-field element when a button is clicked
+                // When gridClassBar itself is left, hide it if not entering a new form-field.
+                $(document).on('mouseleave', '#gridClassBar', function (e) {
+                    if (!$(e.relatedTarget).hasClass('form-field')) {
+                        $(this).hide();
+                    }
+                });
+
+                // When clicking on a grid class button, apply the class to the current form field.
                 $(document).on('click', '.grid-class-btn', function () {
                     var gridClass = $(this).data('class');
                     var $target = $('#gridClassBar').data('target');
 
+                    // Remove previous grid classes and apply the new one
                     if ($target) {
-                        // Remove any existing grid classes
                         $target.removeClass(function (index, className) {
                             return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
                         });
-
-                        // Add the new grid class
                         $target.addClass(gridClass);
                     }
                 });
 
-
+                // Preventing the gridClassBar from taking the form-field out of its hover state when trying to click a button.
+                $(document).on('mouseenter', '#gridClassBar', function () {
+                    $(this).show();
+                });
                 //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
