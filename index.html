@@ -101,6 +101,14 @@
             
         } */
 
+        /*Update 003 Bootstrap Grid Bar UI*/
+        #gridClassBar button {
+            margin: 2px;
+            /* Add additional styling as needed */
+        }
+
+        /*End of 003 Bootstrap Grid Bar UI*/
+
 
 
 
@@ -125,6 +133,17 @@
     </div>
 
     <div id="fb-editor"></div>
+
+    <!--Update 003 New Bootstrap Grid Class Bar For Sizing-->
+    <div id="gridClassBar" style="display:none; position:absolute; z-index:1000;">
+        <button class="grid-class-btn" data-class="col-md-8">.col-md-8</button>
+        <button class="grid-class-btn" data-class="col-md-4">.col-md-4</button>
+        <button class="grid-class-btn" data-class="col-md-6">.col-md-6</button>
+        <!-- Add more buttons as needed -->
+    </div>
+
+    <!--End of Update 003-->
+
     <div class="form_preview_section">
         <h1>Here is your generated form.</h1>
         <p>Click the "add attachment to form" or "toggle mailbox form" buttons if needed and simply hit the Copy HTML
@@ -539,45 +558,47 @@
                         }
                     ], //where the April 19th 2024 test to try out inputSets code ends
 
-                    //UPDATE 002 - SCRIPT TO ATTACH RESIZE HANDLES TO NEW CHILDREN OF STAGE
 
-
-
-                    //END OF RESIZE HANDLE UPDATE 002 SCRIPT
                 };
 
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
-                // A simple debounce function to limit how often a function is executed
-                function debounce(func, wait, immediate) {
-                    var timeout;
-                    return function () {
-                        var context = this,
-                            args = arguments;
-                        var later = function () {
-                            timeout = null;
-                            if (!immediate) func.apply(context, args);
-                        };
-                        var callNow = immediate && !timeout;
-                        clearTimeout(timeout);
-                        timeout = setTimeout(later, wait);
-                        if (callNow) func.apply(context, args);
-                    };
-                };
+                // Show the grid class bar when hovering over a form-field element
+                $(document).on('mouseenter', '.form-field', function () {
+                    var $this = $(this);
+                    var offset = $this.offset();
 
-                // Debounced class update function
-                var updateClassesDebounced = debounce(function (newClasses, editingLi) {
-                    editingLi.removeClass(function (index, className) {
-                        return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(' ');
-                    }).addClass(newClasses);
-                }, 500);
+                    // Position the gridClassBar over the element
+                    $('#gridClassBar').css({
+                        'top': offset.top,
+                        'left': offset.left
+                    }).show();
 
-                $(document).on('input', 'li.editing .fld-className', function () {
-                    var newClasses = $(this).val();
-                    var editingLi = $(this).closest('li.editing');
-                    updateClassesDebounced(newClasses, editingLi);
+                    // Set a data attribute on the gridClassBar to keep track of the current element
+                    $('#gridClassBar').data('target', $this);
+                });
+
+                // Hide the grid class bar when leaving the form-field element
+                $(document).on('mouseleave', '.form-field', function () {
+                    $('#gridClassBar').hide();
+                });
+
+                // Add the selected grid class to the form-field element when a button is clicked
+                $(document).on('click', '.grid-class-btn', function () {
+                    var gridClass = $(this).data('class');
+                    var $target = $('#gridClassBar').data('target');
+
+                    if ($target) {
+                        // Remove any existing grid classes
+                        $target.removeClass(function (index, className) {
+                            return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
+                        });
+
+                        // Add the new grid class
+                        $target.addClass(gridClass);
+                    }
                 });
 
                 //End of Update 003 Above
