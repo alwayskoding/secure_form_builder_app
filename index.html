@@ -550,7 +550,7 @@
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
-                $(document).on('change', 'li.editing .fld-className', function () {
+                $(document).on('focusout', 'li.editing .fld-className', function () {
                     // Get the new class names, removing any extra whitespace
                     var newClasses = $(this).val().trim();
 
@@ -561,13 +561,17 @@
                         // First, remove any class names that are not 'form-field', which is a class we want to keep
                         editingLi.removeClass(function (index, className) {
                             // Create a regex pattern to match all classes except 'form-field' and remove them
-                            return (className.match(/(?!^form-field\b)^.*$/gm) || []).join(' ');
+                            // This regex will keep 'form-field' and 'form-builder' classes and remove others
+                            return (className.match(
+                                /(?!^\bform-field\b|\bform-builder\b)\b\w+\b/g) || []).join(
+                                ' ');
                         });
 
                         // Now, add the new class names from the 'fld-className' input field
                         editingLi.addClass(newClasses);
                     }
                 });
+
 
                 //End of Update 003 Above
 
