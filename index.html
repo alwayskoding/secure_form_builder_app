@@ -590,54 +590,54 @@
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 $(document).on('mouseenter', '.form-field', function () {
-                    var $this = $(this);
-                    var offset = $this.offset();
-                    var width = $this.outerWidth();
+                    // Get the offset of the hovered .form-field element
+                    var offset = $(this).offset();
 
-                    // Position the gridClassBar on top of the form field
+                    // Adjust the top position based on the height of the toolbar to ensure it doesn't go off-screen
+                    var toolbarHeight = $('#gridClassBar').outerHeight(true); // true to include margins
+                    var topPosition = offset.top - toolbarHeight > 0 ? offset.top - toolbarHeight :
+                        offset.top + $(this).outerHeight(true);
+
+                    // Set the position of the gridClassBar
                     $('#gridClassBar').css({
-                        'top': offset.top + 'px', // Position at the top of the form field
-                        'left': (offset.left + width) +
-                            'px' // Position to the right of the form field
-                    }).show();
+                        top: topPosition,
+                        left: offset.left
+                    }).fadeIn(); // fadeIn for smooth appearance
 
-                    // Store the current form field in the data of the gridClassBar
-                    $('#gridClassBar').data('target', $this);
+                    // Store the reference to the hovered .form-field
+                    $('#gridClassBar').data('target', $(this));
                 });
 
-                // When mouse leaves the form-field, hide the gridClassBar.
+                // When mouse leaves the .form-field hide the toolbar
                 $(document).on('mouseleave', '.form-field', function (e) {
-                    // If the mouse is not moving towards the gridClassBar, hide it.
+                    // Only hide if the mouse did not move to the toolbar
                     if (!$(e.relatedTarget).closest('#gridClassBar').length) {
-                        $('#gridClassBar').hide();
+                        $('#gridClassBar').fadeOut(); // fadeOut for smooth disappearance
                     }
                 });
 
-                // When gridClassBar itself is left, hide it if not entering a new form-field.
+                // When mouse leaves the toolbar and not entering a .form-field, then hide the toolbar
                 $(document).on('mouseleave', '#gridClassBar', function (e) {
                     if (!$(e.relatedTarget).hasClass('form-field')) {
-                        $(this).hide();
+                        $('#gridClassBar').fadeOut(); // fadeOut for smooth disappearance
                     }
                 });
 
-                // When clicking on a grid class button, apply the class to the current form field.
+                // Bind the click event to the buttons on the toolbar
                 $(document).on('click', '.grid-class-btn', function () {
                     var gridClass = $(this).data('class');
                     var $target = $('#gridClassBar').data('target');
 
-                    // Remove previous grid classes and apply the new one
-                    if ($target) {
-                        $target.removeClass(function (index, className) {
-                            return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
+                    if ($target && $target.length) {
+                        // Remove existing grid classes
+                        $target.removeClass(function (index, css) {
+                            return (css.match(/\bcol-md-\d+\b/g) || []).join(' ');
                         });
+                        // Add new grid class
                         $target.addClass(gridClass);
                     }
                 });
 
-                // Preventing the gridClassBar from taking the form-field out of its hover state when trying to click a button.
-                $(document).on('mouseenter', '#gridClassBar', function () {
-                    $(this).show();
-                });
                 //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
