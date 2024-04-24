@@ -100,24 +100,10 @@
             /* adjust this value as needed */
         }
 
-        /*Places a resize handle next to each field - part of update 002*/
-        .resize-handle {
-            position: absolute;
-            width: 10px;
-            height: 100%;
-            right: 0;
-            top: 0;
-            background-color: blue;
-            cursor: ew-resize;
-            display: none;
-            /* Make sure it is not visible by default */
-        }
+        
+        
 
-        /* This CSS rule will make the resize handle visible when hovering over the field */
-        .form-field:hover .resize-handle {
-            display: block !important;
-            /* Make sure this corresponds with how you hide it by default */
-        }
+       
 
 
 
@@ -186,18 +172,21 @@
                     dataType: 'json',
                     fields: [{
                             label: "Email",
+                            className: "form-control row-1 col-md-6",
                             type: "text",
                             subtype: "email",
                             icon: "✉"
                         },
                         {
                             label: "Phone Number",
+                            className: "form-control row-1 col-md-6",
                             type: "text",
                             subtype: "tel",
                             icon: "☎"
                         },
                         {
                             label: "Member First Name",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             name: "member_first_name",
                             placeholder: "Will be auto-filled with Member's First Name",
@@ -205,6 +194,7 @@
                         },
                         {
                             label: "Member Middle Name",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             name: "member_middle_name",
                             placeholder: "Will be auto-filled with Member's Middle Name",
@@ -212,6 +202,7 @@
                         },
                         {
                             label: "Member Last Name",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             name: "member_last_name",
                             placeholder: "Will be auto-filled with Member's Last Name",
@@ -219,6 +210,7 @@
                         },
                         {
                             label: "Member ID",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             name: "member_ID",
                             placeholder: "Will be auto-filled with Member's ID",
@@ -226,6 +218,7 @@
                         },
                         {
                             label: "Member Email",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             subtype: "email",
                             name: "member_email",
@@ -234,6 +227,7 @@
                         },
                         {
                             label: "Member Birthdate",
+                            className: "form-control row-2 col-md-1",
                             type: "text",
                             name: "member_birthdate",
                             placeholder: "Will be auto-filled with Member's Birthdate",
@@ -545,36 +539,7 @@
                     ], //where the April 19th 2024 test to try out inputSets code ends
 
                     //UPDATE 002 - SCRIPT TO ATTACH RESIZE HANDLES TO NEW CHILDREN OF STAGE
-                    onAddField: function (fieldId) {
-                        const field = document.getElementById(fieldId);
-                        if (field && !$(field).closest('.frm-holder')
-                            .length) { // Make sure the field is not inside frm-holder
-                            // Append the resize handle div to this form-field if not already appended
-                            let resizeHandle = field.querySelector('.resize-handle');
-                            if (!resizeHandle) {
-                                resizeHandle = document.createElement('div');
-                                resizeHandle.classList.add('resize-handle');
-                                field.appendChild(resizeHandle);
-                            }
-
-                            // Initialize the resizable plugin
-                            $(field).resizable({
-                                handles: {
-                                    'e': resizeHandle,
-                                    's': resizeHandle // Allow resizing in both east and south directions
-                                },
-                                alsoResize: $(field).find(
-                                    'input, textarea, select'
-                                    ), // Ensure inner form elements resize too
-                                stop: function (event, ui) {
-                                    // Handle resizing stop event
-                                }
-                            });
-
-                            // Initially hide the handle
-                            resizeHandle.style.display = 'none';
-                        }
-                    }
+                    
 
 
                     //END OF RESIZE HANDLE UPDATE 002 SCRIPT
@@ -583,13 +548,7 @@
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
                 // Update 002 - Inside your mainScript or after form builder initialization
-                $('.stage-wrap').on('mouseenter', '.form-field', function () {
-                    // Show the handle for the current field
-                    $(this).find('.resize-handle').show();
-                }).on('mouseleave', '.form-field', function () {
-                    // Hide the handle when not hovering
-                    $(this).find('.resize-handle').hide();
-                });
+                
                 //End of Update 002 Above
 
                 $('#copyHTMLBtn').click(function () {
