@@ -558,21 +558,26 @@
                     var editingLi = $(this).closest('li.editing');
 
                     if (editingLi.length) {
-                        // First, remove any class names that are not 'form-field', which is a class we want to keep
+                        // First, make a copy of the 'editing' class to reapply later
+                        var isEditing = editingLi.hasClass('editing');
+
+                        // Remove all classes except for the ones that form-builder relies on
                         editingLi.removeClass(function (index, className) {
-                            // Create a regex pattern to match all classes except 'form-field' and remove them
-                            // This regex will keep 'form-field' and 'form-builder' classes and remove others
+                            // Create a regex pattern to match all classes except for 'form-field', 'form-builder', and 'editing'
                             return (className.match(
-                                /(?!^\bform-field\b|\bform-builder\b)\b\w+\b/g) || []).join(
-                                ' ');
+                                /(?!^\bform-field\b|\bform-builder\b|\bediting\b)\b\w+\b/g
+                                ) || []).join(' ');
                         });
 
-                        // Now, add the new class names from the 'fld-className' input field
+                        // Add the new classes from the 'fld-className' input field
                         editingLi.addClass(newClasses);
+
+                        // Reapply the 'editing' class if it was there before
+                        if (isEditing) {
+                            editingLi.addClass('editing');
+                        }
                     }
                 });
-
-
                 //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
