@@ -550,16 +550,36 @@
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
+                // A simple debounce function to limit how often a function is executed
+                function debounce(func, wait, immediate) {
+                    var timeout;
+                    return function () {
+                        var context = this,
+                            args = arguments;
+                        var later = function () {
+                            timeout = null;
+                            if (!immediate) func.apply(context, args);
+                        };
+                        var callNow = immediate && !timeout;
+                        clearTimeout(timeout);
+                        timeout = setTimeout(later, wait);
+                        if (callNow) func.apply(context, args);
+                    };
+                };
+
+                // Debounced class update function
+                var updateClassesDebounced = debounce(function (newClasses, editingLi) {
+                    editingLi.removeClass(function (index, className) {
+                        return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(' ');
+                    }).addClass(newClasses);
+                }, 500);
+
                 $(document).on('input', 'li.editing .fld-className', function () {
                     var newClasses = $(this).val();
                     var editingLi = $(this).closest('li.editing');
-                    if (editingLi.length) {
-                        editingLi.removeClass(function (index, className) {
-                            return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(
-                            ' ');
-                        }).addClass(newClasses);
-                    }
+                    updateClassesDebounced(newClasses, editingLi);
                 });
+
                 //End of Update 003 Above
 
                 $('#copyHTMLBtn').click(function () {
