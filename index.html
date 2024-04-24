@@ -550,24 +550,15 @@
 
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
-                function updateEditingLiClasses() {
-                    var editingLi = $('li.editing');
+                $(document).on('input', 'li.editing .fld-className', function () {
+                    var newClasses = $(this).val();
+                    var editingLi = $(this).closest('li.editing');
                     if (editingLi.length) {
-                        // Get the class names from the fld-className input
-                        var newClasses = editingLi.find('.fld-className').val().trim();
-
-                        // Update the classes on the editing LI
                         editingLi.removeClass(function (index, className) {
-                            // This regex excludes the classes form-field, form-builder, and editing from being removed
-                            return (className.match(
-                                /(?!^form-field\b|^form-builder\b|^editing\b)\S+/g) || []).join(' ');
+                            return (className.match(/(\bcol-\S+)|(\brow-\S+)/g) || []).join(
+                            ' ');
                         }).addClass(newClasses);
                     }
-                }
-
-                // Attach the event handler to the close-field button
-                $(document).on('click', '.close-field', function () {
-                    updateEditingLiClasses();
                 });
                 //End of Update 003 Above
 
