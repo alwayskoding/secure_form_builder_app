@@ -113,6 +113,20 @@
             top: 450px !important;
         }
 
+        /*Add specific points in here where it tells the inputs directly inside of the li with form-field the main field to have a 
+        width: 100% instead of auto like it is by default so the bootstrap classes take effect*/
+
+        .form-wrap.form-builder .frmb .prev-holder input[type="text"],
+        .form-wrap.form-builder .frmb .prev-holder input[type="number"],
+        .form-wrap.form-builder .frmb .prev-holder input[type="email"],
+        .form-wrap.form-builder .frmb .prev-holder input[type="tel"],
+        .form-wrap.form-builder .frmb .prev-holder input[type="date"],
+        .form-wrap.form-builder .frmb .prev-holder select,
+        .form-wrap.form-builder .frmb .prev-holder textarea {
+            width: 100% !important;
+        }
+
+
         /*End of 003 Bootstrap Grid Bar UI*/
 
 
@@ -142,7 +156,7 @@
 
     <!--Update 003 New Bootstrap Grid Class Bar For Sizing-->
     <div id="gridClassBar" style="display:none; position:absolute; z-index:1000;">
-        
+
         <button class="grid-class-btn" data-class="col-md-4">.col-md-4</button>
         <button class="grid-class-btn" data-class="col-md-6">.col-md-6</button>
         <button class="grid-class-btn" data-class="col-md-8">.col-md-8</button>
@@ -574,7 +588,11 @@
                 // Update 003 - Testing the classes being added after user finishes adding them in class panel when open and current li set to editing
                 // Listen for changes to the class input field within the 'editing' li element
                 // Show the grid class bar when hovering over a form-field element
+                var hideGridClassBarTimeout;
+
                 $(document).on('mouseenter', '.form-field', function () {
+                    clearTimeout(
+                        hideGridClassBarTimeout); // Clear timeout when hovering over form-field
                     var $this = $(this);
                     var offset = $this.offset();
 
@@ -586,11 +604,20 @@
 
                     // Set a data attribute on the gridClassBar to keep track of the current element
                     $('#gridClassBar').data('target', $this);
+                }).on('mouseleave', '.form-field', function () {
+                    // Set a timeout to hide the grid class bar after some milliseconds
+                    hideGridClassBarTimeout = setTimeout(function () {
+                        $('#gridClassBar').hide();
+                    }, 300); // 300 milliseconds delay before hiding
                 });
 
-                // Hide the grid class bar when leaving the form-field element
-                $(document).on('mouseleave', '.form-field', function () {
-                    $('#gridClassBar').hide();
+                // Make sure the gridClassBar doesn't hide when you are hovering over it
+                $('#gridClassBar').on('mouseenter', function () {
+                    clearTimeout(hideGridClassBarTimeout);
+                }).on('mouseleave', function () {
+                    hideGridClassBarTimeout = setTimeout(function () {
+                        $('#gridClassBar').hide();
+                    }, 300);
                 });
 
                 // Add the selected grid class to the form-field element when a button is clicked
@@ -608,6 +635,7 @@
                         $target.addClass(gridClass);
                     }
                 });
+
 
                 //End of Update 003 Above
 
