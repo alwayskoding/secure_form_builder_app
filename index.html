@@ -592,15 +592,12 @@
                 $(document).on('mouseenter', '.form-field', function () {
                     // Get the offset of the hovered .form-field element
                     var offset = $(this).offset();
-
-                    // Adjust the top position based on the height of the toolbar to ensure it doesn't go off-screen
-                    var toolbarHeight = $('#gridClassBar').outerHeight(true); // true to include margins
-                    var topPosition = offset.top - toolbarHeight > 0 ? offset.top - toolbarHeight :
-                        offset.top + $(this).outerHeight(true);
+                    var fieldHeight = $(this).outerHeight();
+                    var toolbarHeight = $('#gridClassBar').outerHeight();
 
                     // Set the position of the gridClassBar
                     $('#gridClassBar').css({
-                        top: topPosition,
+                        top: offset.top + fieldHeight, // Position below the field
                         left: offset.left
                     }).fadeIn(); // fadeIn for smooth appearance
 
@@ -637,6 +634,7 @@
                         $target.addClass(gridClass);
                     }
                 });
+
 
                 //End of Update 003 Above
 
