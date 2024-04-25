@@ -590,33 +590,33 @@
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 $(document).on('mouseenter', '.form-field', function () {
-                    // Get the offset of the hovered .form-field element
-                    var offset = $(this).offset();
-                    var fieldHeight = $(this).outerHeight();
-                    var toolbarHeight = $('#gridClassBar').outerHeight();
+                    var $this = $(this);
+                    var offset = $this.offset();
+                    var fieldHeight = $this.outerHeight();
 
-                    // Set the position of the gridClassBar
+                    // Set the position of the gridClassBar just below the form-field
                     $('#gridClassBar').css({
-                        top: offset.top + fieldHeight, // Position below the field
-                        left: offset.left
-                    }).fadeIn(); // fadeIn for smooth appearance
+                        top: offset.top + fieldHeight, // Place it right below the field
+                        left: offset.left,
+                        position: 'absolute' // Ensure it's positioned absolutely relative to the document
+                    }).fadeIn();
 
                     // Store the reference to the hovered .form-field
-                    $('#gridClassBar').data('target', $(this));
+                    $('#gridClassBar').data('target', $this);
                 });
 
                 // When mouse leaves the .form-field hide the toolbar
                 $(document).on('mouseleave', '.form-field', function (e) {
-                    // Only hide if the mouse did not move to the toolbar
+                    // Check if we're not going into the toolbar
                     if (!$(e.relatedTarget).closest('#gridClassBar').length) {
-                        $('#gridClassBar').fadeOut(); // fadeOut for smooth disappearance
+                        $('#gridClassBar').fadeOut();
                     }
                 });
 
                 // When mouse leaves the toolbar and not entering a .form-field, then hide the toolbar
                 $(document).on('mouseleave', '#gridClassBar', function (e) {
                     if (!$(e.relatedTarget).hasClass('form-field')) {
-                        $('#gridClassBar').fadeOut(); // fadeOut for smooth disappearance
+                        $('#gridClassBar').fadeOut();
                     }
                 });
 
@@ -625,7 +625,7 @@
                     var gridClass = $(this).data('class');
                     var $target = $('#gridClassBar').data('target');
 
-                    if ($target && $target.length) {
+                    if ($target) {
                         // Remove existing grid classes
                         $target.removeClass(function (index, css) {
                             return (css.match(/\bcol-md-\d+\b/g) || []).join(' ');
@@ -634,6 +634,7 @@
                         $target.addClass(gridClass);
                     }
                 });
+
 
 
                 //End of Update 003 Above
