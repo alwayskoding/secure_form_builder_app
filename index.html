@@ -590,100 +590,119 @@
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 $(document).ready(function () {
-                    // Function to add the toolbar to a form field
-                    function addBootstrapToolbar($field) {
-                        // Remove any existing toolbar to avoid duplicates
-                        $('.bootstrap-toolbar').remove();
+                    // Function to add or remove the Bootstrap toolbar
+                    function toggleBootstrapToolbar($field, action) {
+                        if (action === 'add') {
+                            // Create the toolbar dynamically if it doesn't exist
+                            if ($field.find('.bootstrap-toolbar').length === 0) {
+                                var $toolbar = $('<div/>', {
+                                    'class': 'bootstrap-toolbar',
+                                    'css': {
+                                        'position': 'absolute',
+                                        'z-index': '1000',
+                                        'top': '300px', // Adjust this value as needed
+                                        'left': 0,
+                                        'display': 'none',
+                                        'background-color': '#f9f9f9',
+                                        'border': '1px solid #ccc',
+                                        'padding': '5px',
+                                    }
+                                });
 
-                        // Create the toolbar dynamically
-                        var $toolbar = $('<div/>', {
-                            'class': 'bootstrap-toolbar',
-                            'css': {
-                                'position': 'absolute',
-                                'z-index': '1000',
-                                'top': '300px', // Adjust this value as needed
-                                'left': 0,
-                                'display': 'none',
-                                'background-color': '#f9f9f9', // Added for visibility
-                                'border': '1px solid #ccc', // Added for visibility
-                                'padding': '5px', // Added for visibility
+                                // Add buttons to the toolbar
+                                var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
+                                $.each(classes, function (i, gridClass) {
+                                    $('<button/>', {
+                                        'class': 'grid-class-btn',
+                                        'data-class': gridClass,
+                                        'text': '.' + gridClass,
+                                        'type': 'button'
+                                    }).appendTo($toolbar);
+                                });
+
+                                // Append the toolbar to the form field
+                                $field.css('position', 'relative').append($toolbar);
+                                $toolbar.slideDown();
+                            }
+                        } else if (action === 'remove') {
+                            // Remove the toolbar if it exists
+                            $field.find('.bootstrap-toolbar').slideUp(function () {
+                                $(this).remove();
+                            });
+                        }
+                    }
+
+                    // Observe changes in the style attribute of frm-holder to toggle the Bootstrap toolbar
+                    var observer = new MutationObserver(function (mutations) {
+                        mutations.forEach(function (mutation) {
+                            var $holder = $(mutation.target);
+                            var $field = $holder.closest('.form-field');
+                            if ($holder.css('display') === 'block') {
+                                toggleBootstrapToolbar($field, 'remove');
+                            } else {
+                                toggleBootstrapToolbar($field, 'add');
                             }
                         });
-
-                        // Add buttons to the toolbar
-                        var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
-                        $.each(classes, function (i, gridClass) {
-                            $('<button/>', {
-                                'class': 'grid-class-btn',
-                                'data-class': gridClass,
-                                'text': '.' + gridClass,
-                                'type': 'button' // Ensure this is set to avoid submitting forms
-                            }).appendTo($toolbar);
-                        });
-
-                        // Append the toolbar to the current form field and set its parent position to relative
-                        $field.css('position', 'relative').append($toolbar);
-
-                        // Show the toolbar
-                        $toolbar.slideDown();
-                    }
+                    });
 
                     // Bind mouse enter event to form fields
                     $(document).on('mouseenter', '.form-field', function () {
-                        // Add toolbar to the hovered form field
-                        addBootstrapToolbar($(this));
+                        // Set up the observer on the frm-holder
+                        var $holder = $(this).find('.frm-holder');
+                        if ($holder.length) {
+                            observer.observe($holder[0], {
+                                attributes: true,
+                                attributeFilter: ['style']
+                            });
+                        }
+                        // Add the toolbar only if the frm-holder is not displayed
+                        if ($holder.css('display') !== 'block') {
+                            toggleBootstrapToolbar($(this), 'add');
+                        }
                     });
 
-                    // Hide and remove the toolbar with a delay when the mouse leaves the form field
+                    // Hide and remove the toolbar when the mouse leaves the form field
                     $(document).on('mouseleave', '.form-field', function () {
-                        var $toolbar = $(this).find('.bootstrap-toolbar');
-                        setTimeout(function () {
-                            if ($toolbar.is(':hover')) {
-                                // If the mouse is over the toolbar, do not hide it
-                                return;
-                            }
-                            $toolbar.slideUp(function () {
-                                $(this).remove();
-                            });
-                        }, 500); // Delay time in milliseconds
+                        // Disconnect the observer and remove the toolbar
+                        var $holder = $(this).find('.frm-holder');
+                        if ($holder.length) {
+                            observer.disconnect();
+                        }
+                        toggleBootstrapToolbar($(this), 'remove');
                     });
 
                     // Bind click event to the toolbar buttons
                     $(document).on('click', '.grid-class-btn', function () {
                         var gridClass = $(this).data('class');
                         var $target = $(this).closest('.form-field');
-
                         if ($target.length) {
-                            // Remove existing grid classes
+                            // Remove existing grid classes and add the new class
                             $target.removeClass(function (index, className) {
                                 return (className.match(/\bcol-md-\d+\b/g) || []).join(
                                     ' ');
-                            });
-
-                            // Add the new grid class
-                            $target.addClass(gridClass);
+                            }).addClass(gridClass);
                         }
                     });
 
-                    // Ensure the toolbar doesn't disappear when trying to click a button
+                    // Ensure the toolbar doesn't disappear when hovering over it
                     $(document).on('mouseenter', '.bootstrap-toolbar', function () {
-                        $(this).stop(true)
-                    .show(); // stop any slideUp animation and show the toolbar
+                        $(this).stop(true).show();
                     });
 
+                    // Handle mouse leave on the toolbar for delayed hide
                     $(document).on('mouseleave', '.bootstrap-toolbar', function () {
-                        // Hide the toolbar with a delay to allow for button clicks
+                        var $toolbar = $(this);
                         setTimeout(function () {
-                            if ($(this).is(':hover')) {
-                                // If the mouse is over the toolbar, do not hide it
+                            if ($toolbar.is(':hover')) {
                                 return;
                             }
-                            $(this).slideUp(function () {
+                            $toolbar.slideUp(function () {
                                 $(this).remove();
                             });
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
