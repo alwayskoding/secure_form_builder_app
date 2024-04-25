@@ -592,6 +592,9 @@
                 $(document).ready(function () {
                     // Function to add the toolbar to a form field
                     function addBootstrapToolbar($field) {
+                        // Remove any existing toolbar to avoid duplicates
+                        $('.bootstrap-toolbar').remove();
+
                         // Create the toolbar dynamically
                         var $toolbar = $('<div/>', {
                             'class': 'bootstrap-toolbar',
@@ -627,20 +630,22 @@
 
                     // Bind mouse enter event to form fields
                     $(document).on('mouseenter', '.form-field', function () {
-                        // Remove any existing toolbar to avoid duplicates
-                        $('.bootstrap-toolbar').remove();
-
                         // Add toolbar to the hovered form field
                         addBootstrapToolbar($(this));
                     });
 
-                    // Hide and remove the toolbar when the mouse leaves the form field
-                    $(document).on('mouseleave', '.form-field', function (e) {
-                        if (!$(e.relatedTarget).closest('.bootstrap-toolbar').length) {
-                            $(this).find('.bootstrap-toolbar').slideUp(function () {
+                    // Hide and remove the toolbar with a delay when the mouse leaves the form field
+                    $(document).on('mouseleave', '.form-field', function () {
+                        var $toolbar = $(this).find('.bootstrap-toolbar');
+                        setTimeout(function () {
+                            if ($toolbar.is(':hover')) {
+                                // If the mouse is over the toolbar, do not hide it
+                                return;
+                            }
+                            $toolbar.slideUp(function () {
                                 $(this).remove();
                             });
-                        }
+                        }, 500); // Delay time in milliseconds
                     });
 
                     // Bind click event to the toolbar buttons
@@ -662,15 +667,24 @@
 
                     // Ensure the toolbar doesn't disappear when trying to click a button
                     $(document).on('mouseenter', '.bootstrap-toolbar', function () {
-                        $(this).stop(true).css('display', 'flex');
+                        $(this).stop(true)
+                    .show(); // stop any slideUp animation and show the toolbar
                     });
 
                     $(document).on('mouseleave', '.bootstrap-toolbar', function () {
-                        $(this).slideUp(function () {
-                            $(this).remove();
-                        });
+                        // Hide the toolbar with a delay to allow for button clicks
+                        setTimeout(function () {
+                            if ($(this).is(':hover')) {
+                                // If the mouse is over the toolbar, do not hide it
+                                return;
+                            }
+                            $(this).slideUp(function () {
+                                $(this).remove();
+                            });
+                        }, 500); // Delay time in milliseconds
                     });
                 });
+
 
 
 
