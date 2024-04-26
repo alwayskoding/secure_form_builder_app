@@ -146,11 +146,8 @@
         /*Update 004*/
         /*Adjusting Input Sizes Using Bootstrap Utility Classes*/
         /* Your custom styles to ensure input size classes take precedence */
-        
-        .form-wrap.form-builder.formbuilder-embedded-bootstrap .form-control.input-lg,
-        .form-wrap.form-builder.formbuilder-embedded-bootstrap .form-control.input-sm {
-            height: auto !important;
-        }
+
+
 
         /*End of Update 004*/
     </style>
@@ -719,6 +716,41 @@
 
 
                 //End of Update 003 Above
+
+                //Update 004 Allowing Bootstrap Input Sizing Classes To Work
+                $(document).ready(function () {
+                    // Observe class changes on all .form-control within li.form-field
+                    $('li.form-field .form-control').each(function () {
+                        var $input = $(this); // Cache the jQuery object of the input
+
+                        // Create an observer instance
+                        var observer = new MutationObserver(function (mutations) {
+                            mutations.forEach(function (mutation) {
+                                if (mutation.attributeName === "class") {
+                                    // Check if the input has input-sm or input-lg
+                                    if ($input.hasClass('input-sm') || $input
+                                        .hasClass('input-lg')) {
+                                        // Remove the inline height style if it exists
+                                        $input.css('height', '');
+                                    }
+                                }
+                            });
+                        });
+
+                        // Observer configuration
+                        var config = {
+                            attributes: true,
+                            attributeFilter: ['class']
+                        };
+
+                        // Start observing the target node for configured mutations
+                        observer.observe($input[0], config);
+
+                        // Later, you can stop observing like this:
+                        // observer.disconnect();
+                    });
+                });
+                //Update 004
 
                 $('#copyHTMLBtn').click(function () {
                     var formData = formBuilder.actions.getData('json', true);
