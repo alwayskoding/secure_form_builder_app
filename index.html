@@ -13,6 +13,7 @@
     <style>
         body {
             padding: 160px !important;
+            background-color: #f5f5f5 !important;
         }
 
         .save-template {
@@ -155,6 +156,7 @@
         .form-wrap.form-builder .stage-wrap>.hoverDropStyleInverse {
             width: 50% !important;
         }
+
         /*End of Update 005*/
     </style>
 
@@ -210,7 +212,6 @@
     <script src="attachmentHandler.js">
     </script>
 
-    <script src="resizableFields.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
     <!--aside fromt localStorage.js, formHandlerModule.js and init.js there isn't any other code that was mixed in to make the local storage templates save stuff work-->
@@ -605,18 +606,19 @@
                 // Listen for changes to the class input field within the 'editing' li element
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
+                //Recently adjusted to also include the width selector input so user can enter specific width for the inputs themselves
                 $(document).ready(function () {
                     // Function to add or remove the Bootstrap toolbar
                     function toggleBootstrapToolbar($field, action) {
                         if (action === 'add') {
-                            // Create the toolbar dynamically if it doesn't exist
+                            // Create the Bootstrap toolbar dynamically if it doesn't exist
                             if ($field.find('.bootstrap-toolbar').length === 0) {
                                 var $toolbar = $('<div/>', {
                                     'class': 'bootstrap-toolbar',
                                     'css': {
                                         'position': 'absolute',
                                         'z-index': '1000',
-                                        'top': '150px', // Adjust this value as needed
+                                        'top': '150px',
                                         'left': 0,
                                         'display': 'none',
                                         'background-color': '#f9f9f9',
@@ -635,6 +637,26 @@
                                         'type': 'button'
                                     }).appendTo($toolbar);
                                 });
+
+                                // Create width input section
+                                var $widthInput = $('<input/>', {
+                                    'type': 'number',
+                                    'placeholder': 'Width',
+                                    'style': 'margin-left: 10px; width: 60px;'
+                                });
+                                var $selectUnit = $('<select>', {
+                                    'style': 'margin-left: 5px;'
+                                }).append($('<option>', {
+                                        value: 'px',
+                                        text: 'px'
+                                    }),
+                                    $('<option>', {
+                                        value: '%',
+                                        text: '%'
+                                    }));
+
+                                // Append the input and select to the toolbar
+                                $toolbar.append($widthInput, $selectUnit);
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
@@ -663,7 +685,6 @@
 
                     // Bind mouse enter event to form fields
                     $(document).on('mouseenter', '.form-field', function () {
-                        // Set up the observer on the frm-holder
                         var $holder = $(this).find('.frm-holder');
                         if ($holder.length) {
                             observer.observe($holder[0], {
@@ -679,13 +700,22 @@
 
                     // Hide and remove the toolbar when the mouse leaves the form field
                     $(document).on('mouseleave', '.form-field', function () {
-                        // Disconnect the observer and remove the toolbar
                         var $holder = $(this).find('.frm-holder');
                         if ($holder.length) {
                             observer.disconnect();
                         }
                         toggleBootstrapToolbar($(this), 'remove');
                     });
+
+                    // Bind change events to the width input and unit selector
+                    $(document).on('change', '.bootstrap-toolbar input, .bootstrap-toolbar select',
+                        function () {
+                            var $toolbar = $(this).closest('.bootstrap-toolbar');
+                            var widthValue = $toolbar.find('input[type="number"]').val();
+                            var unit = $toolbar.find('select').val();
+                            var $inputFields = $toolbar.parent().find('input, select, textarea');
+                            $inputFields.css('width', widthValue + unit);
+                        });
 
                     // Bind click event to the toolbar buttons
                     $(document).on('click', '.grid-class-btn', function () {
@@ -718,6 +748,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
