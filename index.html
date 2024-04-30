@@ -623,7 +623,7 @@
                                         'display': 'none',
                                         'background-color': '#f9f9f9',
                                         'border': '1px solid #ccc',
-                                        'padding': '5px',
+                                        'padding': '20px',
                                     }
                                 });
 
@@ -714,6 +714,7 @@
                         var gridClass = $(this).data('class');
                         var $target = $(this).closest('.form-field');
                         if ($target.length) {
+                            // Remove existing grid classes and add the new class
                             $target.removeClass(function (index, className) {
                                 return (className.match(/\bcol-md-\d+\b/g) || []).join(
                                     ' ');
@@ -738,6 +739,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
