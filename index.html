@@ -623,7 +623,7 @@
                                         'display': 'none',
                                         'background-color': '#f9f9f9',
                                         'border': '1px solid #ccc',
-                                        'padding': '20px',
+                                        'padding': '5px',
                                     }
                                 });
 
@@ -640,23 +640,13 @@
 
                                 // Create width input section
                                 var $widthInput = $('<input/>', {
-                                    'type': 'number',
-                                    'placeholder': 'Width',
-                                    'style': 'margin-left: 10px; width: 60px;'
+                                    'type': 'text',
+                                    'placeholder': 'e.g., 200px or 80%',
+                                    'style': 'margin-left: 10px; width: 100px;'
                                 });
-                                var $selectUnit = $('<select>', {
-                                    'style': 'margin-left: 5px;'
-                                }).append($('<option>', {
-                                        value: 'px',
-                                        text: 'px'
-                                    }),
-                                    $('<option>', {
-                                        value: '%',
-                                        text: '%'
-                                    }));
 
-                                // Append the input and select to the toolbar
-                                $toolbar.append($widthInput, $selectUnit);
+                                // Append the input to the toolbar
+                                $toolbar.append($widthInput);
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
@@ -704,33 +694,26 @@
                         if ($holder.length) {
                             observer.disconnect();
                         }
-                        // Delay hiding the toolbar to allow interaction with the dropdown
-                        setTimeout(() => {
-                            toggleBootstrapToolbar($(this), 'remove');
-                        }, 500); // 500 milliseconds delay
+                        toggleBootstrapToolbar($(this), 'remove');
                     });
 
-                    // Bind change events to the width input and unit selector
-                    $(document).on('change', '.bootstrap-toolbar input, .bootstrap-toolbar select',
-                        function () {
-                            var $toolbar = $(this).closest('.bootstrap-toolbar');
-                            var widthValue = $toolbar.find('input[type="number"]').val();
-                            var unit = $toolbar.find('select').val();
-                            var newWidth = widthValue + unit +
-                            ' !important'; // Adding the !important rule
-                            // Find the closest form-field and change the width of the specified inputs
-                            var $inputFields = $toolbar.parent().find('.prev-holder').find(
-                                'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
-                            );
-                            $inputFields.css('width', newWidth);
-                        });
+                    // Bind input event to the width input
+                    $(document).on('input', '.bootstrap-toolbar input[type="text"]', function () {
+                        var $input = $(this);
+                        var $toolbar = $input.closest('.bootstrap-toolbar');
+                        var widthValue = $input.val();
+                        // Apply width style directly
+                        var $inputFields = $toolbar.parent().find('.prev-holder').find(
+                            'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
+                        );
+                        $inputFields.css('width', widthValue + ' !important');
+                    });
 
                     // Bind click event to the toolbar buttons
                     $(document).on('click', '.grid-class-btn', function () {
                         var gridClass = $(this).data('class');
                         var $target = $(this).closest('.form-field');
                         if ($target.length) {
-                            // Remove existing grid classes and add the new class
                             $target.removeClass(function (index, className) {
                                 return (className.match(/\bcol-md-\d+\b/g) || []).join(
                                     ' ');
@@ -755,6 +738,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
