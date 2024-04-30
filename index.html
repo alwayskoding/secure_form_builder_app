@@ -704,7 +704,10 @@
                         if ($holder.length) {
                             observer.disconnect();
                         }
-                        toggleBootstrapToolbar($(this), 'remove');
+                        // Delay hiding the toolbar to allow interaction with the dropdown
+                        setTimeout(() => {
+                            toggleBootstrapToolbar($(this), 'remove');
+                        }, 500); // 500 milliseconds delay
                     });
 
                     // Bind change events to the width input and unit selector
@@ -713,14 +716,13 @@
                             var $toolbar = $(this).closest('.bootstrap-toolbar');
                             var widthValue = $toolbar.find('input[type="number"]').val();
                             var unit = $toolbar.find('select').val();
+                            var newWidth = widthValue + unit +
+                            ' !important'; // Adding the !important rule
                             // Find the closest form-field and change the width of the specified inputs
                             var $inputFields = $toolbar.parent().find('.prev-holder').find(
                                 'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
                             );
-                            $inputFields.each(function () {
-                                this.style.setProperty('width', widthValue + unit,
-                                    'important');
-                            });
+                            $inputFields.css('width', newWidth);
                         });
 
                     // Bind click event to the toolbar buttons
@@ -745,15 +747,15 @@
                     $(document).on('mouseleave', '.bootstrap-toolbar', function () {
                         var $toolbar = $(this);
                         setTimeout(function () {
-                            if ($toolbar.is(':hover')) {
-                                return;
+                            if (!$toolbar.is(':hover')) {
+                                $toolbar.slideUp(function () {
+                                    $(this).remove();
+                                });
                             }
-                            $toolbar.slideUp(function () {
-                                $(this).remove();
-                            });
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
