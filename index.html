@@ -716,8 +716,11 @@
                             // Find the closest form-field and change the width of the specified inputs
                             var $inputFields = $toolbar.parent().find('.prev-holder').find(
                                 'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
-                                );
-                            $inputFields.css('width', widthValue + unit);
+                            );
+                            $inputFields.each(function () {
+                                this.style.setProperty('width', widthValue + unit,
+                                    'important');
+                            });
                         });
 
                     // Bind click event to the toolbar buttons
@@ -751,6 +754,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
