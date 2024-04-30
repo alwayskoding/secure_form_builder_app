@@ -611,7 +611,7 @@
                     // Function to add or remove the Bootstrap toolbar
                     function toggleBootstrapToolbar($field, action) {
                         if (action === 'add') {
-                            // Create the Bootstrap toolbar dynamically if it doesn't exist
+                            // Create the toolbar dynamically if it doesn't exist
                             if ($field.find('.bootstrap-toolbar').length === 0) {
                                 var $toolbar = $('<div/>', {
                                     'class': 'bootstrap-toolbar',
@@ -713,7 +713,10 @@
                             var $toolbar = $(this).closest('.bootstrap-toolbar');
                             var widthValue = $toolbar.find('input[type="number"]').val();
                             var unit = $toolbar.find('select').val();
-                            var $inputFields = $toolbar.parent().find('input, select, textarea');
+                            // Find the closest form-field and change the width of the specified inputs
+                            var $inputFields = $toolbar.parent().find('.prev-holder').find(
+                                'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
+                                );
                             $inputFields.css('width', widthValue + unit);
                         });
 
@@ -748,6 +751,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
