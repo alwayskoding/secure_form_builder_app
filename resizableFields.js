@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
     // Function to make input fields resizable
     function makeFieldsResizable() {
         $(".form-wrap.form-builder .frmb .prev-holder input[type='text'], " +
@@ -45,4 +45,4 @@ $(document).ready(function() {
     $(window).on('unload', function() {
         observer.disconnect();
     });
-});
+
