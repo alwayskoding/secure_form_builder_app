@@ -611,6 +611,12 @@
                     // Function to add or remove the Bootstrap toolbar
                     function toggleBootstrapToolbar($field, action) {
                         if (action === 'add') {
+                            // Check if the field is radio or checkbox type to skip width input
+                            var fieldType = $field.find('input').attr('type');
+                            if (fieldType === 'radio' || fieldType === 'checkbox') {
+                                return; // Skip adding toolbar for radio and checkbox groups
+                            }
+
                             // Create the toolbar dynamically if it doesn't exist
                             if ($field.find('.bootstrap-toolbar').length === 0) {
                                 var $toolbar = $('<div/>', {
@@ -638,15 +644,16 @@
                                     }).appendTo($toolbar);
                                 });
 
-                                // Create width input section
-                                var $widthInput = $('<input/>', {
-                                    'type': 'text',
-                                    'placeholder': 'e.g., 200px or 80%',
-                                    'style': 'margin-left: 10px; width: 100px;'
-                                });
-
-                                // Append the input to the toolbar
-                                $toolbar.append($widthInput);
+                                // Create width input section if not radio or checkbox
+                                if (!(fieldType === 'radio' || fieldType === 'checkbox')) {
+                                    var $widthInput = $('<input/>', {
+                                        'type': 'text',
+                                        'placeholder': 'e.g., 200px or 80%',
+                                        'style': 'margin-left: 10px; width: 100px;'
+                                    });
+                                    // Append the input to the toolbar
+                                    $toolbar.append($widthInput);
+                                }
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
@@ -742,6 +749,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
