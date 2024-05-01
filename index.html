@@ -638,9 +638,13 @@
                                     }).appendTo($toolbar);
                                 });
 
-                                // Check if the field is not a radio or checkbox
+                                // Check the type of field to decide whether to show the width input
                                 var fieldType = $field.find('input').attr('type');
-                                if (fieldType !== 'radio' && fieldType !== 'checkbox') {
+                                var isTextAreaOrSelect = $field.is('.textarea-field, .select-field');
+
+                                // Show width input for text areas, selects, and all other types except radio and checkbox
+                                if (fieldType !== 'radio' && fieldType !== 'checkbox' ||
+                                    isTextAreaOrSelect) {
                                     // Create width input section
                                     var $widthInput = $('<input/>', {
                                         'type': 'text',
@@ -745,6 +749,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
