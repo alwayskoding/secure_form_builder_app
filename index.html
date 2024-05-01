@@ -706,7 +706,10 @@
                         var $inputFields = $toolbar.parent().find('.prev-holder').find(
                             'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
                         );
-                        $inputFields.css('width', widthValue + ' !important');
+                        $inputFields.each(function () {
+                            this.style.setProperty('width', widthValue, 'important');
+                        });
+                        console.log("Applied width:", widthValue); // Log the applied width
                     });
 
                     // Bind click event to the toolbar buttons
@@ -739,6 +742,7 @@
                         }, 1000); // Delay time in milliseconds
                     });
                 });
+
 
 
 
