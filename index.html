@@ -819,11 +819,14 @@
                         const transformedHTML = transformHTML(html);
                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
 
-                        // Open new window/tab with the rendered HTML
-                        var stylingWindow = window.open('css-styling.html', '_blank');
-                        stylingWindow.renderedHTML = wrappedContent; // Pass HTML to the new page
+                        // Save the rendered HTML to localStorage
+                        localStorage.setItem('renderedHTML', wrappedContent);
+
+                        // Open new window/tab
+                        window.open('css-styling.html', '_blank');
                     }
                 });
+
 
                 //Update 004 - copy html button changes to allow for opening new page to add styles there 
 

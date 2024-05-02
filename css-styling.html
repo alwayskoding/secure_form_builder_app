@@ -11,17 +11,26 @@
         <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
     </div>
     <script>
-        window.onload = function() {
-            if (window.opener && window.opener.renderedHTML) {
-                document.getElementById('htmlPreview').innerHTML = window.opener.renderedHTML;
-
-                document.getElementById('cssEditor').addEventListener('input', function() {
-                    var styleTag = document.createElement('style');
-                    styleTag.innerHTML = this.value;
-                    document.getElementById('htmlPreview').appendChild(styleTag);
-                });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve the rendered HTML from localStorage
+            var renderedHTML = localStorage.getItem('renderedHTML');
+            if (renderedHTML) {
+                document.getElementById('htmlPreview').innerHTML = renderedHTML;
+                // Clear the localStorage if it's no longer needed
+                localStorage.removeItem('renderedHTML');
             }
-        };
+
+            document.getElementById('cssEditor').addEventListener('input', function() {
+                // Ensure there's only one style tag
+                var existingStyle = document.querySelector('#htmlPreview style');
+                if (!existingStyle) {
+                    var styleTag = document.createElement('style');
+                    document.getElementById('htmlPreview').appendChild(styleTag);
+                    existingStyle = styleTag;
+                }
+                existingStyle.innerHTML = this.value;
+            });
+        });
     </script>
 </body>
 </html>
