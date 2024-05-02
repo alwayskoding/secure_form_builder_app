@@ -4,31 +4,60 @@
     <meta charset="UTF-8">
     <title>CSS Styling</title>
     <!-- Optionally include CSS editor library -->
+    <style>
+        #toggleButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
         <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
     </div>
+    <button id="toggleButton">Toggle View</button>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Retrieve the rendered HTML from localStorage
             var renderedHTML = localStorage.getItem('renderedHTML');
             if (renderedHTML) {
                 document.getElementById('htmlPreview').innerHTML = renderedHTML;
-                // Clear the localStorage if it's no longer needed
                 localStorage.removeItem('renderedHTML');
             }
 
-            document.getElementById('cssEditor').addEventListener('input', function() {
-                // Ensure there's only one style tag
+            var cssEditor = document.getElementById('cssEditor');
+            cssEditor.addEventListener('input', function() {
                 var existingStyle = document.querySelector('#htmlPreview style');
                 if (!existingStyle) {
                     var styleTag = document.createElement('style');
                     document.getElementById('htmlPreview').appendChild(styleTag);
                     existingStyle = styleTag;
                 }
-                existingStyle.innerHTML = this.value;
+                existingStyle.innerHTML = cssEditor.value;
+            });
+
+            var isCodeView = false;
+            var originalContent = document.getElementById('htmlPreview').innerHTML;
+            var button = document.getElementById('toggleButton');
+            button.addEventListener('click', function() {
+                if (!isCodeView) {
+                    // Show HTML source
+                    var htmlCode = document.createElement('textarea');
+                    htmlCode.style.width = '100%';
+                    htmlCode.style.height = '100%';
+                    htmlCode.textContent = originalContent;
+                    document.getElementById('htmlPreview').innerHTML = '';
+                    document.getElementById('htmlPreview').appendChild(htmlCode);
+                    button.textContent = 'Show Preview';
+                } else {
+                    // Show rendered HTML
+                    document.getElementById('htmlPreview').innerHTML = originalContent;
+                    button.textContent = 'Show Code';
+                }
+                isCodeView = !isCodeView;
             });
         });
     </script>
