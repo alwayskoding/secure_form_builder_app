@@ -5,10 +5,14 @@
     <title>CSS Styling</title>
     <!-- Optionally include CSS editor library -->
     <style>
-        #toggleButton {
+        #buttonPanel {
             position: fixed;
             top: 10px;
-            right: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .button {
             padding: 10px 20px;
             cursor: pointer;
         }
@@ -19,7 +23,10 @@
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
         <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
     </div>
-    <button id="toggleButton">Toggle View</button>
+    <div id="buttonPanel">
+        <button id="toggleButton" class="button">Show Code</button>
+        <button id="tidyButton" class="button">Tidy HTML</button>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var renderedHTML = localStorage.getItem('renderedHTML');
@@ -41,8 +48,10 @@
 
             var isCodeView = false;
             var originalContent = document.getElementById('htmlPreview').innerHTML;
-            var button = document.getElementById('toggleButton');
-            button.addEventListener('click', function() {
+            var toggleButton = document.getElementById('toggleButton');
+            var tidyButton = document.getElementById('tidyButton');
+
+            toggleButton.addEventListener('click', function() {
                 if (!isCodeView) {
                     // Show HTML source
                     var htmlCode = document.createElement('textarea');
@@ -51,14 +60,29 @@
                     htmlCode.textContent = originalContent;
                     document.getElementById('htmlPreview').innerHTML = '';
                     document.getElementById('htmlPreview').appendChild(htmlCode);
-                    button.textContent = 'Show Preview';
+                    toggleButton.textContent = 'Show Preview';
                 } else {
                     // Show rendered HTML
                     document.getElementById('htmlPreview').innerHTML = originalContent;
-                    button.textContent = 'Show Code';
+                    toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
             });
+
+            tidyButton.addEventListener('click', function() {
+                if (isCodeView) {
+                    var htmlTextArea = document.querySelector('#htmlPreview textarea');
+                    if (htmlTextArea) {
+                        htmlTextArea.value = tidyHTML(htmlTextArea.value);
+                    }
+                }
+            });
+
+            function tidyHTML(html) {
+                // Placeholder function for HTML formatting
+                // You may use a library like js-beautify (https://beautifier.io/)
+                return html; // This should actually format the HTML
+            }
         });
     </script>
 </body>
