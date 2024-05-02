@@ -24,7 +24,7 @@
 
         body {
             padding: 40px;
-            background-color: #3f3f3f;
+            
         }
     </style>
 </head>
@@ -47,7 +47,7 @@
             var rawHTML = localStorage.getItem('renderedHTML') || ''; // Store raw HTML
 
             if (rawHTML) {
-                htmlPreview.innerHTML = rawHTML; // Initially display raw HTML
+                htmlPreview.innerHTML = tidyHTML(rawHTML); // Display beautified HTML initially
             }
 
             var savedCSS = localStorage.getItem('lastCss');
@@ -71,6 +71,10 @@
                 }).replace(/(<input [^>]*>)/g, '\n$1\n');
             }
 
+            function contentChanged(oldContent, newContent) {
+                return oldContent.replace(/\s/g, '') !== newContent.replace(/\s/g, '');
+            }
+
             toggleButton.addEventListener('click', function () {
                 if (!isCodeView) {
                     var htmlCode = document.createElement('textarea');
@@ -81,8 +85,11 @@
                     htmlPreview.appendChild(htmlCode);
                     toggleButton.textContent = 'Show Preview';
                 } else {
-                    rawHTML = htmlPreview.querySelector('textarea').value; // Update raw HTML from textarea
-                    htmlPreview.innerHTML = rawHTML; // Display raw HTML without further beautification
+                    var editedHTML = htmlPreview.querySelector('textarea').value;
+                    if (contentChanged(rawHTML, editedHTML)) {
+                        rawHTML = editedHTML; // Update raw HTML only if changed
+                    }
+                    htmlPreview.innerHTML = tidyHTML(rawHTML); // Beautify and display updated raw HTML
                     localStorage.setItem('renderedHTML', rawHTML); // Save raw HTML
                     toggleButton.textContent = 'Show Code';
                 }
