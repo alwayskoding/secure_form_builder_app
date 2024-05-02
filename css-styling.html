@@ -35,15 +35,22 @@
             var cssEditor = document.getElementById('cssEditor');
             var toggleButton = document.getElementById('toggleButton');
             var tidyButton = document.getElementById('tidyButton');
-            var isCodeView = false;
             var styleTag = document.createElement('style');
+            document.head.appendChild(styleTag); // Append style tag to head for global style management
+            var isCodeView = false;
 
-            // Load initial CSS from localStorage if available
-            cssEditor.value = localStorage.getItem('lastCss') || '';
-            styleTag.innerHTML = cssEditor.value;
-            document.head.appendChild(styleTag);
+            // Load HTML and CSS from localStorage
+            var savedHTML = localStorage.getItem('renderedHTML');
+            var savedCSS = localStorage.getItem('lastCss');
+            if (savedHTML) {
+                htmlPreview.innerHTML = savedHTML;
+                localStorage.removeItem('renderedHTML'); // Clear the stored HTML if needed
+            }
+            if (savedCSS) {
+                cssEditor.value = savedCSS;
+                styleTag.innerHTML = savedCSS;
+            }
 
-            // Update CSS and save to localStorage on input
             cssEditor.addEventListener('input', function() {
                 styleTag.innerHTML = cssEditor.value;
                 localStorage.setItem('lastCss', cssEditor.value);
@@ -62,6 +69,7 @@
                     toggleButton.textContent = 'Show Preview';
                 } else {
                     htmlPreview.innerHTML = htmlPreview.querySelector('textarea').value;
+                    localStorage.setItem('renderedHTML', htmlPreview.innerHTML); // Save the rendered HTML
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
