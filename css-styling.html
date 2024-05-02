@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Styling</title>
+    <!-- Optionally include CSS editor library -->
+</head>
+<body>
+    <div style="display: flex; height: 100vh;">
+        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
+        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
+    </div>
+    <script>
+        window.onload = function() {
+            if (window.opener && window.opener.renderedHTML) {
+                document.getElementById('htmlPreview').innerHTML = window.opener.renderedHTML;
+
+                document.getElementById('cssEditor').addEventListener('input', function() {
+                    var styleTag = document.createElement('style');
+                    styleTag.innerHTML = this.value;
+                    document.getElementById('htmlPreview').appendChild(styleTag);
+                });
+            }
+        };
+    </script>
+</body>
+</html>

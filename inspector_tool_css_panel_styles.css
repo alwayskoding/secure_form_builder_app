@@ -1,0 +1,24 @@
+.highlighted {
+    outline: 2px solid blue; /* Highlight style */
+    position: relative; /* Needed for absolute positioning of children */
+}
+
+.hover-label {
+    position: absolute;
+    top: -25px; /* Position above the element */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid blue;
+    padding: 2px 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000; /* Make sure it's on top */
+}
+
+.add-css-btn {
+    margin-left: 5px;
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+}

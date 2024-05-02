@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 
+
+
+
     <style>
         body {
             padding: 160px !important;
@@ -202,6 +205,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
     <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+
+
+
     <!--The 2 below are Part of the local storage setup for saving forms (remove or modify when ready for real database)-->
     <!-- Load Storage Module Script -->
     <script src="localStorageModule.js"></script>
@@ -799,7 +805,7 @@
                         // observer.disconnect();
                     });
                 });
-                //Update 004
+                //Update 004 - I've updated this to not copy the html anymore but to open a new page and place the copied code there in a left panel and css styles in a right panel to write custom css
 
                 $('#copyHTMLBtn').click(function () {
                     var formData = formBuilder.actions.getData('json', true);
@@ -812,19 +818,15 @@
                         const html = $('#render-container').formRender('html');
                         const transformedHTML = transformHTML(html);
                         const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
-                        $('#render-container').html(wrappedContent);
+
+                        // Open new window/tab with the rendered HTML
+                        var stylingWindow = window.open('css-styling.html', '_blank');
+                        stylingWindow.renderedHTML = wrappedContent; // Pass HTML to the new page
                     }
-
-                    var htmlContent = $('#render-container').html();
-
-                    navigator.clipboard.writeText(htmlContent).then(function () {
-                        alert('HTML copied to clipboard!');
-                    }).catch(function (err) {
-                        alert('Failed to copy text: ', err);
-                    });
-
-                    $('#htmlOutput').hide();
                 });
+
+                //Update 004 - copy html button changes to allow for opening new page to add styles there 
+
 
                 function wrapContentWithFormTemplate(content) {
                     return addAttachmentToForm(content);
