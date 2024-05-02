@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>CSS Styling</title>
@@ -15,14 +14,12 @@
             display: flex;
             gap: 10px;
         }
-
         .button {
             padding: 10px 20px;
             cursor: pointer;
         }
     </style>
 </head>
-
 <body>
     <div style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
@@ -30,24 +27,20 @@
     </div>
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
-        <button id="tidyButton" class="button">Tidy HTML</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var htmlPreview = document.getElementById('htmlPreview');
             var cssEditor = document.getElementById('cssEditor');
             var toggleButton = document.getElementById('toggleButton');
-            var tidyButton = document.getElementById('tidyButton');
             var styleTag = document.createElement('style');
-            document.head.appendChild(styleTag); // Append style tag to head for global style management
+            document.head.appendChild(styleTag);
             var isCodeView = false;
 
-            // Load HTML and CSS from localStorage
             var savedHTML = localStorage.getItem('renderedHTML');
             var savedCSS = localStorage.getItem('lastCss');
             if (savedHTML) {
                 htmlPreview.innerHTML = savedHTML;
-                localStorage.removeItem('renderedHTML'); // Clear the stored HTML if needed
             }
             if (savedCSS) {
                 cssEditor.value = savedCSS;
@@ -59,43 +52,35 @@
                 localStorage.setItem('lastCss', cssEditor.value);
             });
 
+            function tidyHTML(html) {
+                let formattedHTML = html_beautify(html, {
+                    indent_size: 4,
+                    indent_inner_html: true,
+                    wrap_line_length: 80,
+                    unformatted: [],
+                    extra_liners: []
+                });
+                formattedHTML = formattedHTML.replace(/(<input [^>]*>)/g, '\n$1\n');
+                return formattedHTML;
+            }
+
             toggleButton.addEventListener('click', function () {
                 if (!isCodeView) {
                     var htmlCode = document.createElement('textarea');
                     htmlCode.style.width = '100%';
                     htmlCode.style.height = '100%';
-                    htmlCode.value = html_beautify(htmlPreview.innerHTML, {
-                        indent_size: 4, // Adjust this value based on your preferred indentation size
-                        indent_inner_html: true, // Ensures the content within the tags is also indented
-                        wrap_line_length: 80, // Wraps lines that exceed this length
-                        unformatted: [], // You can remove specific tags if you don't want them to be formatted
-                        extra_liners: [] // Keeps <head>/<body>/<html> in one line if you prefer
-                    });
+                    htmlCode.value = tidyHTML(htmlPreview.innerHTML);
                     htmlPreview.innerHTML = '';
                     htmlPreview.appendChild(htmlCode);
                     toggleButton.textContent = 'Show Preview';
                 } else {
-                    htmlPreview.innerHTML = htmlPreview.querySelector('textarea').value;
-                    localStorage.setItem('renderedHTML', htmlPreview
-                        .innerHTML); // Save the rendered HTML
+                    htmlPreview.innerHTML = tidyHTML(htmlPreview.querySelector('textarea').value);
+                    localStorage.setItem('renderedHTML', htmlPreview.innerHTML);
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
             });
-
-            tidyButton.addEventListener('click', function () {
-                if (isCodeView) {
-                    var htmlTextArea = htmlPreview.querySelector('textarea');
-                    if (htmlTextArea) {
-                        htmlTextArea.value = html_beautify(htmlTextArea.value, {
-                            indent_size: 4,
-                            extra_liners: []
-                        });
-                    }
-                }
-            });
         });
     </script>
 </body>
-
 </html>
