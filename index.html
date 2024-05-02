@@ -16,7 +16,7 @@
     <style>
         body {
             padding: 160px !important;
-            background-color: #f5f5f5 !important;
+            background-color: #201f1f;
         }
 
         .save-template {
@@ -161,13 +161,73 @@
         }
 
         /*End of Update 005*/
+
+        /*Styling Main Builder To Fit With Styles Builder Page*/
+        .form-wrap.form-builder .frmb .field-label {
+
+            color: #fff !important;
+        }
+
+        div.cb-wrap.sticky-controls ul.frmb-control li {
+            background-color: #3080F6;
+            border: none !important;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+        }
+
+        /*these are the form-fields background colors*/
+        .form-wrap.form-builder .frmb li.form-field {
+            background-color: #2b2a2a;
+        }
+
+        .form-wrap.form-builder .frmb-control li:hover {
+            background-color: #2472e6;
+        }
+
+        .top_info p {
+            color: #ffffff;
+            font-size: 22px;
+            position: relative;
+            left: 13px;
+            opacity: .6;
+        }
+
+        #buildit {
+            font-size: 180px;
+            color: #3080F6;
+            font-family: verdana;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        .builder_top_bar {
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            background-color: #3080F6;
+            top: 0;
+            left: 0;
+        }
+
+        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn {
+            position: relative;
+            float: left;
+            background-color: #3080F6;
+            border-radius: 0 !important;
+        }
+
+        /*End of Main Builder Style Page Mimic*/
     </style>
 
 </head>
 
 <body>
+    <div class="builder_top_bar"></div>
     <div class="top_info">
-        <h1>Secure Forms Made Easy</h1>
+        <h1 id="buildit">Form Build</h1>
         <p>Simply drag and drop an item from the right onto the form preview on the left.</p>
     </div>
 
@@ -194,7 +254,7 @@
 
     </div>
     <div id="render-container"></div>
-    <button id="copyHTMLBtn" style="display:none;">Copy HTML</button>
+    <button id="copyHTMLBtn" style="display:none;">Style Form</button>
     <textarea id="htmlOutput" style="display:none;"></textarea>
 
 
