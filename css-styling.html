@@ -12,7 +12,10 @@
             display: flex;
             gap: 10px;
             width: 100%;
-            justify-content: left;
+            justify-content: space-between;
+            background-color: #2b2a2a;
+            box-sizing: border-box;
+            padding: 10px 15px 15px 15px;
         }
 
         .button {
@@ -22,10 +25,12 @@
 
         body {
             padding: 80px 40px 40px 40px;
+            background-color: #201f1f;
         }
 
         #htmlPreview textarea {
             border: none;
+            padding: 20px;
         }
 
         #cssEditor {
@@ -37,23 +42,39 @@
             font-size: 13px;
         }
 
-        /* #toggleButton {
-            position: absolute;
-            top: -335px;
-            left: -49px;
-        }
-
         #copyHtmlButton {
-            position: absolute;
-            position: absolute;
-            top: -335px;
-            left: 81px;
+            position: relative;
+            left: -82px;
         }
 
+        #toggleButton,
+        #copyHtmlButton,
         #copyCssButton {
-            position: absolute;
-            top: -335px !important;
-        } */
+            background-color: #3080F6;
+            border: none !important;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* Subtle shadow */
+            transition: all 0.3s ease;
+        }
+
+        #toggleButton:hover,
+        #copyHtmlButton:hover,
+        #copyCssButton:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            /* More pronounced shadow on hover */
+            transform: translateY(-2px);
+            /* Slight lift effect */
+        }
+
+        #htmlPreview {
+            background-color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -63,11 +84,11 @@
         <button id="copyHtmlButton" class="button">Copy HTML</button>
         <button id="copyCssButton" class="button" style="position: fixed; right: 20px; top: 11px;">Copy CSS</button>
     </div>
-    <div style="display: flex; height: 100vh; border: 3px dashed #ccc;">
+    <div style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
         <textarea id="cssEditor" style="width: 50%;"></textarea>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var htmlPreview = document.getElementById('htmlPreview');
