@@ -9,17 +9,26 @@
     <style>
         #buttonPanel {
             position: fixed;
-            top: 10px;
-            left: 10px;
+            top: 11px;
+            left: 49px;
             display: flex;
             gap: 10px;
+            width: 100%;
+            justify-content: left;
         }
+
         .button {
             padding: 10px 20px;
             cursor: pointer;
         }
+
+        body {
+            padding: 40px;
+            background-color: #3f3f3f;
+        }
     </style>
 </head>
+
 <body>
     <div style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
@@ -36,12 +45,13 @@
             var styleTag = document.createElement('style');
             document.head.appendChild(styleTag);
             var isCodeView = false;
-
-            var savedHTML = localStorage.getItem('renderedHTML');
+            var rawHTML = localStorage.getItem('renderedHTML') || ''; // Store raw HTML
             var savedCSS = localStorage.getItem('lastCss');
-            if (savedHTML) {
-                htmlPreview.innerHTML = savedHTML;
+
+            if (rawHTML) {
+                htmlPreview.innerHTML = tidyHTML(rawHTML); // Beautify when loading
             }
+
             if (savedCSS) {
                 cssEditor.value = savedCSS;
                 styleTag.innerHTML = savedCSS;
@@ -69,13 +79,14 @@
                     var htmlCode = document.createElement('textarea');
                     htmlCode.style.width = '100%';
                     htmlCode.style.height = '100%';
-                    htmlCode.value = tidyHTML(htmlPreview.innerHTML);
+                    htmlCode.value = tidyHTML(rawHTML); // Beautify raw HTML for code view
                     htmlPreview.innerHTML = '';
                     htmlPreview.appendChild(htmlCode);
                     toggleButton.textContent = 'Show Preview';
                 } else {
-                    htmlPreview.innerHTML = tidyHTML(htmlPreview.querySelector('textarea').value);
-                    localStorage.setItem('renderedHTML', htmlPreview.innerHTML);
+                    rawHTML = htmlPreview.querySelector('textarea').value; // Save raw HTML from textarea
+                    htmlPreview.innerHTML = tidyHTML(rawHTML); // Beautify when switching to preview
+                    localStorage.setItem('renderedHTML', rawHTML); // Store raw HTML
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
