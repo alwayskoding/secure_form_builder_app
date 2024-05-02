@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
     <meta charset="UTF-8">
     <title>CSS Styling</title>
@@ -9,15 +7,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
-
-
     <style>
         #buttonPanel {
-            position: fixed;
-            top: 10px;
-            left: 10px;
             display: flex;
             gap: 10px;
+            padding: 10px;
+            background: #f1f1f1;
         }
         .button {
             padding: 10px 20px;
@@ -26,54 +21,33 @@
     </style>
 </head>
 <body>
-    <div style="display: flex; height: 100vh;">
-        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
-        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
-    </div>
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
         <button id="tidyButton" class="button">Tidy HTML</button>
+    </div>
+    <div style="display: flex; height: calc(100vh - 50px);">
+        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
+        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var renderedHTML = localStorage.getItem('renderedHTML');
             if (renderedHTML) {
                 document.getElementById('htmlPreview').innerHTML = renderedHTML;
-                localStorage.removeItem('renderedHTML');
+                applyStyles();
             }
     
             var cssEditor = document.getElementById('cssEditor');
             cssEditor.addEventListener('input', function() {
-                var existingStyle = document.querySelector('#htmlPreview style');
-                if (!existingStyle) {
-                    var styleTag = document.createElement('style');
-                    document.getElementById('htmlPreview').appendChild(styleTag);
-                    existingStyle = styleTag;
-                }
-                existingStyle.innerHTML = cssEditor.value;
+                applyStyles();
             });
     
             var isCodeView = false;
-            var originalContent = document.getElementById('htmlPreview').innerHTML;
             var toggleButton = document.getElementById('toggleButton');
             var tidyButton = document.getElementById('tidyButton');
     
             toggleButton.addEventListener('click', function() {
-                if (!isCodeView) {
-                    // Show HTML source
-                    var htmlCode = document.createElement('textarea');
-                    htmlCode.style.width = '100%';
-                    htmlCode.style.height = '100%';
-                    htmlCode.textContent = originalContent;
-                    document.getElementById('htmlPreview').innerHTML = '';
-                    document.getElementById('htmlPreview').appendChild(htmlCode);
-                    toggleButton.textContent = 'Show Preview';
-                } else {
-                    // Show rendered HTML
-                    document.getElementById('htmlPreview').innerHTML = originalContent;
-                    toggleButton.textContent = 'Show Code';
-                }
-                isCodeView = !isCodeView;
+                toggleView();
             });
     
             tidyButton.addEventListener('click', function() {
@@ -85,14 +59,42 @@
                 }
             });
     
+            function toggleView() {
+                var htmlPreview = document.getElementById('htmlPreview');
+                if (!isCodeView) {
+                    // Show HTML source
+                    var htmlCode = document.createElement('textarea');
+                    htmlCode.style.width = '100%';
+                    htmlCode.style.height = '100%';
+                    htmlCode.textContent = tidyHTML(htmlPreview.innerHTML);
+                    htmlPreview.innerHTML = '';
+                    htmlPreview.appendChild(htmlCode);
+                    toggleButton.textContent = 'Show Preview';
+                } else {
+                    // Show rendered HTML
+                    var htmlTextArea = document.querySelector('#htmlPreview textarea');
+                    if (htmlTextArea) {
+                        htmlPreview.innerHTML = htmlTextArea.value;
+                    }
+                    toggleButton.textContent = 'Show Code';
+                    applyStyles();
+                }
+                isCodeView = !isCodeView;
+            }
+    
             function tidyHTML(html) {
-                return html_beautify(html, {
-                    indent_size: 4, // Adjust according to your preference
-                    extra_liners: [] // Keeps <head>/<body>/<html> in one line if you prefer
-                });
+                return html_beautify(html, { indent_size: 4, extra_liners: [] });
+            }
+
+            function applyStyles() {
+                var existingStyle = document.querySelector('#htmlPreview style');
+                if (!existingStyle) {
+                    existingStyle = document.createElement('style');
+                    document.head.appendChild(existingStyle);
+                }
+                existingStyle.innerHTML = cssEditor.value;
             }
         });
     </script>
-    
 </body>
 </html>
