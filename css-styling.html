@@ -28,7 +28,6 @@
         }
     </style>
 </head>
-
 <body>
     <div style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
@@ -46,12 +45,12 @@
             document.head.appendChild(styleTag);
             var isCodeView = false;
             var rawHTML = localStorage.getItem('renderedHTML') || ''; // Store raw HTML
-            var savedCSS = localStorage.getItem('lastCss');
 
             if (rawHTML) {
-                htmlPreview.innerHTML = tidyHTML(rawHTML); // Beautify when loading
+                htmlPreview.innerHTML = rawHTML; // Display raw HTML without beautifying on load
             }
 
+            var savedCSS = localStorage.getItem('lastCss');
             if (savedCSS) {
                 cssEditor.value = savedCSS;
                 styleTag.innerHTML = savedCSS;
@@ -63,15 +62,13 @@
             });
 
             function tidyHTML(html) {
-                let formattedHTML = html_beautify(html, {
+                return html_beautify(html, {
                     indent_size: 4,
                     indent_inner_html: true,
                     wrap_line_length: 80,
                     unformatted: [],
                     extra_liners: []
-                });
-                formattedHTML = formattedHTML.replace(/(<input [^>]*>)/g, '\n$1\n');
-                return formattedHTML;
+                }).replace(/(<input [^>]*>)/g, '\n$1\n');
             }
 
             toggleButton.addEventListener('click', function () {
@@ -79,14 +76,14 @@
                     var htmlCode = document.createElement('textarea');
                     htmlCode.style.width = '100%';
                     htmlCode.style.height = '100%';
-                    htmlCode.value = tidyHTML(rawHTML); // Beautify raw HTML for code view
+                    htmlCode.value = tidyHTML(htmlPreview.innerHTML); // Beautify for editing
                     htmlPreview.innerHTML = '';
                     htmlPreview.appendChild(htmlCode);
                     toggleButton.textContent = 'Show Preview';
                 } else {
-                    rawHTML = htmlPreview.querySelector('textarea').value; // Save raw HTML from textarea
-                    htmlPreview.innerHTML = tidyHTML(rawHTML); // Beautify when switching to preview
-                    localStorage.setItem('renderedHTML', rawHTML); // Store raw HTML
+                    rawHTML = htmlPreview.querySelector('textarea').value; // Capture raw HTML from textarea
+                    htmlPreview.innerHTML = rawHTML; // Display raw HTML without further beautification
+                    localStorage.setItem('renderedHTML', rawHTML); // Save raw HTML
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
