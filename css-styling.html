@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>CSS Styling</title>
@@ -8,24 +9,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
     <style>
         #buttonPanel {
-            position: fixed;
-            top: 11px;
-            left: 49px;
             display: flex;
             gap: 10px;
             width: 100%;
             justify-content: left;
         }
+
         .button {
             padding: 10px 20px;
             cursor: pointer;
         }
+
         body {
-            padding: 40px;
+            padding: 80px 40px 40px 40px;
         }
+
         #htmlPreview textarea {
             border: none;
         }
+
         #cssEditor {
             border: none;
             border-left: 1px solid #dfdfdf;
@@ -34,18 +36,38 @@
             padding: 20px;
             font-size: 13px;
         }
+
+        /* #toggleButton {
+            position: absolute;
+            top: -335px;
+            left: -49px;
+        }
+
+        #copyHtmlButton {
+            position: absolute;
+            position: absolute;
+            top: -335px;
+            left: 81px;
+        }
+
+        #copyCssButton {
+            position: absolute;
+            top: -335px !important;
+        } */
     </style>
 </head>
+
 <body>
-    <div style="display: flex; height: 100vh; border: 3px dashed #ccc;">
-        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
-        <textarea id="cssEditor" style="width: 50%;"></textarea>
-    </div>
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
         <button id="copyHtmlButton" class="button">Copy HTML</button>
         <button id="copyCssButton" class="button" style="position: fixed; right: 20px; top: 11px;">Copy CSS</button>
     </div>
+    <div style="display: flex; height: 100vh; border: 3px dashed #ccc;">
+        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
+        <textarea id="cssEditor" style="width: 50%;"></textarea>
+    </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var htmlPreview = document.getElementById('htmlPreview');
@@ -108,7 +130,7 @@
                 isCodeView = !isCodeView;
             });
 
-            copyHtmlButton.addEventListener('click', function() {
+            copyHtmlButton.addEventListener('click', function () {
                 if (isCodeView) { // Only allow copying if in code view
                     var htmlTextArea = htmlPreview.querySelector('textarea');
                     htmlTextArea.select();
@@ -116,11 +138,12 @@
                 }
             });
 
-            copyCssButton.addEventListener('click', function() {
+            copyCssButton.addEventListener('click', function () {
                 cssEditor.select();
                 document.execCommand('copy');
             });
         });
     </script>
 </body>
+
 </html>
