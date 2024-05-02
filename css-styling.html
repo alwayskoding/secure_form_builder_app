@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
     <meta charset="UTF-8">
     <title>CSS Styling</title>
     <!-- Optionally include CSS editor library -->
+    <script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.0/lib/beautify-html.js"></script>
+
+
     <style>
         #buttonPanel {
             position: fixed;
@@ -34,7 +39,7 @@
                 document.getElementById('htmlPreview').innerHTML = renderedHTML;
                 localStorage.removeItem('renderedHTML');
             }
-
+    
             var cssEditor = document.getElementById('cssEditor');
             cssEditor.addEventListener('input', function() {
                 var existingStyle = document.querySelector('#htmlPreview style');
@@ -45,12 +50,12 @@
                 }
                 existingStyle.innerHTML = cssEditor.value;
             });
-
+    
             var isCodeView = false;
             var originalContent = document.getElementById('htmlPreview').innerHTML;
             var toggleButton = document.getElementById('toggleButton');
             var tidyButton = document.getElementById('tidyButton');
-
+    
             toggleButton.addEventListener('click', function() {
                 if (!isCodeView) {
                     // Show HTML source
@@ -68,7 +73,7 @@
                 }
                 isCodeView = !isCodeView;
             });
-
+    
             tidyButton.addEventListener('click', function() {
                 if (isCodeView) {
                     var htmlTextArea = document.querySelector('#htmlPreview textarea');
@@ -77,13 +82,15 @@
                     }
                 }
             });
-
+    
             function tidyHTML(html) {
-                // Placeholder function for HTML formatting
-                // You may use a library like js-beautify (https://beautifier.io/)
-                return html; // This should actually format the HTML
+                return html_beautify(html, {
+                    indent_size: 4, // Adjust according to your preference
+                    extra_liners: [] // Keeps <head>/<body>/<html> in one line if you prefer
+                });
             }
         });
     </script>
+    
 </body>
 </html>
