@@ -16,31 +16,43 @@
             width: 100%;
             justify-content: left;
         }
-
         .button {
             padding: 10px 20px;
             cursor: pointer;
         }
-
         body {
             padding: 40px;
-            
+        }
+        #htmlPreview textarea {
+            border: none;
+        }
+        #cssEditor {
+            border: none;
+            border-left: 1px solid #dfdfdf;
+            background-color: #3e3e3e;
+            color: #adb6ff;
+            padding: 20px;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    <div style="display: flex; height: 100vh;">
+    <div style="display: flex; height: 100vh; border: 3px dashed #ccc;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
-        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
+        <textarea id="cssEditor" style="width: 50%;"></textarea>
     </div>
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
+        <button id="copyHtmlButton" class="button">Copy HTML</button>
+        <button id="copyCssButton" class="button" style="position: fixed; right: 20px; top: 11px;">Copy CSS</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var htmlPreview = document.getElementById('htmlPreview');
             var cssEditor = document.getElementById('cssEditor');
             var toggleButton = document.getElementById('toggleButton');
+            var copyHtmlButton = document.getElementById('copyHtmlButton');
+            var copyCssButton = document.getElementById('copyCssButton');
             var styleTag = document.createElement('style');
             document.head.appendChild(styleTag);
             var isCodeView = false;
@@ -94,6 +106,19 @@
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
+            });
+
+            copyHtmlButton.addEventListener('click', function() {
+                if (isCodeView) { // Only allow copying if in code view
+                    var htmlTextArea = htmlPreview.querySelector('textarea');
+                    htmlTextArea.select();
+                    document.execCommand('copy');
+                }
+            });
+
+            copyCssButton.addEventListener('click', function() {
+                cssEditor.select();
+                document.execCommand('copy');
             });
         });
     </script>
