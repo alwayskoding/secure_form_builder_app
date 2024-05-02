@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>CSS Styling</title>
-    <!-- Optionally include CSS editor library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
     <style>
         #buttonPanel {
+            position: fixed;
+            top: 10px;
+            left: 10px;
             display: flex;
             gap: 10px;
-            padding: 10px;
-            background: #f1f1f1;
         }
         .button {
             padding: 10px 20px;
@@ -21,79 +21,63 @@
     </style>
 </head>
 <body>
+    <div style="display: flex; height: 100vh;">
+        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
+        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
+    </div>
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
         <button id="tidyButton" class="button">Tidy HTML</button>
     </div>
-    <div style="display: flex; height: calc(100vh - 50px);">
-        <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
-        <textarea id="cssEditor" style="width: 50%; height: 100%;"></textarea>
-    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var renderedHTML = localStorage.getItem('renderedHTML');
-            if (renderedHTML) {
-                document.getElementById('htmlPreview').innerHTML = renderedHTML;
-                applyStyles();
-            }
-    
+            var htmlPreview = document.getElementById('htmlPreview');
             var cssEditor = document.getElementById('cssEditor');
-            cssEditor.addEventListener('input', function() {
-                applyStyles();
-            });
-    
-            var isCodeView = false;
             var toggleButton = document.getElementById('toggleButton');
             var tidyButton = document.getElementById('tidyButton');
-    
+            var isCodeView = false;
+            var styleTag = document.createElement('style');
+
+            // Load initial CSS from localStorage if available
+            cssEditor.value = localStorage.getItem('lastCss') || '';
+            styleTag.innerHTML = cssEditor.value;
+            document.head.appendChild(styleTag);
+
+            // Update CSS and save to localStorage on input
+            cssEditor.addEventListener('input', function() {
+                styleTag.innerHTML = cssEditor.value;
+                localStorage.setItem('lastCss', cssEditor.value);
+            });
+
             toggleButton.addEventListener('click', function() {
-                toggleView();
-            });
-    
-            tidyButton.addEventListener('click', function() {
-                if (isCodeView) {
-                    var htmlTextArea = document.querySelector('#htmlPreview textarea');
-                    if (htmlTextArea) {
-                        htmlTextArea.value = tidyHTML(htmlTextArea.value);
-                    }
-                }
-            });
-    
-            function toggleView() {
-                var htmlPreview = document.getElementById('htmlPreview');
                 if (!isCodeView) {
-                    // Show HTML source
                     var htmlCode = document.createElement('textarea');
                     htmlCode.style.width = '100%';
                     htmlCode.style.height = '100%';
-                    htmlCode.textContent = tidyHTML(htmlPreview.innerHTML);
+                    htmlCode.value = html_beautify(htmlPreview.innerHTML, {
+                        indent_size: 4
+                    });
                     htmlPreview.innerHTML = '';
                     htmlPreview.appendChild(htmlCode);
                     toggleButton.textContent = 'Show Preview';
                 } else {
-                    // Show rendered HTML
-                    var htmlTextArea = document.querySelector('#htmlPreview textarea');
-                    if (htmlTextArea) {
-                        htmlPreview.innerHTML = htmlTextArea.value;
-                    }
+                    htmlPreview.innerHTML = htmlPreview.querySelector('textarea').value;
                     toggleButton.textContent = 'Show Code';
-                    applyStyles();
                 }
                 isCodeView = !isCodeView;
-            }
-    
-            function tidyHTML(html) {
-                return html_beautify(html, { indent_size: 4, extra_liners: [] });
-            }
+            });
 
-            function applyStyles() {
-                var existingStyle = document.querySelector('#htmlPreview style');
-                if (!existingStyle) {
-                    existingStyle = document.createElement('style');
-                    document.head.appendChild(existingStyle);
+            tidyButton.addEventListener('click', function() {
+                if (isCodeView) {
+                    var htmlTextArea = htmlPreview.querySelector('textarea');
+                    if (htmlTextArea) {
+                        htmlTextArea.value = html_beautify(htmlTextArea.value, {
+                            indent_size: 4,
+                            extra_liners: []
+                        });
+                    }
                 }
-                existingStyle.innerHTML = cssEditor.value;
-            }
+            });
         });
     </script>
 </body>
