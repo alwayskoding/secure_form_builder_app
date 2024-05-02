@@ -65,10 +65,10 @@
                     htmlCode.style.width = '100%';
                     htmlCode.style.height = '100%';
                     htmlCode.value = html_beautify(htmlPreview.innerHTML, {
-                        indent_size: 4, // Increase or decrease based on your preference
-                        indent_inner_html: true, // Indent the contents of tags for better readability
-                        wrap_line_length: 80, // Sets a good standard width for readability
-                        unformatted: ['b', 'i', 'u'], // List of tags to not format
+                        indent_size: 4, // Adjust this value based on your preferred indentation size
+                        indent_inner_html: true, // Ensures the content within the tags is also indented
+                        wrap_line_length: 80, // Wraps lines that exceed this length
+                        unformatted: [], // You can remove specific tags if you don't want them to be formatted
                         extra_liners: [] // Keeps <head>/<body>/<html> in one line if you prefer
                     });
                     htmlPreview.innerHTML = '';
@@ -77,7 +77,7 @@
                 } else {
                     htmlPreview.innerHTML = htmlPreview.querySelector('textarea').value;
                     localStorage.setItem('renderedHTML', htmlPreview
-                    .innerHTML); // Save the rendered HTML
+                        .innerHTML); // Save the rendered HTML
                     toggleButton.textContent = 'Show Code';
                 }
                 isCodeView = !isCodeView;
