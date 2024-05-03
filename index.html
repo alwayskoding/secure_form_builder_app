@@ -1089,18 +1089,21 @@
 
                 $(document).ready(function () {
                     function updateButtonLabels() {
+                        console.log("Updating button labels...");
+
                         // Update the text for the 'Clear' button
                         $('.clear-all').text('Remove All Fields');
+                        console.log("Clear button updated.");
 
                         // Update the text for the button that shows '[{…}]'
-                        $('.get-data').text(
-                        'JSON'); // Ensure this selector targets the right button, adjust if necessary
+                        $('.get-data').text('JSON');
+                        console.log("Data button updated.");
 
-                        // Update the text for the 'Save Template' button
-                        // Check if the button with the class 'special' also has an id that contains 'save'
+                        // Update the text for the 'Save Template' button that has an ID containing 'save'
                         $('.special').each(function () {
                             if (this.id.includes('save')) {
                                 $(this).text('Generate Form');
+                                console.log("Generate Form button updated.");
                             }
                         });
                     }
@@ -1110,13 +1113,15 @@
 
                     // Optional: Use setInterval if buttons are dynamically loaded and not immediately present
                     var checkExist = setInterval(function () {
-                        if ($('.clear-all').length && $('.get-data').length && $(
-                                '.special:contains("Generate Form")').length) {
+                        if ($('.clear-all').length && $('.get-data').length && $('.special')
+                            .length) {
                             updateButtonLabels();
                             clearInterval(checkExist); // Stop checking once buttons are updated
+                            console.log("All buttons confirmed and updated, interval cleared.");
                         }
                     }, 100); // Check every 100 milliseconds
                 });
+
 
 
 
