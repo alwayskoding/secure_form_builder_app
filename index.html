@@ -596,7 +596,8 @@
                                                 }
                                                 //update 008 related swalclosed line
                                                 $(document).trigger(
-                                                'swalClosed'); // Trigger the custom event after handling Swal
+                                                    'swalClosed'
+                                                    ); // Trigger the custom event after handling Swal
                                             }
                                         });
                                     } else {
@@ -1146,6 +1147,10 @@
                     var formPreview = $('.form_preview_section');
                     var renderContainer = $('#render-container');
 
+                    // Initially hide the elements
+                    formPreview.hide();
+                    renderContainer.hide();
+
                     // Function to show and scroll to the form preview and render container
                     function showAndScroll() {
                         formPreview.show();
@@ -1172,10 +1177,10 @@
                         }
                     });
 
-                    // This part should be triggered when the Swal is confirmed/closed
-                    // Triggered this event in my Swal's close/confirm handler
+                    // Ensure this event is triggered in your Swal's close/confirm handler
                     // Example: $(document).trigger('swalClosed');
                 });
+
 
 
 
