@@ -1085,6 +1085,49 @@
 
                 //End of Update 006
 
+                //Update 007 Changing Text In Default Main Page Save Etc Buttons
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Function to update button texts
+                    function updateButtonLabels() {
+                        // Update the text for the 'Clear' button
+                        var clearButton = document.querySelector('button[data-action="clear"]');
+                        if (clearButton) {
+                            clearButton.textContent = 'Remove All Fields';
+                        }
+
+                        // Update the text for the button with JSON symbol '[{…}]'
+                        var jsonButton = document.querySelector('button[data-action="getData"]');
+                        if (jsonButton) {
+                            jsonButton.textContent = 'JSON';
+                        }
+
+                        // Update the text for the 'Save Template' button
+                        var saveTemplateButton = document.querySelector(
+                            'button[data-action="saveTemplate"]');
+                        if (saveTemplateButton) {
+                            saveTemplateButton.textContent = 'Generate Form';
+                        }
+                    }
+
+                    // Call the function to update button labels
+                    updateButtonLabels();
+
+                    // Optional: if buttons are created dynamically and might not exist at DOMContentLoaded, set an interval to check periodically
+                    // This part is only necessary if buttons are not available after DOMContentLoaded due to dynamic content loading
+                    var checkExist = setInterval(function () {
+                        if (document.querySelector('button[data-action="clear"]') &&
+                            document.querySelector('button[data-action="getData"]') &&
+                            document.querySelector('button[data-action="saveTemplate"]')) {
+                            updateButtonLabels();
+                            clearInterval(checkExist); // Stop checking once buttons are updated
+                        }
+                    }, 100); // Check every 100 milliseconds
+                });
+
+
+                //End of Update 007
+
 
             }); //end of jquery wrapper
         } //end of mainScript
