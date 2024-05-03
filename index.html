@@ -142,7 +142,14 @@
             top: 450px !important;
             gap: 10px;
             margin-bottom: 10px;
+            pointer-events: none;
         }
+
+        #gridClassBar {
+            pointer-events: none;
+            /* Disable pointer events initially */
+        }
+
 
         .grid-class-btn {
             background-color: #3080F6;
@@ -782,8 +789,8 @@
                                             window.globalFormName = formName;
                                             //update 008 related swalclosed line
                                             $(document).trigger(
-                                                    'swalClosed'
-                                                ); // Trigger the custom event after handling Swal
+                                                'swalClosed'
+                                            ); // Trigger the custom event after handling Swal
                                         }
                                     });
                                 }
@@ -900,7 +907,12 @@
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
-                                $toolbar.slideDown();
+                                $toolbar.slideDown('fast', function () {
+                                    // After the slide down completes, delay enabling pointer events
+                                    setTimeout(() => {
+                                        $toolbar.css('pointer-events', 'auto');
+                                    }, 2000); // Delay of 2000 milliseconds (2 seconds)
+                                });
                             }
                         } else if (action === 'remove') {
                             // Remove the toolbar if it exists
