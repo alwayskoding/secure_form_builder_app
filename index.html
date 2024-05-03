@@ -594,10 +594,7 @@
                                                         window.mailboxID);
                                                     mailboxInput.value = window.mailboxID;
                                                 }
-                                                //update 008 related swalclosed line
-                                                $(document).trigger(
-                                                    'swalClosed'
-                                                    ); // Trigger the custom event after handling Swal
+
                                             }
                                         });
                                     } else {
@@ -682,6 +679,10 @@
                                                             formName;
                                                         $('#changeFormNameBtn')
                                                             .show(); // Show change name button when a name is set
+                                                        //update 008 related swalclosed line
+                                                        $(document).trigger(
+                                                            'swalClosed'
+                                                        ); // Trigger the custom event after handling Swal
                                                     }
                                                 });
                                             }
@@ -709,6 +710,10 @@
                                                                 'input[name="sf:recipient_mailbox"]'
                                                             );
                                                         mailboxInput.value = result.value;
+                                                        //update 008 related swalclosed line
+                                                        $(document).trigger(
+                                                            'swalClosed'
+                                                        ); // Trigger the custom event after handling Swal
                                                     }
                                                 });
                                             }
@@ -773,6 +778,10 @@
                                             hiddenInput.value = formName;
                                             formElement.setAttribute('name', formName);
                                             window.globalFormName = formName;
+                                            //update 008 related swalclosed line
+                                            $(document).trigger(
+                                                    'swalClosed'
+                                                ); // Trigger the custom event after handling Swal
                                         }
                                     });
                                 }
@@ -1169,7 +1178,7 @@
                             $(document).one('swalClosed', function () {
                                 showAndScroll();
                                 swalShown =
-                                true; // Set flag to true after first activation
+                                    true; // Set flag to true after first activation
                             });
                         } else if (this.id.includes('save')) {
                             // For subsequent clicks, just show and scroll
