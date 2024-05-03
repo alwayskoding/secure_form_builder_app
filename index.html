@@ -1138,29 +1138,31 @@
                 //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview
 
                 $(document).ready(function () {
-                    // Use event delegation if the button might be added dynamically
-                    $(document).on('click', '.special', function () {
-                        // Ensure the button has 'save' in its id
-                        if (this.id.includes('save')) {
-                            var formPreview = $('.form_preview_section');
-                            var renderContainer = $('#render-container');
+                    var formPreview = $('.form_preview_section');
+                    var renderContainer = $('#render-container');
 
-                            // Toggle the display with slide effect for form preview
-                            if (formPreview.is(':hidden')) {
-                                formPreview.slideDown('slow', function () {
-                                    // Slide down the render container after the form preview
-                                    renderContainer.slideDown('slow');
+                    // Initially hide the form preview section and the render container
+                    formPreview.hide();
+                    renderContainer.hide();
+
+                    $(document).on('click', '.special', function () {
+                        // Ensure the button has 'save' in its ID
+                        if (this.id.includes('save')) {
+                            // Always show or reload the form preview and render container
+                            formPreview.slideDown('slow', function () {
+                                // Ensure render container is also shown
+                                renderContainer.slideDown('slow', function () {
+                                    // Scroll the form preview into view every time the button is clicked
+                                    formPreview[0].scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'start'
+                                    });
                                 });
-                            } else {
-                                // Slide up the render container first
-                                renderContainer.slideUp('slow', function () {
-                                    // Slide up the form preview after the render container
-                                    formPreview.slideUp('slow');
-                                });
-                            }
+                            });
                         }
                     });
                 });
+
 
 
 
