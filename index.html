@@ -37,6 +37,18 @@
             margin: 0 auto;
             border: 1px solid #e1dfdf;
             padding: 2em;
+            background-color: #ffffff;
+            border: 1px solid #e1dfdf;
+            position: relative;
+            left: 250px;
+            top: -51px;
+        }
+
+        .form_preview_section p {
+            max-width: 600px;
+            font-size: 22px;
+            color: #fff;
+            opacity: .6;
         }
 
         button#copyHTMLBtn {
@@ -64,10 +76,11 @@
         .form_preview_section {
             margin: 0 auto !important;
             width: 800px;
-            border-bottom: 1px solid #e1dfdf;
             margin-bottom: 50px !important;
             padding-bottom: 15px;
-            margin-top: 270px !important;
+            margin-top: 500px !important;
+            position: relative;
+            left: -519px;
         }
 
         /*Styles For CSS Grid Predefined Layouts Update*/
@@ -228,7 +241,8 @@
             opacity: .6;
         }
 
-        #buildit {
+        #buildit,
+        .form_preview_section h1 {
             font-size: 180px;
             color: #3080F6;
             font-family: verdana;
@@ -272,7 +286,8 @@
             bottom: -100px !important;
         }
 
-        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn {
+        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn,
+        #saveTemplateBtn {
             position: relative;
             float: left;
             background-color: rgb(33, 38, 45);
@@ -307,7 +322,8 @@
             transition-property: color, fill, background-color, border-color;
         }
 
-        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn:hover {
+        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn:hover,
+        #saveTemplateBtn {
             background-color: #232222;
         }
 
@@ -380,10 +396,13 @@
 
     <div class="form_preview_section">
         <h1>Here is your generated form.</h1>
-        <p>Click the "add attachment to form" or "toggle mailbox form" buttons if needed and simply hit the Copy HTML
-            button and add your finished secure form to content.</p>
+        <p>
+            Click the "ADD ATTACHMENT TO FORM" or "TOGGLE MAILBOX FORM" buttons above if needed, save the form as a
+            template for next time if you like and simply hit the Style Form button to start styling your form.
+        </p>
         <button id="saveTemplateBtn">Save Template</button>
-        <button id="loadTemplateBtn">Load Template</button>
+        <!--Hiding Load Template Button For Now But When Ready Come Back and Uncomment and Know That This Should Connect To The LocalStorage JS You Started-->
+        <!-- <button id="loadTemplateBtn">Load Template</button> -->
 
     </div>
     <div id="render-container"></div>
@@ -1039,18 +1058,18 @@
                     // Attach click event handler to the grid class buttons within the toolbar
                     $(document).on('click', '.grid-class-btn', function () {
                         var selectedClass = $(this).data(
-                        'class'); // Extract the class from the button
+                            'class'); // Extract the class from the button
                         var $formField = $(this).closest(
-                        '.form-field'); // Find the closest parent form-field
+                            '.form-field'); // Find the closest parent form-field
                         var $classInput = $formField.find(
-                        '.fld-className'); // Find the class input within the form-field
+                            '.fld-className'); // Find the class input within the form-field
 
                         // Update the class input value and trigger change to propagate within form builder
                         if ($classInput.length) {
                             var currentClasses = $classInput.val();
                             // Optionally clear other grid classes before adding new one
                             currentClasses = currentClasses.replace(/\bcol-md-\d+\b/g, '')
-                            .trim();
+                                .trim();
                             $classInput.val(currentClasses + ' ' + selectedClass).trigger(
                                 'change');
                         }
