@@ -782,8 +782,8 @@
                                             window.globalFormName = formName;
                                             //update 008 related swalclosed line
                                             $(document).trigger(
-                                                    'swalClosed'
-                                                ); // Trigger the custom event after handling Swal
+                                                'swalClosed'
+                                            ); // Trigger the custom event after handling Swal
                                         }
                                     });
                                 }
@@ -900,7 +900,14 @@
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
-                                $toolbar.slideDown();
+                                $toolbar.slideDown('fast', function () {
+                                    // Enable pointer events after a short delay
+                                    setTimeout(() => {
+                                        $toolbar.css('pointer-events', 'auto');
+                                    },
+                                    200); // Delay pointer events to ensure complete appearance
+                                });
+
                             }
                         } else if (action === 'remove') {
                             // Remove the toolbar if it exists
