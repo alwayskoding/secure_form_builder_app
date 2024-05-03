@@ -866,7 +866,7 @@
                                         'background-color': '#2b2a2a',
                                         'border': '1px solid #2b2a2a',
                                         'padding': '20px',
-                                        'min-height': '60px'
+                                        'min-height': '100px'
                                     }
                                 });
 
@@ -901,12 +901,13 @@
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
                                 $toolbar.slideDown('fast', function () {
-                                    // Enable pointer events after a short delay
-                                    setTimeout(() => {
-                                        $toolbar.css('pointer-events', 'auto');
-                                    },
-                                    200); // Delay pointer events to ensure complete appearance
+                                    // This function will be executed after the slide down animation completes
+                                    $(this).promise().done(function () {
+                                        // This ensures that all animations on the toolbar are truly completed
+                                        $(this).css('pointer-events', 'auto');
+                                    });
                                 });
+
 
                             }
                         } else if (action === 'remove') {
