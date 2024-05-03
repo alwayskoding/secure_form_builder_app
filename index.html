@@ -142,13 +142,7 @@
             top: 450px !important;
             gap: 10px;
             margin-bottom: 10px;
-            pointer-events: none;
-            height: 180px;
-        }
-
-        #gridClassBar {
-            pointer-events: none;
-            /* Disable pointer events initially */
+            
         }
 
 
@@ -908,12 +902,7 @@
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
-                                $toolbar.slideDown('fast', function () {
-                                    // After the slide down completes, delay enabling pointer events
-                                    setTimeout(() => {
-                                        $toolbar.css('pointer-events', 'auto');
-                                    }, 2000); // Delay of 2000 milliseconds (2 seconds)
-                                });
+                                $toolbar.slideDown();
                             }
                         } else if (action === 'remove') {
                             // Remove the toolbar if it exists
