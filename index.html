@@ -1030,6 +1030,41 @@
                 }
 
 
+                //Update 006 - Adding Function To Handle Copying Data-Class of Bootstrap Toolbar Button To Inner Form-Field Panel So 
+                //That it carries over to the preview renderer and to the style page.
+
+                $(document).ready(function () {
+                    // Attach click event handler to the grid class buttons within the toolbar
+                    $(document).on('click', '.grid-class-btn', function () {
+                        var selectedClass = $(this).data(
+                        'class'); // Extract the class from the button
+                        var $formField = $(this).closest(
+                        '.form-field'); // Find the closest parent form-field
+                        var $classInput = $formField.find(
+                        '.fld-className'); // Find the class input within the form-field
+
+                        // Update the class input value and trigger change to propagate within form builder
+                        if ($classInput.length) {
+                            var currentClasses = $classInput.val();
+                            // Optionally clear other grid classes before adding new one
+                            currentClasses = currentClasses.replace(/\bcol-md-\d+\b/g, '')
+                            .trim();
+                            $classInput.val(currentClasses + ' ' + selectedClass).trigger(
+                                'change');
+                        }
+
+                        // Directly update the class for visual feedback in the form builder's preview
+                        $formField.removeClass(function (index, className) {
+                            return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
+                        }).addClass(selectedClass);
+                    });
+                });
+
+
+
+                //End of Update 006
+
+
             }); //end of jquery wrapper
         } //end of mainScript
 
