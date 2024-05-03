@@ -1135,7 +1135,7 @@
 
                 //End of Update 007
 
-                //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview
+                //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview - Also on the first click making sure swal popup has already opened and closed
 
                 $(document).ready(function () {
                     var formPreview = $('.form_preview_section');
@@ -1145,23 +1145,54 @@
                     formPreview.hide();
                     renderContainer.hide();
 
+                    // Function to show sections
+                    function showSections() {
+                        formPreview.show();
+                        renderContainer.show();
+                        formPreview[0].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+
                     $(document).on('click', '.special', function () {
-                        // Ensure the button has 'save' in its ID
                         if (this.id.includes('save')) {
-                            // Always show or reload the form preview and render container
-                            formPreview.slideDown('slow', function () {
-                                // Ensure render container is also shown
-                                renderContainer.slideDown('slow', function () {
-                                    // Scroll the form preview into view every time the button is clicked
-                                    formPreview[0].scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'start'
-                                    });
+                            // Check if the Swal has already been shown by checking a flag
+                            if (!window.swalShown) {
+                                Swal.fire({
+                                    title: 'Enter Form Name',
+                                    input: 'text',
+                                    inputLabel: 'Form Name',
+                                    inputPlaceholder: 'Enter the Form Name',
+                                    inputValidator: (value) => {
+                                        if (!value)
+                                        return 'You need to write something!';
+                                    },
+                                    showCancelButton: false,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Set flag to true to indicate Swal has been shown
+                                        window.swalShown = true;
+                                        const formName = result.value.trim().replace(
+                                            /\s+/g, '_');
+                                        const hiddenInput = document.querySelector(
+                                            'input[name="sf:form_name"]');
+                                        const formElement = document.querySelector(
+                                            'form');
+                                        if (hiddenInput && formElement) {
+                                            hiddenInput.value = formName;
+                                            formElement.setAttribute('name', formName);
+                                        }
+                                        showSections();
+                                    }
                                 });
-                            });
+                            } else {
+                                showSections();
+                            }
                         }
                     });
                 });
+
 
 
 
