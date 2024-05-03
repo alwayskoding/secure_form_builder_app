@@ -594,6 +594,9 @@
                                                         window.mailboxID);
                                                     mailboxInput.value = window.mailboxID;
                                                 }
+                                                //update 008 related swalclosed line
+                                                $(document).trigger(
+                                                'swalClosed'); // Trigger the custom event after handling Swal
                                             }
                                         });
                                     } else {
@@ -1137,62 +1140,42 @@
 
                 //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview - Also on the first click making sure swal popup has already opened and closed
 
+
+
                 $(document).ready(function () {
                     var formPreview = $('.form_preview_section');
                     var renderContainer = $('#render-container');
 
-                    // Initially hide the form preview section and the render container
-                    formPreview.hide();
-                    renderContainer.hide();
-
-                    // Function to show sections
-                    function showSections() {
+                    // Function to show and scroll to the form preview and render container
+                    function showAndScroll() {
                         formPreview.show();
                         renderContainer.show();
-                        formPreview[0].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                        $('html, body').animate({
+                            scrollTop: formPreview.offset().top
+                        }, 'slow');
                     }
 
+                    // Flag to check if Swal has been shown
+                    var swalShown = false;
+
                     $(document).on('click', '.special', function () {
-                        if (this.id.includes('save')) {
-                            // Check if the Swal has already been shown by checking a flag
-                            if (!window.swalShown) {
-                                Swal.fire({
-                                    title: 'Enter Form Name',
-                                    input: 'text',
-                                    inputLabel: 'Form Name',
-                                    inputPlaceholder: 'Enter the Form Name',
-                                    inputValidator: (value) => {
-                                        if (!value)
-                                        return 'You need to write something!';
-                                    },
-                                    showCancelButton: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // Set flag to true to indicate Swal has been shown
-                                        window.swalShown = true;
-                                        const formName = result.value.trim().replace(
-                                            /\s+/g, '_');
-                                        const hiddenInput = document.querySelector(
-                                            'input[name="sf:form_name"]');
-                                        const formElement = document.querySelector(
-                                            'form');
-                                        if (hiddenInput && formElement) {
-                                            hiddenInput.value = formName;
-                                            formElement.setAttribute('name', formName);
-                                        }
-                                        showSections();
-                                    }
-                                });
-                            } else {
-                                showSections();
-                            }
+                        // Check if the button has 'save' in its ID and the Swal has not been shown
+                        if (this.id.includes('save') && !swalShown) {
+                            $(document).one('swalClosed', function () {
+                                showAndScroll();
+                                swalShown =
+                                true; // Set flag to true after first activation
+                            });
+                        } else if (this.id.includes('save')) {
+                            // For subsequent clicks, just show and scroll
+                            showAndScroll();
                         }
                     });
-                });
 
+                    // This part should be triggered when the Swal is confirmed/closed
+                    // Triggered this event in my Swal's close/confirm handler
+                    // Example: $(document).trigger('swalClosed');
+                });
 
 
 
