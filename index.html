@@ -369,6 +369,13 @@
         }
 
         /*End of Swal PopUP Style*/
+
+        /*Hide Preview Renderer Initially Until Generate Form is Clicked*/
+        .form_preview_section {
+            display: none;
+        }
+
+        /*End of Hide Renderer*/
     </style>
 
 </head>
@@ -1127,6 +1134,36 @@
 
 
                 //End of Update 007
+
+                //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview
+
+                $(document).ready(function () {
+                    // Select the button and the form preview section
+                    var button = $('.special');
+                    var formPreview = $('.form_preview_section');
+
+                    // Initially hide the form preview section without display:none
+                    formPreview.hide();
+
+                    // Ensure the button has 'save' in its id
+                    if (button.attr('id') && button.attr('id').includes('save')) {
+                        // Add click event listener to the button
+                        button.click(function () {
+                            // Toggle the display with slide and fade effect
+                            if (formPreview.is(':hidden')) {
+                                formPreview.slideDown('slow');
+                            } else {
+                                formPreview.slideUp('slow');
+                            }
+                        });
+                    }
+                });
+
+
+
+
+
+                //End of Update 008
 
 
             }); //end of jquery wrapper
