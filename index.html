@@ -371,9 +371,9 @@
         /*End of Swal PopUP Style*/
 
         /*Hide Preview Renderer Initially Until Generate Form is Clicked*/
-        .form_preview_section {
+        /* .form_preview_section {
             display: none;
-        }
+        } */
 
         /*End of Hide Renderer*/
     </style>
@@ -1138,26 +1138,38 @@
                 //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview
 
                 $(document).ready(function () {
-                    // Select the button and the form preview section
+                    // Select the button, the form preview section, and the render container
                     var button = $('.special');
                     var formPreview = $('.form_preview_section');
+                    var renderContainer = $('#render-container');
 
-                    // Initially hide the form preview section without display:none
+                    // Initially hide the form preview section and the render container
                     formPreview.hide();
+                    renderContainer.hide();
 
                     // Ensure the button has 'save' in its id
                     if (button.attr('id') && button.attr('id').includes('save')) {
                         // Add click event listener to the button
                         button.click(function () {
-                            // Toggle the display with slide and fade effect
+                            // Toggle the display with slide effect for form preview
                             if (formPreview.is(':hidden')) {
-                                formPreview.slideDown('slow');
+                                formPreview.slideDown('slow', function () {
+                                    // This callback function is executed after formPreview slides down
+                                    // Now slide down the render container
+                                    renderContainer.slideDown('slow');
+                                });
                             } else {
-                                formPreview.slideUp('slow');
+                                // Slide up the render container first
+                                renderContainer.slideUp('slow', function () {
+                                    // This callback function is executed after renderContainer slides up
+                                    // Now slide up the form preview
+                                    formPreview.slideUp('slow');
+                                });
                             }
                         });
                     }
                 });
+
 
 
 
