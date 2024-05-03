@@ -1097,7 +1097,12 @@
                         'JSON'); // Ensure this selector targets the right button, adjust if necessary
 
                         // Update the text for the 'Save Template' button
-                        $('.special').text('Generate Form');
+                        // Check if the button with the class 'special' also has an id that contains 'save'
+                        $('.special').each(function () {
+                            if (this.id.includes('save')) {
+                                $(this).text('Generate Form');
+                            }
+                        });
                     }
 
                     // Call the function to update button labels
@@ -1106,12 +1111,13 @@
                     // Optional: Use setInterval if buttons are dynamically loaded and not immediately present
                     var checkExist = setInterval(function () {
                         if ($('.clear-all').length && $('.get-data').length && $(
-                                '.save-template').length) {
+                                '.special:contains("Generate Form")').length) {
                             updateButtonLabels();
                             clearInterval(checkExist); // Stop checking once buttons are updated
                         }
                     }, 100); // Check every 100 milliseconds
                 });
+
 
 
 
