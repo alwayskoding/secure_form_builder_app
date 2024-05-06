@@ -142,7 +142,7 @@
             top: 450px !important;
             gap: 10px;
             margin-bottom: 10px;
-            
+
         }
 
 
@@ -380,6 +380,15 @@
         } */
 
         /*End of Hide Renderer*/
+
+        /*Update 010 - Adding Styles To Modify Form-Fields - Specifically showing them as more separated*/
+        /*Remove these if you ever need to go back to the old State*/
+
+        .form-wrap.form-builder .frmb li.form-field {
+            background-color: #393838 !important;
+            border-radius: 0 !important;
+            border-left: 5px solid #201f1f;
+        }
     </style>
 
 </head>
@@ -783,7 +792,7 @@
                                             formElement.setAttribute('name', formName);
                                             window.globalFormName = formName;
                                             //update 008 related swalclosed line
-                                            
+
                                         }
                                     });
                                 }
