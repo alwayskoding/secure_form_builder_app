@@ -1496,10 +1496,41 @@
                         // You would filter the displayed templates based on 'query'
                     }
 
+
+                    // Function to populate templates
+                    function populateTemplates() {
+                        const container = document.getElementById('templateContainer');
+                        if (container) {
+                            container.innerHTML = ''; // Clear existing content
+                            Object.keys(templates).forEach(key => {
+                                const card = document.createElement('div');
+                                card.className = 'template-card';
+                                card.setAttribute('data-template', key);
+                                card.textContent =
+                                key; // Set the name or a descriptive part of the template
+                                card.onclick = function () {
+                                    formBuilder.actions.setData(templates[key]);
+                                };
+                                container.appendChild(card);
+                            });
+                        } else {
+                            console.error("Template container not found");
+                        }
+                    }
+
+                    // Call to populate the templates
+                    populateTemplates();
+
                     // Display the modal
                     document.getElementById('createTemplateBtn').addEventListener('click', function () {
-                        document.getElementById('templateModal').style.display = 'block';
+                        var modal = document.getElementById('templateModal');
+                        if (modal) {
+                            modal.style.display = 'block';
+                        } else {
+                            console.error("Modal element not found");
+                        }
                     });
+
 
                     // Close the modal
                     document.getElementsByClassName('close')[0].addEventListener('click', function () {
