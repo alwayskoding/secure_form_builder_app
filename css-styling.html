@@ -80,36 +80,38 @@
         /*Freeze Button Styles For Overlay Inspector Mode Visual*/
         #inspectorOverlay {
             position: absolute;
+            border: 1px dashed #9c9c9c;
             pointer-events: none;
-            /* Ensure clicks go through when not frozen */
-            display: none;
-            border: 2px dashed blue;
-            z-index: 10000;
-        }
-
-        #freezeIndicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 20px;
-            display: none;
-            /* Initially hidden */
+            /* Ensure it doesn't interfere with other interactions */
         }
 
         #infoBox {
             position: absolute;
-            background-color: #f0f0f0;
-            padding: 10px;
+            background-color: #fff;
+            color: #000;
+            padding: 5px 10px;
             border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            /* Above the overlay */
+            pointer-events: none;
+            /* Ensure it doesn't interfere with other interactions */
+            font-size: 12px;
             display: none;
-            z-index: 10001;
         }
 
-        #inspectorModeToggle {
-            position: fixed;
-            top: 10px;
-            right: 10px;
+        #infoBox::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #ddd transparent transparent transparent;
         }
+
 
 
         /*End of Freeze Button Styles*/
@@ -117,16 +119,6 @@
 </head>
 
 <body>
-
-    <!-- Add an overlay div in your HTML that will be used to show the element information -->
-    <div id="inspectorOverlay"
-        style="position: fixed; pointer-events: none; display: none; border: 1px solid blue; z-index: 9999;">
-        <span id="freezeIndicator">🔒</span>
-    </div>
-    <div id="infoBox"
-        style="position: fixed; display: none; background: white; border: 1px solid black; padding: 5px; z-index: 10000;">
-    </div>
-    <!--End of Inspector Overlay Feature-->
 
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
@@ -217,60 +209,38 @@
 
         //Below is for Update 011 Where we are now giving the option to turn on inspector and see elements breadcrumbs for easier styling and allow freezing the current overlay on click and release on second
         document.addEventListener('DOMContentLoaded', function () {
-            var isInspectorActive = false;
-            var isFrozen = false;
-            var overlay = document.getElementById('inspectorOverlay');
-            var freezeIndicator = document.getElementById('freezeIndicator');
-            var infoBox = document.getElementById('infoBox');
-            var inspectorButton = document.getElementById('inspectorModeToggle');
+            var overlay = document.createElement('div');
+            overlay.id = 'inspectorOverlay';
+            document.body.appendChild(overlay);
 
-            inspectorButton.addEventListener('click', function () {
-                isInspectorActive = !isInspectorActive;
-                this.textContent = isInspectorActive ? "Disable Inspector Mode" :
-                    "Enable Inspector Mode";
-                if (!isInspectorActive) {
+            var infoBox = document.createElement('div');
+            infoBox.id = 'infoBox';
+            document.body.appendChild(infoBox);
+
+            document.body.addEventListener('mousemove', function (e) {
+                if (!e.target || e.target === overlay || e.target === infoBox) {
                     overlay.style.display = 'none';
                     infoBox.style.display = 'none';
-                    freezeIndicator.style.display = 'none';
-                    isFrozen = false;
+                    return;
                 }
-            });
-
-            document.addEventListener('mousemove', function (e) {
-                if (!isInspectorActive || isFrozen) return;
-                updateOverlay(e.target);
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!isInspectorActive || e.target === inspectorButton) return;
-                if (isFrozen) {
-                    if (e.target === freezeIndicator) {
-                        isFrozen = false;
-                        overlay.style.display = 'none';
-                        infoBox.style.display = 'none';
-                        freezeIndicator.style.display = 'none';
-                    }
-                } else {
-                    isFrozen = true;
-                    updateOverlay(e.target);
-                    freezeIndicator.style.display = 'block'; // Show the freeze indicator
-                }
-            });
-
-            function updateOverlay(targetElement) {
-                var rect = targetElement.getBoundingClientRect();
+                var rect = e.target.getBoundingClientRect();
                 overlay.style.display = 'block';
-                overlay.style.top = rect.top + window.scrollY + 'px';
                 overlay.style.left = rect.left + window.scrollX + 'px';
-                overlay.style.width = targetElement.offsetWidth + 'px';
-                overlay.style.height = targetElement.offsetHeight + 'px';
+                overlay.style.top = rect.top + window.scrollY + 'px';
+                overlay.style.width = rect.width + 'px';
+                overlay.style.height = rect.height + 'px';
 
                 infoBox.style.display = 'block';
-                infoBox.style.top = (rect.top + window.scrollY + targetElement.offsetHeight + 5) + 'px';
                 infoBox.style.left = rect.left + window.scrollX + 'px';
-                infoBox.textContent = 'Tag: ' + targetElement.tagName + ', Class: ' + targetElement.className +
-                    ', ID: ' + targetElement.id;
-            }
+                infoBox.style.top = rect.bottom + window.scrollY + 5 + 'px';
+                infoBox.innerHTML =
+                    `<strong>Tag:</strong> ${e.target.tagName.toLowerCase()}, <strong>Class:</strong> ${e.target.className}, <strong>ID:</strong> ${e.target.id}, <strong>Dimensions:</strong> ${rect.width.toFixed(1)} x ${rect.height.toFixed(1)}`;
+            });
+
+            document.body.addEventListener('click', function (e) {
+                overlay.style.display = 'none';
+                infoBox.style.display = 'none';
+            });
         });
     </script>
 </body>
