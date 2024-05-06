@@ -76,6 +76,43 @@
             padding: 20px;
             box-sizing: border-box;
         }
+
+        /*Freeze Button Styles For Overlay Inspector Mode Visual*/
+        #inspectorOverlay {
+            position: absolute;
+            pointer-events: none;
+            /* Ensure clicks go through when not frozen */
+            display: none;
+            border: 2px dashed blue;
+            z-index: 10000;
+        }
+
+        #freezeIndicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            display: none;
+            /* Initially hidden */
+        }
+
+        #infoBox {
+            position: absolute;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: none;
+            z-index: 10001;
+        }
+
+        #inspectorModeToggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+
+
+        /*End of Freeze Button Styles*/
     </style>
 </head>
 
@@ -83,7 +120,9 @@
 
     <!-- Add an overlay div in your HTML that will be used to show the element information -->
     <div id="inspectorOverlay"
-        style="position: fixed; pointer-events: none; display: none; border: 1px solid blue; z-index: 9999;"></div>
+        style="position: fixed; pointer-events: none; display: none; border: 1px solid blue; z-index: 9999;">
+        <span id="freezeIndicator">🔒</span>
+    </div>
     <div id="infoBox"
         style="position: fixed; display: none; background: white; border: 1px solid black; padding: 5px; z-index: 10000;">
     </div>
@@ -181,17 +220,19 @@
             var isInspectorActive = false;
             var isFrozen = false;
             var overlay = document.getElementById('inspectorOverlay');
+            var freezeIndicator = document.getElementById('freezeIndicator');
             var infoBox = document.getElementById('infoBox');
             var inspectorButton = document.getElementById('inspectorModeToggle');
 
             inspectorButton.addEventListener('click', function () {
-                isInspectorActive = !isInspectorActive; // Toggle inspector mode
+                isInspectorActive = !isInspectorActive;
                 this.textContent = isInspectorActive ? "Disable Inspector Mode" :
                     "Enable Inspector Mode";
                 if (!isInspectorActive) {
-                    overlay.style.display = 'none'; // Hide overlay when inspector is deactivated
+                    overlay.style.display = 'none';
                     infoBox.style.display = 'none';
-                    isFrozen = false; // Reset freeze state
+                    freezeIndicator.style.display = 'none';
+                    isFrozen = false;
                 }
             });
 
@@ -202,13 +243,17 @@
 
             document.addEventListener('click', function (e) {
                 if (!isInspectorActive || e.target === inspectorButton) return;
-                if (isFrozen && e.target === overlay) {
-                    isFrozen = false;
-                    overlay.style.display = 'none';
-                    infoBox.style.display = 'none';
-                } else if (!isFrozen) {
+                if (isFrozen) {
+                    if (e.target === freezeIndicator) {
+                        isFrozen = false;
+                        overlay.style.display = 'none';
+                        infoBox.style.display = 'none';
+                        freezeIndicator.style.display = 'none';
+                    }
+                } else {
                     isFrozen = true;
                     updateOverlay(e.target);
+                    freezeIndicator.style.display = 'block'; // Show the freeze indicator
                 }
             });
 
