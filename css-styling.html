@@ -80,17 +80,18 @@
         /*Freeze Button Styles For Overlay Inspector Mode Visual*/
         #inspectorOverlay {
             position: absolute;
-            border: 1px dashed #9c9c9c;
+            background-color: #68bdf03b;
+            border: 2px dashed #3f29d8;
             pointer-events: none;
             /* Ensure it doesn't interfere with other interactions */
         }
 
         #infoBox {
             position: absolute;
-            background-color: #fff;
-            color: #000;
+            background-color: #201f1f;
+            color: #3080F6;
             padding: 5px 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #201f1f;
             border-radius: 4px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1001;
@@ -122,7 +123,6 @@
 
     <div id="buttonPanel">
         <button id="toggleButton" class="button">Show Code</button>
-        <button id="inspectorModeToggle" class="button">Toggle Inspector Mode</button>
         <button id="copyHtmlButton" class="button">Copy HTML</button>
         <button id="copyCssButton" class="button">Copy CSS</button>
     </div>
