@@ -473,20 +473,12 @@
     </div>
 
     <!-- Template Cards Section Update 012 -->
-    <!-- Trigger Button -->
-    <button id="createTemplateBtn">Create Form From Template</button>
-
-    <!-- Template Modal -->
-    <div id="templateModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <input type="text" id="templateSearch" placeholder="Search templates...">
-            <div id="templateContainer" class="template-container">
-                <!-- Template cards will be dynamically inserted here -->
-            </div>
-            <button id="loadMoreTemplates">Load More</button>
-        </div>
-    </div>
+    <h2>Set Data</h2>
+    <select name="formTemplates" id="formTemplates" class="form-control">
+        <option value="user">User Form</option>
+        <option value="terms">Terms Agreement Form</option>
+        <option value="issue">Submit Issue Form</option>
+    </select>
 
     <!--End of Update 012 Template View Setup-->
 
@@ -1295,95 +1287,52 @@
 
                 //Update 012 Templates View and Loader 
 
-                document.addEventListener('DOMContentLoaded', function () {
+                // Ensure DOM is ready before setting up the template switcher
+                $(document).ready(function () {
+                    const templateSelect = document.getElementById('formTemplates');
+
+                    // Assuming templates are defined somewhere in your script
                     const templates = {
                         user: [{
-                                "type": "text",
-                                "required": false,
-                                "label": "Member Benefit Plan Name",
-                                "placeholder": "Will be auto-filled with Member's Benefit Plan Name",
-                                "className": "form-control col-md-4",
-                                "name": "member_benefit_plan_name",
-                                "access": false,
-                                "value": "|member.benefit_plan_name|",
-                                "subtype": "text"
-                            },
-                            {
-                                "type": "text",
-                                "required": false,
-                                "label": "Member Benefit Plan ID",
-                                "placeholder": "Will be auto-filled with Member's Benefit Plan ID",
-                                "className": "form-control col-md-4",
-                                "name": "member_benefit_plan_id",
-                                "access": false,
-                                "value": "|member.benefit_plan_id|",
-                                "subtype": "text"
-                            },
-                            {
-                                "type": "text",
-                                "required": false,
-                                "label": "Member Birthdate",
-                                "placeholder": "Will be auto-filled with Member's Birthdate",
-                                "className": "form-control col-md-4",
-                                "name": "member_birthdate",
-                                "access": false,
-                                "value": "|member.birthdate|",
-                                "subtype": "text"
-                            },
-                            // Additional fields...
-                        ],
-                        // Other categories like 'terms', 'issue' can be added here
+                            "type": "text",
+                            "label": "Full Name",
+                            "subtype": "text",
+                            "className": "form-control",
+                            "name": "text-1476748004559"
+                        }, {
+                            "type": "select",
+                            "label": "Occupation",
+                            "className": "form-control",
+                            "name": "select-1476748006618",
+                            "values": [{
+                                "label": "Street Sweeper",
+                                "value": "option-1",
+                                "selected": true
+                            }, {
+                                "label": "Moth Man",
+                                "value": "option-2"
+                            }, {
+                                "label": "Chemist",
+                                "value": "option-3"
+                            }]
+                        }, {
+                            "type": "textarea",
+                            "label": "Short Bio",
+                            "rows": "5",
+                            "className": "form-control",
+                            "name": "textarea-1476748007461"
+                        }],
+                        terms: [ /* array of terms form fields */ ],
+                        issue: [ /* array of issue form fields */ ]
                     };
 
-                    function populateTemplates() {
-                        console.log("Attempting to populate templates...");
-                        const container = document.getElementById('templateContainer');
-                        if (container) {
-                            console.log("Template container found.");
-                            container.innerHTML = ''; // Clear existing content
-                            Object.keys(templates).forEach(category => {
-                                const card = document.createElement('div');
-                                card.className = 'template-card';
-                                card.textContent = category; // Display the category name
-                                card.onclick = function () {
-                                    console.log("Template card clicked:", category);
-                                    formBuilder.actions.setData(templates[category]);
-                                };
-                                container.appendChild(card);
-                            });
+                    templateSelect.addEventListener('change', function (e) {
+                        if (formBuilder && formBuilder.actions && formBuilder.actions.setData) {
+                            formBuilder.actions.setData(templates[e.target.value]);
                         } else {
-                            console.error("Template container not found.");
-                        }
-                    }
-
-                    // Display the modal
-                    document.getElementById('createTemplateBtn').addEventListener('click', function () {
-                        console.log("Create template button clicked.");
-                        var modal = document.getElementById('templateModal');
-                        if (modal) {
-                            console.log("Modal found. Displaying...");
-                            modal.style.display = 'block';
-                        } else {
-                            console.error("Modal element not found.");
+                            console.error('FormBuilder is not initialized or malformed.');
                         }
                     });
-
-                    // Close the modal
-                    document.getElementsByClassName('close')[0].addEventListener('click', function () {
-                        console.log("Close button clicked.");
-                        document.getElementById('templateModal').style.display = 'none';
-                    });
-
-                    // Close modal if clicking outside of it
-                    window.onclick = function (event) {
-                        console.log("Window clicked.");
-                        if (event.target == document.getElementById('templateModal')) {
-                            console.log("Click outside modal detected. Closing modal...");
-                            document.getElementById('templateModal').style.display = 'none';
-                        }
-                    };
-
-                    populateTemplates(); // Initially populate the templates
                 });
 
 
