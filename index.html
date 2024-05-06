@@ -393,6 +393,74 @@
             border-radius: 0 !important;
             border-left: 5px solid #201f1f;
         }
+
+        /*Update 012 - Template Selection Overlay Styles*/
+
+        /* Modal and Overlay */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            /* 10% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #templateContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .template-container .template-card {
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            width: 150px;
+            /* Fixed width for uniformity */
+        }
+
+        .template-card img {
+            width: 100%;
+            height: auto;
+        }
+
+
+        /*End of Update 012 - Template Selection Overlay Styles*/
     </style>
 
 </head>
@@ -403,6 +471,24 @@
         <h1 id="buildit">Builder</h1>
         <p>Simply drag and drop an item from the right onto the form preview on the left.</p>
     </div>
+
+    <!-- Template Cards Section Update 012 -->
+    <!-- Trigger Button -->
+    <button id="createTemplateBtn">Create Form From Template</button>
+
+    <!-- Template Modal -->
+    <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="text" id="templateSearch" placeholder="Search templates...">
+            <div id="templateContainer" class="template-container">
+                <!-- Template cards will be dynamically inserted here -->
+            </div>
+            <button id="loadMoreTemplates">Load More</button>
+        </div>
+    </div>
+
+    <!--End of Update 012 Template View Setup-->
 
     <div id="fb-editor"></div>
 
@@ -1205,15 +1291,251 @@
                     // Example: $(document).trigger('swalClosed');
                 });
 
-
-
-
-
-
-
-
-
                 //End of Update 008
+
+                //Update 012 Templates View and Loader 
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const templates = {
+                        user: [{
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan Name",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_name",
+                                "access": false,
+                                "value": "|member.benefit_plan_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan ID",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan ID",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_id",
+                                "access": false,
+                                "value": "|member.benefit_plan_id|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Birthdate",
+                                "placeholder": "Will be auto-filled with Member's Birthdate",
+                                "className": "form-control col-md-4",
+                                "name": "member_birthdate",
+                                "access": false,
+                                "value": "|member.birthdate|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "email",
+                                "required": false,
+                                "label": "Member Email",
+                                "placeholder": "Will be auto-filled with Member's Email",
+                                "className": "form-control col-md-6",
+                                "name": "member_email",
+                                "access": false,
+                                "value": "|member.email|"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member ID",
+                                "placeholder": "Will be auto-filled with Member's ID",
+                                "className": "form-control col-md-6",
+                                "name": "member_ID",
+                                "access": false,
+                                "value": "|member.memberId|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Last Name",
+                                "placeholder": "Will be auto-filled with Member's Last Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_last_name",
+                                "access": false,
+                                "value": "|member.last_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Middle Name",
+                                "placeholder": "Will be auto-filled with Member's Middle Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_middle_name",
+                                "access": false,
+                                "value": "|member.middle_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member First Name",
+                                "placeholder": "Will be auto-filled with Member's First Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_first_name",
+                                "access": false,
+                                "value": "|member.first_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "tel",
+                                "required": false,
+                                "label": "Phone Number",
+                                "className": "form-control col-md-4",
+                                "name": "text-1715023927085-0",
+                                "access": false
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "email",
+                                "required": false,
+                                "label": "Email",
+                                "className": "form-control col-md-8",
+                                "name": "text-1715023927525-0",
+                                "access": false
+                            },
+                            {
+                                "type": "textarea",
+                                "required": false,
+                                "label": "Text Area",
+                                "className": "form-control col-md-12",
+                                "name": "textarea-1715023928000-0",
+                                "access": false,
+                                "subtype": "textarea"
+                            },
+                            {
+                                "type": "checkbox-group",
+                                "required": false,
+                                "label": "Checkbox Group",
+                                "toggle": false,
+                                "inline": false,
+                                "className": "col-md-4",
+                                "name": "checkbox-group-1715024693092-0",
+                                "access": false,
+                                "other": false,
+                                "values": [{
+                                    "label": "Option 1",
+                                    "value": "option-1",
+                                    "selected": true
+                                }]
+                            },
+                            {
+                                "type": "radio-group",
+                                "required": false,
+                                "label": "Radio Group",
+                                "inline": false,
+                                "className": "col-md-4",
+                                "name": "radio-group-1715024699643-0",
+                                "access": false,
+                                "other": false,
+                                "values": [{
+                                        "label": "Option 1",
+                                        "value": "option-1",
+                                        "selected": false
+                                    },
+                                    {
+                                        "label": "Option 2",
+                                        "value": "option-2",
+                                        "selected": false
+                                    },
+                                    {
+                                        "label": "Option 3",
+                                        "value": "option-3",
+                                        "selected": false
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Input 1",
+                                "className": "form-control",
+                                "name": "input1",
+                                "access": false,
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Input 2",
+                                "className": "form-control",
+                                "name": "input2",
+                                "access": false,
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Input 3",
+                                "className": "form-control",
+                                "name": "input3",
+                                "access": false,
+                                "subtype": "text"
+                            }
+                        ],
+                        terms: [ /* Array of objects for terms form fields */ ],
+                        issue: [ /* Array of objects for issue form fields */ ]
+                    };
+
+                    function loadTemplates() {
+                        // Placeholder function to load more templates
+                        // You might fetch from a server or load more from a local array
+                    }
+
+                    function searchTemplates(query) {
+                        // Placeholder for search functionality
+                        // You would filter the displayed templates based on 'query'
+                    }
+
+                    // Display the modal
+                    document.getElementById('createTemplateBtn').addEventListener('click', function () {
+                        document.getElementById('templateModal').style.display = 'block';
+                    });
+
+                    // Close the modal
+                    document.getElementsByClassName('close')[0].addEventListener('click', function () {
+                        document.getElementById('templateModal').style.display = 'none';
+                    });
+
+                    // Close modal if clicking outside of it
+                    window.onclick = function (event) {
+                        if (event.target == document.getElementById('templateModal')) {
+                            document.getElementById('templateModal').style.display = 'none';
+                        }
+                    }
+
+                    // Load more templates
+                    document.getElementById('loadMoreTemplates').addEventListener('click', function () {
+                        loadTemplates();
+                    });
+
+                    // Search templates
+                    document.getElementById('templateSearch').addEventListener('input', function (e) {
+                        searchTemplates(e.target.value);
+                    });
+
+                    // Select and set template data
+                    $(document).on('click', '.template-card', function () {
+                        const templateType = $(this).data('template');
+                        if (templates[templateType]) {
+                            formBuilder.actions.setData(templates[templateType]);
+                        }
+                    });
+
+                });
+
+
+
+                //End of Update 012 Templates View and Loader
 
 
             }); //end of jquery wrapper
