@@ -1501,15 +1501,16 @@
                     function populateTemplates() {
                         const container = document.getElementById('templateContainer');
                         if (container) {
+                            console.log("Populating templates...");
                             container.innerHTML = ''; // Clear existing content
-                            Object.keys(templates).forEach(key => {
+                            Object.keys(templates).forEach(category => {
                                 const card = document.createElement('div');
                                 card.className = 'template-card';
-                                card.setAttribute('data-template', key);
-                                card.textContent =
-                                key; // Set the name or a descriptive part of the template
+                                card.textContent = category; // Display the category name
                                 card.onclick = function () {
-                                    formBuilder.actions.setData(templates[key]);
+                                    console.log("Category clicked:", category);
+                                    // Assuming you have a mechanism to handle an entire category of templates
+                                    formBuilder.actions.setData(templates[category]);
                                 };
                                 container.appendChild(card);
                             });
@@ -1517,6 +1518,7 @@
                             console.error("Template container not found");
                         }
                     }
+
 
                     // Call to populate the templates
                     populateTemplates();
