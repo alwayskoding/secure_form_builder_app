@@ -1250,12 +1250,12 @@
                             "type": "text",
                             "label": "Full Name",
                             "subtype": "text",
-                            "className": "form-control",
+                            "className": "form-control col-md-4",
                             "name": "text-1476748004559"
                         }, {
                             "type": "select",
                             "label": "Occupation",
-                            "className": "form-control",
+                            "className": "form-control col-md-6",
                             "name": "select-1476748006618",
                             "values": [{
                                 "label": "Street Sweeper",
@@ -1272,7 +1272,7 @@
                             "type": "textarea",
                             "label": "Short Bio",
                             "rows": "5",
-                            "className": "form-control",
+                            "className": "form-control col-md-8",
                             "name": "textarea-1476748007461"
                         }],
                         terms: [{
@@ -1555,9 +1555,8 @@
                     });
 
                     function applyBootstrapGridClasses() {
-                        // Listen for changes in the className input fields within the form builder
-                        $('#fb-editor').on('change', '.fld-className', function () {
-                            // This is the input field where class names are set
+                        // Loop through each .fld-className input field
+                        $('.fld-className').each(function () {
                             var $input = $(this);
                             var classNames = $input.val();
                             var gridClasses = classNames.match(
@@ -1578,6 +1577,7 @@
                             }
                         });
                     }
+
 
 
 
