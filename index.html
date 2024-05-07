@@ -459,6 +459,29 @@
             height: auto;
         }
 
+        /*temporary card for testing styles can remove if doesnt work or you grow it more complexity*/
+
+        .template-cards {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .template-card {
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            width: 30%;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .template-card:hover {
+            background-color: #e9e9e9;
+        }
+
+        /*end of termporary card for testing styles*/
+
 
         /*End of Update 012 - Template Selection Overlay Styles*/
     </style>
@@ -474,11 +497,20 @@
 
     <!-- Template Cards Section Update 012 -->
     <h2>Set Data</h2>
-    <select name="formTemplates" id="formTemplates" class="form-control">
+    <!-- <select name="formTemplates" id="formTemplates" class="form-control">
         <option value="user">User Form</option>
         <option value="terms">Terms Agreement Form</option>
         <option value="issue">Submit Issue Form</option>
-    </select>
+    </select> -->
+
+    <!--Adding this extra below while keeping the top the template stuff about and disabling that one for now to test this one-->
+    <div class="template-cards">
+        <div id="template-user" class="template-card">User Form</div>
+        <div id="template-terms" class="template-card">Terms Form</div>
+        <div id="template-issue" class="template-card">Issue Form</div>
+    </div>
+
+    <!--end of additional temporary one-->
 
     <!--End of Update 012 Template View Setup-->
 
@@ -1326,11 +1358,22 @@
                         issue: [ /* array of issue form fields */ ]
                     };
 
-                    templateSelect.addEventListener('change', function (e) {
-                        if (formBuilder && formBuilder.actions && formBuilder.actions.setData) {
-                            formBuilder.actions.setData(templates[e.target.value]);
+                    // templateSelect.addEventListener('change', function (e) {
+                    //     if (formBuilder && formBuilder.actions && formBuilder.actions.setData) {
+                    //         formBuilder.actions.setData(templates[e.target.value]);
+                    //     } else {
+                    //         console.error('FormBuilder is not initialized or malformed.');
+                    //     }
+                    // });
+
+                    // Setup click handlers for template cards
+                    $('.template-card').on('click', function () {
+                        const templateId = this.id.replace('template-', '');
+                        if (templates[templateId]) {
+                            formBuilder.actions.setData(templates[templateId]);
+                            console.log(`Loaded template: ${templateId}`);
                         } else {
-                            console.error('FormBuilder is not initialized or malformed.');
+                            console.error('Template not found:', templateId);
                         }
                     });
                 });
