@@ -396,71 +396,6 @@
 
         /*Update 012 - Template Selection Overlay Styles*/
 
-        /* Modal and Overlay */
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black w/ opacity */
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            /* 10% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            /* Could be more or less, depending on screen size */
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #templateContainer {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-        }
-
-        .template-container .template-card {
-            cursor: pointer;
-            display: inline-block;
-            margin: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-            width: 150px;
-            /* Fixed width for uniformity */
-        }
-
-        .template-card img {
-            width: 100%;
-            height: auto;
-        }
-
-        /*temporary card for testing styles can remove if doesnt work or you grow it more complexity*/
-
         .template-cards {
             display: flex;
             justify-content: space-around;
@@ -480,9 +415,6 @@
             background-color: #e9e9e9;
         }
 
-        /*end of termporary card for testing styles*/
-
-
         /*End of Update 012 - Template Selection Overlay Styles*/
     </style>
 
@@ -496,22 +428,11 @@
     </div>
 
     <!-- Template Cards Section Update 012 -->
-    <h2>Set Data</h2>
-    <!-- <select name="formTemplates" id="formTemplates" class="form-control">
-        <option value="user">User Form</option>
-        <option value="terms">Terms Agreement Form</option>
-        <option value="issue">Submit Issue Form</option>
-    </select> -->
-
-    <!--Adding this extra below while keeping the top the template stuff about and disabling that one for now to test this one-->
     <div class="template-cards">
         <div id="template-user" class="template-card">User Form</div>
         <div id="template-terms" class="template-card">Terms Form</div>
         <div id="template-issue" class="template-card">Issue Form</div>
     </div>
-
-    <!--end of additional temporary one-->
-
     <!--End of Update 012 Template View Setup-->
 
     <div id="fb-editor"></div>
@@ -1354,17 +1275,270 @@
                             "className": "form-control",
                             "name": "textarea-1476748007461"
                         }],
-                        terms: [ /* array of terms form fields */ ],
-                        issue: [ /* array of issue form fields */ ]
+                        terms: [{
+                                "type": "header",
+                                "subtype": "h1",
+                                "label": "Header",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "paragraph",
+                                "subtype": "p",
+                                "label": "Paragraph",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "date",
+                                "required": false,
+                                "label": "Date Field",
+                                "className": "form-control col-md-4",
+                                "name": "date-1715051453648-0",
+                                "access": false,
+                                "subtype": "date"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member First Name",
+                                "placeholder": "Will be auto-filled with Member's First Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_first_name",
+                                "access": false,
+                                "value": "|member.first_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Middle Name",
+                                "placeholder": "Will be auto-filled with Member's Middle Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_middle_name",
+                                "access": false,
+                                "value": "|member.middle_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Last Name",
+                                "placeholder": "Will be auto-filled with Member's Last Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_last_name",
+                                "access": false,
+                                "value": "|member.last_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Birthdate",
+                                "placeholder": "Will be auto-filled with Member's Birthdate",
+                                "className": "form-control col-md-4",
+                                "name": "member_birthdate",
+                                "access": false,
+                                "value": "|member.birthdate|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan ID",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan ID",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_id",
+                                "access": false,
+                                "value": "|member.benefit_plan_id|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan Name",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan Name",
+                                "className": "form-control col-md-12",
+                                "name": "member_benefit_plan_name",
+                                "access": false,
+                                "value": "|member.benefit_plan_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "tel",
+                                "required": false,
+                                "label": "Phone Number",
+                                "className": "form-control col-md-12",
+                                "name": "text-1715051474861-0",
+                                "access": false
+                            },
+                            {
+                                "type": "textarea",
+                                "required": false,
+                                "label": "Text Area",
+                                "className": "form-control col-md-12",
+                                "name": "textarea-1715051478910-0",
+                                "access": false,
+                                "subtype": "textarea"
+                            }
+                        ],
+                        issue: [{
+                                "type": "header",
+                                "subtype": "h1",
+                                "label": "Header",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "paragraph",
+                                "subtype": "p",
+                                "label": "Paragraph",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "date",
+                                "required": false,
+                                "label": "Date Field",
+                                "className": "form-control col-md-4",
+                                "name": "date-1715051453648-0",
+                                "access": false,
+                                "subtype": "date"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member First Name",
+                                "placeholder": "Will be auto-filled with Member's First Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_first_name",
+                                "access": false,
+                                "value": "|member.first_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Middle Name",
+                                "placeholder": "Will be auto-filled with Member's Middle Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_middle_name",
+                                "access": false,
+                                "value": "|member.middle_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Last Name",
+                                "placeholder": "Will be auto-filled with Member's Last Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_last_name",
+                                "access": false,
+                                "value": "|member.last_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Birthdate",
+                                "placeholder": "Will be auto-filled with Member's Birthdate",
+                                "className": "form-control col-md-4",
+                                "name": "member_birthdate",
+                                "access": false,
+                                "value": "|member.birthdate|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan ID",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan ID",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_id",
+                                "access": false,
+                                "value": "|member.benefit_plan_id|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "radio-group",
+                                "required": false,
+                                "label": "Radio Group",
+                                "inline": false,
+                                "className": "col-md-6",
+                                "name": "radio-group-1715051534703-0",
+                                "access": false,
+                                "other": false,
+                                "values": [{
+                                        "label": "Option 1",
+                                        "value": "option-1",
+                                        "selected": false
+                                    },
+                                    {
+                                        "label": "Option 2",
+                                        "value": "option-2",
+                                        "selected": false
+                                    },
+                                    {
+                                        "label": "Option 3",
+                                        "value": "option-3",
+                                        "selected": false
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "select",
+                                "required": false,
+                                "label": "Select",
+                                "className": "form-control col-md-6",
+                                "name": "select-1715051537219-0",
+                                "access": false,
+                                "multiple": false,
+                                "values": [{
+                                        "label": "Option 1",
+                                        "value": "option-1",
+                                        "selected": true
+                                    },
+                                    {
+                                        "label": "Option 2",
+                                        "value": "option-2",
+                                        "selected": false
+                                    },
+                                    {
+                                        "label": "Option 3",
+                                        "value": "option-3",
+                                        "selected": false
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "checkbox-group",
+                                "required": false,
+                                "label": "Checkbox Group",
+                                "toggle": false,
+                                "inline": false,
+                                "className": "col-md-4",
+                                "name": "checkbox-group-1715051539050-0",
+                                "access": false,
+                                "other": false,
+                                "values": [{
+                                    "label": "Option 1",
+                                    "value": "option-1",
+                                    "selected": true
+                                }]
+                            },
+                            {
+                                "type": "file",
+                                "required": false,
+                                "label": "File Upload",
+                                "className": "form-control col-md-8",
+                                "name": "file-1715051540928-0",
+                                "access": false,
+                                "multiple": false
+                            }
+                        ]
                     };
-
-                    // templateSelect.addEventListener('change', function (e) {
-                    //     if (formBuilder && formBuilder.actions && formBuilder.actions.setData) {
-                    //         formBuilder.actions.setData(templates[e.target.value]);
-                    //     } else {
-                    //         console.error('FormBuilder is not initialized or malformed.');
-                    //     }
-                    // });
 
                     // Setup click handlers for template cards
                     $('.template-card').on('click', function () {
