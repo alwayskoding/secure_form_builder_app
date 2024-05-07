@@ -1544,30 +1544,23 @@
                     function applyBootstrapGridClasses() {
                         setTimeout(() => {
                             // Select only .form-field elements that are children of .stage-wrap
-                            document.querySelectorAll('.stage-wrap .form-field').forEach(
-                                field => {
-                                    // Ensure the field has a [data-type] element
-                                    const dataTypeElement = field.querySelector(
-                                        '[data-type]');
-                                    if (dataTypeElement) {
-                                        const inputClasses = dataTypeElement.getAttribute(
-                                            'className');
-                                        if (inputClasses) {
-                                            const gridClasses = inputClasses.match(
-                                                /\bcol-md-\d+\b/g);
-                                            if (gridClasses) {
-                                                // Remove existing grid classes and add the new ones
-                                                field.classList.remove(...field.classList
-                                                    .filter(cls => cls.startsWith(
-                                                        'col-md-')));
-                                                field.classList.add(...gridClasses);
-                                            }
-                                        }
-                                    }
-                                });
+                            $('.stage-wrap .form-field').each(function () {
+                                // Get the field ID from the form builder
+                                const fieldId = $(this).attr('id').replace('frmb-',
+                                ''); // Assuming the ID in the DOM is prefixed with 'frmb-'
+                                // Find the corresponding template data using the field ID
+                                const fieldData = Object.values(templates).flat().find(
+                                    template => template.name === fieldId);
+
+                                if (fieldData && fieldData.className) {
+                                    // Clear any existing classes and apply only those from the template
+                                    $(this).removeClass(); // Remove all classes
+                                    $(this).addClass(fieldData
+                                    .className); // Add classes from the JSON template
+                                }
+                            });
                         }, 100); // Adjust timeout as needed based on your application's responsiveness
                     }
-
 
                     // Setup click handlers for template cards
                     $('.template-card').on('click', function () {
@@ -1576,11 +1569,13 @@
                             formBuilder.actions.setData(templates[templateId]);
                             console.log(`Loaded template: ${templateId}`);
                             applyBootstrapGridClasses
-                        (); // Call the function to apply grid classes from update 013 above
+                        (); // Call the function to apply grid classes after setting data
                         } else {
                             console.error('Template not found:', templateId);
                         }
                     });
+
+
                 });
 
 
