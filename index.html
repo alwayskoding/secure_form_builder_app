@@ -1543,22 +1543,31 @@
                     //Update 013 - Applying any bootstrap classes that come in as a className on their JSON  template to be applied correctly in stage
                     function applyBootstrapGridClasses() {
                         setTimeout(() => {
-                            document.querySelectorAll('.form-field').forEach(field => {
-                                const inputClasses = field.querySelector('[data-type]')
-                                    .getAttribute('className');
-                                if (inputClasses) {
-                                    const gridClasses = inputClasses.match(
-                                        /\bcol-md-\d+\b/g);
-                                    if (gridClasses) {
-                                        field.classList.remove(...field.classList
-                                            .filter(cls => cls.startsWith(
-                                                'col-md-')));
-                                        field.classList.add(...gridClasses);
+                            // Select only .form-field elements that are children of .stage-wrap
+                            document.querySelectorAll('.stage-wrap .form-field').forEach(
+                                field => {
+                                    // Ensure the field has a [data-type] element
+                                    const dataTypeElement = field.querySelector(
+                                        '[data-type]');
+                                    if (dataTypeElement) {
+                                        const inputClasses = dataTypeElement.getAttribute(
+                                            'className');
+                                        if (inputClasses) {
+                                            const gridClasses = inputClasses.match(
+                                                /\bcol-md-\d+\b/g);
+                                            if (gridClasses) {
+                                                // Remove existing grid classes and add the new ones
+                                                field.classList.remove(...field.classList
+                                                    .filter(cls => cls.startsWith(
+                                                        'col-md-')));
+                                                field.classList.add(...gridClasses);
+                                            }
+                                        }
                                     }
-                                }
-                            });
+                                });
                         }, 100); // Adjust timeout as needed based on your application's responsiveness
                     }
+
 
                     // Setup click handlers for template cards
                     $('.template-card').on('click', function () {
@@ -1566,7 +1575,8 @@
                         if (templates[templateId]) {
                             formBuilder.actions.setData(templates[templateId]);
                             console.log(`Loaded template: ${templateId}`);
-                            applyBootstrapGridClasses(); // Call the function to apply grid classes from update 013 above
+                            applyBootstrapGridClasses
+                        (); // Call the function to apply grid classes from update 013 above
                         } else {
                             console.error('Template not found:', templateId);
                         }
