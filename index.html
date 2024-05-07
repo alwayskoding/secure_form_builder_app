@@ -396,24 +396,35 @@
 
         /*Update 012 - Template Selection Overlay Styles*/
 
-        .template-cards {
-            display: flex;
-            justify-content: space-around;
+        /* Sidebar Styles */
+        .template-sidebar {
+            position: fixed;
+            width: 250px;
+            height: 100vh;
+            overflow-y: auto;
+            background-color: #2b2a2a;
             padding: 20px;
+            box-sizing: border-box;
         }
 
+        /* Card Styles */
         .template-card {
+            background-color: #333;
+            color: #fff;
             padding: 10px;
-            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            width: 30%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            background-color: #f9f9f9;
         }
 
         .template-card:hover {
-            background-color: #e9e9e9;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
+
 
         /*End of Update 012 - Template Selection Overlay Styles*/
     </style>
@@ -428,7 +439,7 @@
     </div>
 
     <!-- Template Cards Section Update 012 -->
-    <div class="template-cards">
+    <div class="template-sidebar">
         <div id="template-user" class="template-card">User Form</div>
         <div id="template-terms" class="template-card">Terms Form</div>
         <div id="template-issue" class="template-card">Issue Form</div>
@@ -1540,7 +1551,7 @@
                         ]
                     };
 
-                    //Update 013 - Applying any bootstrap classes that come in as a className on their JSON  template to be applied correctly in stage
+                    //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
                     $('.template-card').on('click', function () {
                         const templateId = this.id.replace('template-', '');
                         if (templates[templateId]) {
@@ -1560,7 +1571,7 @@
                             var $input = $(this);
                             var classNames = $input.val();
                             var gridClasses = classNames.match(
-                            /\bcol-md-\d+\b/g); // Extract Bootstrap grid classes
+                                /\bcol-md-\d+\b/g); // Extract Bootstrap grid classes
 
                             if (gridClasses) {
                                 // Find the closest .form-field element
