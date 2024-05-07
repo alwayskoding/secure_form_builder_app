@@ -410,8 +410,9 @@
             top: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: center;
             gap: 10px;
+            align-items: center;
         }
 
         /* Card Styles */
@@ -433,6 +434,20 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
+        .category {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .template-sidebar h2 {
+            font-size: 14px;
+            color: #fff;
+            border-bottom: 2px solid #5d5b5b6b;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
 
         /*End of Update 012 - Template Selection Overlay Styles*/
     </style>
@@ -450,19 +465,19 @@
     <div class="template-sidebar">
         <div class="category">
             <h2>User Forms</h2>
-            <div id="template-user" class="template-card">User Form</div>
+            <div id="template-user" class="template-card"></div>
         </div>
         <div class="category">
             <h2>Terms Forms</h2>
-            <div id="template-terms" class="template-card">Terms Form</div>
+            <div id="template-terms" class="template-card"></div>
         </div>
         <div class="category">
             <h2>Issue Forms</h2>
-            <div id="template-issue" class="template-card">Issue Form</div>
+            <div id="template-issue" class="template-card"></div>
         </div>
         <div class="category">
             <h2>Register Forms</h2>
-            <div id="template-register" class="template-card">Register Form</div>
+            <div id="template-register" class="template-card"></div>
         </div>
     </div>
 
