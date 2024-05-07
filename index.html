@@ -399,7 +399,7 @@
         /* Sidebar Styles */
         .template-sidebar {
             position: fixed;
-            width: 250px;
+            width: 145px;
             height: 100vh;
             overflow-y: auto;
             background-color: #2b2a2a;
@@ -425,7 +425,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 49%;
+            width: 100%;
         }
 
         .template-card:hover {
@@ -448,11 +448,24 @@
 
     <!-- Template Cards Section Update 012 -->
     <div class="template-sidebar">
-        <div id="template-user" class="template-card">User Form</div>
-        <div id="template-terms" class="template-card">Terms Form</div>
-        <div id="template-issue" class="template-card">Issue Form</div>
-        <div id="template-register" class="template-card">Register Form</div>
+        <div class="category">
+            <h2>User Forms</h2>
+            <div id="template-user" class="template-card">User Form</div>
+        </div>
+        <div class="category">
+            <h2>Terms Forms</h2>
+            <div id="template-terms" class="template-card">Terms Form</div>
+        </div>
+        <div class="category">
+            <h2>Issue Forms</h2>
+            <div id="template-issue" class="template-card">Issue Form</div>
+        </div>
+        <div class="category">
+            <h2>Register Forms</h2>
+            <div id="template-register" class="template-card">Register Form</div>
+        </div>
     </div>
+
     <!--End of Update 012 Template View Setup-->
 
     <div id="fb-editor"></div>
