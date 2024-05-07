@@ -450,13 +450,26 @@
             margin-bottom: 20px;
         }
 
-        .card-img2 {
+        .card-img1,
+        .card-img2,
+        .card-img3 {
             background-image: url("template_pic_test_3.jpg");
             background-repeat: no-repeat;
             background-size: cover;
             width: 100%;
             background-position: center;
+        }
 
+        .card-img1 {
+            background-image: url("template_pic_users_example.jpg");
+        }
+
+        .card-img2 {
+            background-image: url("template_terms_example.jpg");
+        }
+
+        .card-img3 {
+            background-image: url("template_pic_test_3.jpg");
         }
 
         /*End of Update 012 - Template Selection Overlay Styles*/
@@ -1305,34 +1318,111 @@
                     // Assuming templates are defined somewhere in your script
                     const templates = {
                         user: [{
-                            "type": "text",
-                            "label": "Full Name",
-                            "subtype": "text",
-                            "className": "form-control col-md-4",
-                            "name": "text-1476748004559"
-                        }, {
-                            "type": "select",
-                            "label": "Occupation",
-                            "className": "form-control col-md-6",
-                            "name": "select-1476748006618",
-                            "values": [{
-                                "label": "Street Sweeper",
-                                "value": "option-1",
-                                "selected": true
-                            }, {
-                                "label": "Moth Man",
-                                "value": "option-2"
-                            }, {
-                                "label": "Chemist",
-                                "value": "option-3"
-                            }]
-                        }, {
-                            "type": "textarea",
-                            "label": "Short Bio",
-                            "rows": "5",
-                            "className": "form-control col-md-8",
-                            "name": "textarea-1476748007461"
-                        }],
+                                "type": "header",
+                                "subtype": "h1",
+                                "label": "Form Name<br>",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "paragraph",
+                                "subtype": "p",
+                                "label": "Enter subtext here on this line.<br>",
+                                "className": "col-md-12",
+                                "access": false
+                            },
+                            {
+                                "type": "date",
+                                "required": false,
+                                "label": "Date Field",
+                                "className": "form-control col-md-4",
+                                "name": "date-1715107960136-0",
+                                "access": false,
+                                "subtype": "date"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan Name",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_name",
+                                "access": false,
+                                "value": "|member.benefit_plan_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Benefit Plan ID",
+                                "placeholder": "Will be auto-filled with Member's Benefit Plan ID",
+                                "className": "form-control col-md-4",
+                                "name": "member_benefit_plan_id",
+                                "access": false,
+                                "value": "|member.benefit_plan_id|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member First Name",
+                                "placeholder": "Will be auto-filled with Member's First Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_first_name",
+                                "access": false,
+                                "value": "|member.first_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Middle Name",
+                                "placeholder": "Will be auto-filled with Member's Middle Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_middle_name",
+                                "access": false,
+                                "value": "|member.middle_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "required": false,
+                                "label": "Member Last Name",
+                                "placeholder": "Will be auto-filled with Member's Last Name",
+                                "className": "form-control col-md-4",
+                                "name": "member_last_name",
+                                "access": false,
+                                "value": "|member.last_name|",
+                                "subtype": "text"
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "tel",
+                                "required": false,
+                                "label": "Phone Number",
+                                "className": "form-control col-md-6",
+                                "name": "text-1715107991245-0",
+                                "access": false
+                            },
+                            {
+                                "type": "text",
+                                "subtype": "email",
+                                "required": false,
+                                "label": "Email",
+                                "className": "form-control col-md-6",
+                                "name": "text-1715107995722-0",
+                                "access": false
+                            },
+                            {
+                                "type": "textarea",
+                                "required": false,
+                                "label": "Text Area",
+                                "className": "form-control col-md-12",
+                                "name": "textarea-1715108027727-0",
+                                "access": false,
+                                "subtype": "textarea"
+                            }
+                        ],
                         terms: [{
                                 "type": "header",
                                 "subtype": "h1",
