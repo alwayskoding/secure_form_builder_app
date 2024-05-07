@@ -53,7 +53,8 @@
             opacity: .6;
         }
 
-        button#copyHTMLBtn {
+        /*If you need this back to the original location uncomment this and remove the one after*/
+        /* button#copyHTMLBtn {
             position: fixed;
             bottom: 0;
             left: 50%;
@@ -67,6 +68,22 @@
             border-top-right-radius: 5px;
             font-size: 20px;
             font-family: Helvetica;
+        } */
+
+        button#copyHTMLBtn {
+            position: relative;
+            top: -535px;
+            left: 314px;
+            transform: translateX(-50%);
+            background: rgb(35, 134, 54) !important;
+            color: #ffffff;
+            padding: 15px 24px;
+            outline: none;
+            border: 0;
+            font-size: 20px;
+            font-family: Helvetica;
+            border-radius: 8px;
+            min-width: 200px;
         }
 
         .top_info {
@@ -328,6 +345,8 @@
             transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
             transition-delay: 0s;
             transition-property: color, fill, background-color, border-color;
+            display: none;
+            /*remove this when you are ready to start saving templates*/
         }
 
         .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn:hover,
