@@ -621,6 +621,27 @@
 
                 //Update 014 Huge Save and Loading Data Update
 
+                // Function to apply grid classes from data with enhanced logging
+                function applyGridClasses(formData) {
+                    console.log("Applying grid classes...");
+                    formData.forEach(function (field, index) {
+                        var selector = '#fb-editor .form-field:eq(' + index + ')';
+                        var $element = $(selector);
+                        if ($element.length === 0) {
+                            console.log("No element found for selector:", selector);
+                            return;
+                        }
+                        var classes = field.className.match(/\bcol-md-\d+\b/g);
+                        if (classes) {
+                            console.log("Applying classes:", classes.join(' '), "to element:",
+                                selector);
+                            $element.addClass(classes.join(' '));
+                        } else {
+                            console.log("No grid classes found for element at index:", index);
+                        }
+                    });
+                }
+
                 // Enhance formData with Bootstrap grid classes before saving
                 function enhanceFormData(formData) {
                     $('#fb-editor .form-field').each(function (index, elem) {
@@ -653,9 +674,10 @@
                         dataType: 'json',
                         // Include other necessary form builder options here...
                     };
+                    // Delayed call to ensure form fields have been rendered
                     setTimeout(function () {
-                        applyGridClasses(savedData); // Apply grid classes after form is rendered
-                    }, 100);
+                        applyGridClasses(JSON.parse(savedData)); // Parse JSON before applying classes
+                    }, 500); // May need to adjust this delay based on your specific conditions
                 } else {
                     options = {
                         dataType: 'json',
@@ -1070,19 +1092,6 @@
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
                 //Update 014 This is Also Part of the Huge Auto Save and Load Update - Adds Bootstrap classes to the data that is saved also 
-                // Function to apply grid classes from data
-                function applyGridClasses(formData) {
-                    formData.forEach(function (field, index) {
-                        var selector = '#fb-editor .form-field:eq(' + index + ')';
-                        var classes = field.className.match(/\bcol-md-\d+\b/g);
-                        if (classes) {
-                            $(selector).addClass(classes.join(' '));
-                        }
-                    });
-                }
-
-
-
                 
                 // Setup autosave functionality
 
