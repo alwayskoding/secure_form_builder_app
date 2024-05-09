@@ -2463,6 +2463,12 @@
 
                     //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
                     $('.template-card').on('click', function () {
+                        let temp_gallery_container = document.querySelector('.template-sidebar');
+
+                        //hide template-sidebar
+
+                        temp_gallery_container.style.display = "none";
+
                         const templateId = this.id.replace('template-', '');
                         if (templates[templateId]) {
                             formBuilder.actions.setData(templates[templateId]);
