@@ -38,7 +38,8 @@
         }
 
         .build_form_from_scratch,
-        .build_form_from_template {
+        .build_form_from_template,
+        .last_form_you_were_working_on {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -59,7 +60,8 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .build_form_from_scratch .inner_plus {
+        .build_form_from_scratch .inner_plus,
+        .reload_old_form_icon {
             color: #f5f5f5;
             font-size: 80px;
         }
@@ -88,6 +90,17 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
+        }
+
+        .last_form_you_were_working_on {
+            border-radius: 8px;
+            height: 400px;
+            border: 2px solid #f5f5f5;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         .inner_doc_template_example {
@@ -262,8 +275,6 @@
         document.querySelector('.build_form_from_template').addEventListener('click', function () {
             window.location.href = 'form_builder_app.html#previousSave';
         });
-
-
     </script>
 
 
