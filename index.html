@@ -276,7 +276,7 @@
             // Check if there is recent activity (formData in localStorage)
             if (localStorage.getItem('formData')) {
                 // Show the div indicating recent activity
-                document.querySelector('.last_form_you_were_working_on').style.display = 'block';
+                document.querySelector('.last_form_you_were_working_on').style.display = 'flex';
 
                 // Display the last saved datetime
                 const lastSavedDateTime = new Date(Number(localStorage.getItem('lastSavedDateTime')));
