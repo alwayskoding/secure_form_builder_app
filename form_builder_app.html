@@ -531,16 +531,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             var hash = window.location.hash;
             var templateSidebar = document.querySelector('.template-sidebar');
-            
+
             // Check if the hash is "blank" and clear localStorage if it is
             if (hash === '#blank') {
                 localStorage.clear();
             }
-    
+
             // Set display style based on whether blank or template gallery was chosen on the previous page
             if (hash === '#template') {
                 templateSidebar.style.display = 'block';
-            } else {
+            } else if (hash === '#previousSave') {
                 templateSidebar.style.display = 'none';
             }
         });

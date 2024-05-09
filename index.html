@@ -188,6 +188,8 @@
 <body>
 
 
+
+
     <div class="full_splash_container">
         <div class="text_instruction">
             <h1>Build a Form</h1>
@@ -223,18 +225,48 @@
                     <span>Look through our template gallery of premade forms.</span>
                 </div>
             </div>
+
+            <div class="last_form_you_were_working_on">
+                <div class="reload_old_form_icon">...</div>
+            </div>
         </div>
     </div>
 
+
+
+
+
     <script>
+        //If Local Storage Show Extra Card Option If not Dont
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if there is recent activity (formData in localStorage)
+            if (localStorage.getItem('formData')) {
+                // Show the div indicating recent activity
+                document.querySelector('.last_form_you_were_working_on').style.display = 'block';
+            } else {
+                // Hide the div indicating recent activity
+                document.querySelector('.last_form_you_were_working_on').style.display = 'none';
+            }
+        });
+
+        //If click on blank option take to blank page using hash
         document.querySelector('.build_form_from_scratch').addEventListener('click', function () {
             window.location.href = 'form_builder_app.html#blank';
         });
 
+        //If click on template take to builder with template hash 
         document.querySelector('.build_form_from_template').addEventListener('click', function () {
             window.location.href = 'form_builder_app.html#template';
         });
+
+        document.querySelector('.build_form_from_template').addEventListener('click', function () {
+            window.location.href = 'form_builder_app.html#previousSave';
+        });
+
+
     </script>
+
+
 
 
 </body>
