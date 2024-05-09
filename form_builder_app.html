@@ -528,10 +528,10 @@
 <body>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var hash = window.location.hash;
             var templateSidebar = document.querySelector('.template-sidebar');
-    
+
             // Set display style based on whether blank or template gallery was chosen on the previous page
             if (hash === '#template') {
                 templateSidebar.style.display = 'block';
@@ -540,9 +540,9 @@
             }
         });
     </script>
-    
-    
-    
+
+
+
 
     <div class="builder_top_bar"></div>
     <div class="top_info">
@@ -676,6 +676,8 @@
                     var formData = formBuilder.actions.getData('json');
                     var enhancedFormData = enhanceFormData(formData); // Enhance data before saving
                     StorageModule.save('formData', enhancedFormData);
+                    // Save the current timestamp as the last saved datetime
+                    StorageModule.save('lastSavedDateTime', Date.now());
                     console.log('Form data autosaved with grid classes.');
                 }
 
@@ -693,7 +695,7 @@
                 if (savedData) {
                     // If there is saved data, use it to initialize the form builder
                     console.log('Form data loaded from local storage.');
-    
+
                     options = {
                         formData: savedData,
                         dataType: 'json',
@@ -1515,7 +1517,7 @@
                 var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
 
                 //Update 014 This is Also Part of the Huge Auto Save and Load Update - Adds Bootstrap classes to the data that is saved also 
-                
+
                 // Setup autosave functionality
 
                 // Periodically autosave the form data

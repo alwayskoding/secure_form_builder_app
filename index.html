@@ -277,10 +277,11 @@
             if (localStorage.getItem('formData')) {
                 // Show the div indicating recent activity
                 document.querySelector('.last_form_you_were_working_on').style.display = 'block';
-                // Retrieve the last saved datetime
+
+                // Display the last saved datetime
                 const lastSavedDateTime = new Date(Number(localStorage.getItem('lastSavedDateTime')));
-                // Display the last saved datetime in a specific format (e.g., MM/DD/YYYY HH:MM:SS)
-                document.querySelector('.savedTime').textContent = lastSavedDateTime.toLocaleString();
+                document.querySelector('.savedTime').textContent = lastSavedDateTime
+            .toLocaleString(); // Display in a human-readable format
             } else {
                 // Hide the div indicating recent activity
                 document.querySelector('.last_form_you_were_working_on').style.display = 'none';
