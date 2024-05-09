@@ -442,7 +442,7 @@
         /* Sidebar Styles */
         .template-sidebar {
             position: fixed;
-            width: 145px;
+            width: 100%;
             height: 100vh;
             overflow-y: auto;
             background-color: #2b2a2a;
@@ -480,9 +480,7 @@
 
         .category {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
+            gap: 40px;
         }
 
         .template-sidebar h2 {
@@ -500,7 +498,7 @@
             background-image: url("template_pic_test_3.jpg");
             background-repeat: no-repeat;
             background-size: cover;
-            width: 100%;
+            width: 25%;
             background-position: center;
         }
 
@@ -554,19 +552,27 @@
     <!-- Template Cards Section Update 012 -->
     <div class="template-sidebar">
         <div class="category">
-            <h2>User Forms</h2>
+            <div id="template-user" class="template-card card-img1" title="New User Form"></div>
+            <div id="template-user" class="template-card card-img1" title="New User Form"></div>
+            <div id="template-user" class="template-card card-img1" title="New User Form"></div>
             <div id="template-user" class="template-card card-img1" title="New User Form"></div>
         </div>
         <div class="category">
-            <h2>Terms Forms</h2>
+            <div id="template-terms" class="template-card card-img2" title="Medicaid Terms Form"></div>
+            <div id="template-terms" class="template-card card-img2" title="Medicaid Terms Form"></div>
+            <div id="template-terms" class="template-card card-img2" title="Medicaid Terms Form"></div>
             <div id="template-terms" class="template-card card-img2" title="Medicaid Terms Form"></div>
         </div>
         <div class="category">
-            <h2>Issue Forms</h2>
+            <div id="template-issue" class="template-card card-img3" title="Complaint and Issues Form"></div>
+            <div id="template-issue" class="template-card card-img3" title="Complaint and Issues Form"></div>
+            <div id="template-issue" class="template-card card-img3" title="Complaint and Issues Form"></div>
             <div id="template-issue" class="template-card card-img3" title="Complaint and Issues Form"></div>
         </div>
         <div class="category">
-            <h2>Register Forms</h2>
+            <div id="template-register" class="template-card card-img4" title="Registering as New Member Form"></div>
+            <div id="template-register" class="template-card card-img4" title="Registering as New Member Form"></div>
+            <div id="template-register" class="template-card card-img4" title="Registering as New Member Form"></div>
             <div id="template-register" class="template-card card-img4" title="Registering as New Member Form"></div>
         </div>
     </div>
