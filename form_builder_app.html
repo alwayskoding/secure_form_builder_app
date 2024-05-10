@@ -2551,13 +2551,16 @@
 
 
                     //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
-                    
-                    $('.template-sidebar').on('click', '.template-card', function () {
 
-                        let temp_gallery_container = document.querySelector('.template-sidebar');
-                        temp_gallery_container.style.display = "none"; // Hide the template gallery
+                    $('.template-sidebar').on('click', '.template-card', function () {
+                        let temp_gallery_container = document.querySelector(
+                        '.template-sidebar');
+                        temp_gallery_container.style.display =
+                        "none"; // Hide the template gallery
 
                         let templateId = this.id.replace('template-', '');
+                        templateId = templateId.replace(/-/g,
+                        '_'); // Convert hyphens to underscores to match template keys
                         console.log("Clicked template ID:", templateId);
 
                         if (templates[templateId]) {
@@ -2568,6 +2571,7 @@
                             console.error('Template not found:', templateId);
                         }
                     });
+
 
 
                     function applyBootstrapGridClasses() {
