@@ -1999,7 +1999,7 @@
 
                     // Function to load items into the gallery
                     function loadItems(data) {
-                        const container = $('.template-sidebar');
+                        const container = $('.template-content'); // New div for content inside sidebar
                         container.empty(); // Clear previous items
                         let itemCount = 0;
 
@@ -2056,7 +2056,7 @@
                     // Setup search input and button
                     function setupSearch() {
                         const searchContainer = $('<div></div>').addClass('search-container').prependTo(
-                            '.template-sidebar');
+                            '.template-sidebar'); // Adjust this if needed
                         $('<input>').attr({
                             type: 'text',
                             id: 'searchInput',
@@ -2064,7 +2064,31 @@
                         }).appendTo(searchContainer);
                         $('<button>').attr('id', 'searchBtn').text('Search').appendTo(searchContainer);
 
+                        // Add some basic styling for visibility
+                        $('.search-container').css({
+                            'width': '100%',
+                            'display': 'flex',
+                            'justify-content': 'center',
+                            'margin-bottom': '10px'
+                        });
+                        $('#searchInput').css({
+                            'padding': '10px',
+                            'width': '70%', // Adjust width as needed
+                            'margin-right': '10px'
+                        });
+                        $('#searchBtn').css({
+                            'padding': '10px 20px',
+                            'cursor': 'pointer'
+                        });
+
                         handleSearch();
+                    }
+
+                    // Prepare the sidebar for content loading
+                    function prepareSidebar() {
+                        $('.template-sidebar').append(
+                            '<div class="template-content" style="width: 100%;"></div>'
+                            ); // Ensure this container is for loading items
                     }
 
                     // Fetch all templates data
@@ -2077,9 +2101,11 @@
                         });
                     }
 
+                    prepareSidebar();
                     setupSearch();
                     fetchData();
                 });
+
 
 
                 //End of Update 016
