@@ -1994,19 +1994,24 @@
                 //The new update here which Im calling 017 is Going To Make Sure That Only a Certain Amount Is Loaded Per Scroll also Using Virtual Scrolling 
                 //It will now only show was is actually visible on the screen at the time and checks to see when they last data has been loaded to not create extra space at the bottom
                 $(document).ready(function () {
-                    const maxInitial = 8; // Maximum items initially displayed
-                    const dataUrl = 'form_template_gallery.json'; // Path to your JSON data
-                    let templatesData = []; // To store fetched templates data
+                    const maxInitial = 8; // Maximum items to load initially
+                    let templatesData = []; // To store all templates data
 
-                    // Function to load initial items
-                    function loadInitialItems(data) {
-                        const container = $('.template-sidebar').empty(); // Clear previous content
-                        const limitedData = data.slice(0, maxInitial); // Limit the data to initial load
+                    // Function to load items into the gallery
+                    function loadItems(data) {
+                        const container = $('.template-sidebar');
+                        container.empty(); // Clear previous items
+                        let itemCount = 0;
 
-                        limitedData.forEach(category => {
+                        data.forEach(category => {
+                            if (itemCount >= maxInitial)
+                        return; // Stop adding if max initial reached
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
+
                             category.templates.forEach(template => {
+                                if (itemCount >= maxInitial)
+                            return; // Stop adding if max initial reached
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
@@ -2022,6 +2027,7 @@
                                         'width': '100%',
                                         'height': '800px'
                                     }).appendTo(cardHolder);
+                                itemCount++;
                             });
                         });
                     }
@@ -2030,32 +2036,42 @@
                     function handleSearch() {
                         $('#searchBtn').click(function () {
                             const searchText = $('#searchInput').val().toLowerCase();
-                            const filteredData = templatesData.map(category => {
-                                return {
-                                    ...category,
-                                    templates: category.templates.filter(t => t.title
-                                        .toLowerCase().includes(searchText))
-                                };
-                            }).filter(category => category.templates.length > 0);
+                            const filteredData = templatesData.filter(category => {
+                                const matchedTemplates = category.templates.filter(
+                                    template =>
+                                    template.title.toLowerCase().includes(
+                                        searchText));
+                                return matchedTemplates.length > 0;
+                            }).map(category => ({
+                                ...category,
+                                templates: category.templates.filter(template =>
+                                    template.title.toLowerCase().includes(
+                                        searchText))
+                            }));
 
-                            loadInitialItems(filteredData);
+                            loadItems(filteredData);
                         });
                     }
 
                     // Setup search input and button
                     function setupSearch() {
-                        $('.template-sidebar').before(
-                            '<input id="searchInput" type="text" placeholder="Search templates...">'
-                            );
-                        $('.template-sidebar').before('<button id="searchBtn">Search</button>');
+                        const searchContainer = $('<div></div>').addClass('search-container').prependTo(
+                            '.template-sidebar');
+                        $('<input>').attr({
+                            type: 'text',
+                            id: 'searchInput',
+                            placeholder: 'Search templates...'
+                        }).appendTo(searchContainer);
+                        $('<button>').attr('id', 'searchBtn').text('Search').appendTo(searchContainer);
+
                         handleSearch();
                     }
 
                     // Fetch all templates data
                     function fetchData() {
-                        $.getJSON(dataUrl, function (data) {
+                        $.getJSON('form_template_gallery.json', function (data) {
                             templatesData = data; // Store data globally
-                            loadInitialItems(data);
+                            loadItems(data); // Load initial items
                         }).fail(function () {
                             console.error("Error fetching the template data.");
                         });
@@ -2064,10 +2080,6 @@
                     setupSearch();
                     fetchData();
                 });
-
-
-
-
 
 
                 //End of Update 016
