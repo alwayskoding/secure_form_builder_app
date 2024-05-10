@@ -739,6 +739,8 @@
 
 
 
+
+
     <script>
         function mainScript() {
             jQuery(function ($) {
@@ -1986,6 +1988,51 @@
 
                 //End of Update 008
 
+
+
+                //Update 016 Refactoring to Have Template Gallery Cards Be Dynamically Created Using JSON From form_template_galleryjson.js file
+
+                $(document).ready(function () {
+                    // Assuming the JSON data is stored locally as "template-gallery.json"
+                    $.getJSON('form_template_gallery.json', function (data) {
+                        const container = $('.template-sidebar');
+
+                        // Loop through each category
+                        data.forEach(category => {
+                            const categoryDiv = $('<div class="category"></div>');
+                            container.append(categoryDiv);
+
+                            // Loop through each template in the category
+                            category.templates.forEach(template => {
+                                const cardHolder = $(
+                                    '<div class="card_holder"></div>');
+
+                                const title = $('<h4></h4>').text(template
+                                    .title);
+                                const card = $('<div></div>').addClass(
+                                        'template-card')
+                                    .attr('id', template.id)
+                                    .attr('title', template.description)
+                                    .css('background-image', 'url(' + template
+                                        .imageURL + ')')
+                                    .css('background-size', 'cover')
+                                    .css('background-position', 'center')
+                                    .css('width', '100%')
+                                    .css('height', '800px');
+
+                                cardHolder.append(title);
+                                cardHolder.append(card);
+                                categoryDiv.append(cardHolder);
+                            });
+                        });
+                    }).fail(function () {
+                        console.error("Error fetching the template data.");
+                    });
+                });
+
+
+                //End of Update 016
+
                 //Update 012 Templates View and Loader 
 
                 // Ensure DOM is ready before setting up the template switcher
@@ -2465,10 +2512,12 @@
                         ]
                     };
 
+
+
                     //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
                     $('.template-card').on('click', function () {
                         let temp_gallery_container = document.querySelector(
-                        '.template-sidebar');
+                            '.template-sidebar');
 
                         //hide template-sidebar
                         temp_gallery_container.style.display = "none";
@@ -2519,48 +2568,7 @@
 
                 //End of Update 012 Templates View and Loader
 
-                //Update 016 Refactoring to Have Template Gallery Cards Be Dynamically Created Using JSON From form_template_galleryjson.js file
 
-                $(document).ready(function () {
-                    // Assuming the JSON data is stored locally as "template-gallery.json"
-                    $.getJSON('form_template_gallery.json', function (data) {
-                        const container = $('.template-sidebar');
-
-                        // Loop through each category
-                        data.forEach(category => {
-                            const categoryDiv = $('<div class="category"></div>');
-                            container.append(categoryDiv);
-
-                            // Loop through each template in the category
-                            category.templates.forEach(template => {
-                                const cardHolder = $(
-                                    '<div class="card_holder"></div>');
-
-                                const title = $('<h4></h4>').text(template
-                                    .title);
-                                const card = $('<div></div>').addClass(
-                                        'template-card')
-                                    .attr('id', template.id)
-                                    .attr('title', template.description)
-                                    .css('background-image', 'url(' + template
-                                        .imageURL + ')')
-                                    .css('background-size', 'cover')
-                                    .css('background-position', 'center')
-                                    .css('width', '100%')
-                                    .css('height', '800px');
-
-                                cardHolder.append(title);
-                                cardHolder.append(card);
-                                categoryDiv.append(cardHolder);
-                            });
-                        });
-                    }).fail(function () {
-                        console.error("Error fetching the template data.");
-                    });
-                });
-
-
-                //End of Update 016
 
 
             }); //end of jquery wrapper
