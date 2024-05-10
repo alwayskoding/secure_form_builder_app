@@ -1992,63 +1992,75 @@
 
                 //Update 016 Refactoring to Have Template Gallery Cards Be Dynamically Created Using JSON From form_template_galleryjson.js file
                 //The new update here which Im calling 017 is Going To Make Sure That Only a Certain Amount Is Loaded Per Scroll also Using Virtual Scrolling 
-                //This new set up will Cap at 48 entries since we cant use react or any other libraries to manage state and remove items that arent in view to keep stress low. A load more button has been introduced as well.
+                //It will now only show was is actually visible on the screen at the time and checks to see when they last data has been loaded to not create extra space at the bottom
                 $(document).ready(function () {
-                    const maxInitial = 8;
-                    const maxPerLoad = 8;
-                    const maxTotal = 48;
+                    const maxInitial = 8; // Maximum items to load initially
+                    const maxPerLoad = 8; // Maximum items to load when the button is clicked
+                    const maxTotal = 48; // Total maximum items to display at once
                     let loadedItems = 0; // Track the number of loaded items
+                    let totalItems = 0; // Total number of items available
 
+                    // Load initial set of templates
                     function loadItems(data, startIndex, count) {
+                        let itemsLoaded = 0;
                         const container = $('.template-sidebar');
-                        if (loadedItems >= maxTotal) return; // Do not load more than maxTotal items
 
-                        const endIndex = startIndex + count;
-                        const itemsToLoad = data.slice(startIndex, endIndex);
-                        itemsToLoad.forEach((template, index) => {
-                            if (loadedItems < maxTotal) {
-                                const cardHolder = $(
-                                    '<div class="card_holder" style="display: block;"></div>'
-                                    );
-                                const title = $('<h4></h4>').text(template.title);
-                                const card = $('<div></div>').addClass('template-card')
-                                    .attr('id', template.id)
-                                    .attr('title', template.description)
-                                    .css({
-                                        'background-image': 'url(' + template.imageURL +
-                                            ')',
-                                        'background-size': 'cover',
-                                        'background-position': 'center',
-                                        'width': '100%',
-                                        'height': '800px'
-                                    });
-
-                                cardHolder.append(title).append(card);
-                                container.append(cardHolder);
-                                loadedItems++;
-                            }
+                        data.forEach(category => {
+                            const categoryDiv = $('<div class="category"></div>').appendTo(
+                                container);
+                            category.templates.slice(startIndex, Math.min(startIndex + count,
+                                category.templates.length)).forEach(template => {
+                                if (loadedItems < maxTotal) {
+                                    const cardHolder = $(
+                                        '<div class="card_holder"></div>').appendTo(
+                                        categoryDiv);
+                                    $('<h4></h4>').text(template.title).appendTo(
+                                        cardHolder);
+                                    $('<div></div>').addClass('template-card')
+                                        .attr('id', template.id)
+                                        .attr('title', template.description)
+                                        .css({
+                                            'background-image': 'url(' + template
+                                                .imageURL + ')',
+                                            'background-size': 'cover',
+                                            'background-position': 'center',
+                                            'width': '100%',
+                                            'height': '800px'
+                                        }).appendTo(cardHolder);
+                                    loadedItems++;
+                                    itemsLoaded++;
+                                }
+                            });
                         });
 
                         // Update button visibility
-                        $('#loadMoreBtn').toggle(loadedItems < maxTotal && loadedItems < data.length);
+                        $('#loadMoreBtn').toggle(loadedItems < maxTotal && loadedItems < totalItems);
                     }
 
+                    // Calculate total items and initialize gallery loading
                     function initializeGallery() {
                         $.getJSON('form_template_gallery.json', function (data) {
+                            totalItems = data.reduce((acc, category) => acc + category.templates
+                                .length, 0);
                             loadItems(data, 0, maxInitial);
-
-                            $('#loadMoreBtn').on('click', function () {
-                                loadItems(data, loadedItems, maxPerLoad);
-                            }).toggle(data.length > maxInitial);
                         }).fail(function () {
                             console.error("Error fetching the template data.");
                         });
                     }
 
-                    // Append the load more button dynamically
-                    $('.template-sidebar').after(
-                        '<button id="loadMoreBtn" style="display: none;">Load More</button>');
+                    // Load more items when button is clicked
+                    function setupLoadMoreButton() {
+                        const loadMoreBtn = $(
+                                '<button id="loadMoreBtn" style="display: none;">Load More</button>')
+                            .appendTo('body');
+                        loadMoreBtn.on('click', function () {
+                            $.getJSON('form_template_gallery.json', function (data) {
+                                loadItems(data, loadedItems, maxPerLoad);
+                            });
+                        });
+                    }
 
+                    setupLoadMoreButton();
                     initializeGallery();
                 });
 
