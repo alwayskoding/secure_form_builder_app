@@ -2517,18 +2517,18 @@
                     //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
                     $('.template-card').on('click', function () {
                         let temp_gallery_container = document.querySelector(
-                            '.template-sidebar');
+                        '.template-sidebar');
+                        temp_gallery_container.style.display =
+                        "none"; // Hide the template gallery
 
-                        //hide template-sidebar
-                        temp_gallery_container.style.display = "none";
+                        const templateId = this.id; // ID from the card
+                        console.log("Clicked template ID:", templateId);
 
-                        const templateId = this.id.replace('template-', '');
+                        // Check if the template ID exists in the templates object
                         if (templates[templateId]) {
+                            console.log(`Loading template: ${templateId}`);
                             formBuilder.actions.setData(templates[templateId]);
-                            console.log(`Loaded template: ${templateId}`);
-
-                            // Call the function to manipulate classes after setting the template data
-                            applyBootstrapGridClasses();
+                            applyBootstrapGridClasses(); // Apply any necessary classes
                         } else {
                             console.error('Template not found:', templateId);
                         }
