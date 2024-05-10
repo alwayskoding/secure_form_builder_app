@@ -1991,15 +1991,22 @@
 
 
                 //Update 016 Refactoring to Have Template Gallery Cards Be Dynamically Created Using JSON From form_template_galleryjson.js file
-                //The new update here which Im calling 017 is Going To Make Sure That Only a Certain Amount Is Loaded Per Scroll
+                //The new update here which Im calling 017 is Going To Make Sure That Only a Certain Amount Is Loaded Per Scroll also Using Virtual Scrolling 
+                //It will now only show was is actually visible on the screen at the time and checks to see when they last data has been loaded to not create extra space at the bottom
                 $(document).ready(function () {
                     const maxInitial = 12; // Maximum items to load initially
                     const maxPerScroll = 12; // Maximum items to load per scroll
                     let loadedItems = 0; // Track the number of loaded items
+                    let totalItems = 0; // Total number of items available
 
                     function loadItems(data, startIndex, count) {
                         const container = $('.template-sidebar');
                         let itemsLoaded = 0;
+
+                        // Calculate total items only once
+                        if (totalItems === 0) {
+                            data.forEach(category => totalItems += category.templates.length);
+                        }
 
                         // Load items from startIndex, stop after 'count' items
                         data.some(category => {
@@ -2047,14 +2054,20 @@
                         $('.template-sidebar').on('scroll', function () {
                             // Check if we are close to the bottom of the container
                             if ($(this).scrollTop() + $(this).innerHeight() >= this
-                                .scrollHeight - 100) {
-                                loadItems(data, loadedItems, maxPerScroll);
+                                .scrollHeight - 100 && loadedItems < totalItems) {
+                                let itemsLoadedNow = loadItems(data, loadedItems,
+                                    maxPerScroll);
+                                if (itemsLoadedNow === 0) { // No more items to load
+                                    $(this).off(
+                                    'scroll'); // Remove the scroll event handler if no more data
+                                }
                             }
                         });
                     }).fail(function () {
                         console.error("Error fetching the template data.");
                     });
                 });
+
 
 
 
