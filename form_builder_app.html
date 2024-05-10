@@ -2005,17 +2005,17 @@
 
                         data.forEach(category => {
                             if (itemCount >= maxInitial)
-                        return; // Stop adding if max initial reached
+                                return; // Stop adding if max initial reached
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
 
                             category.templates.forEach(template => {
                                 if (itemCount >= maxInitial)
-                            return; // Stop adding if max initial reached
+                                    return; // Stop adding if max initial reached
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
-                                cardHolder);
+                                    cardHolder);
                                 $('<div></div>').addClass('template-card')
                                     .attr('id', template.id)
                                     .attr('title', template.description)
@@ -2032,7 +2032,7 @@
                         });
                     }
 
-                    // Function to handle search
+                    // Function to handle search - This will Check Both the Title and Descriptions from the Gallery JSON File for matches
                     function handleSearch() {
                         $('#searchBtn').click(function () {
                             const searchText = $('#searchInput').val().toLowerCase();
@@ -2040,18 +2040,24 @@
                                 const matchedTemplates = category.templates.filter(
                                     template =>
                                     template.title.toLowerCase().includes(
+                                        searchText) ||
+                                    template.description.toLowerCase().includes(
                                         searchText));
                                 return matchedTemplates.length > 0;
                             }).map(category => ({
                                 ...category,
                                 templates: category.templates.filter(template =>
                                     template.title.toLowerCase().includes(
+                                        searchText) ||
+                                    template.description.toLowerCase().includes(
                                         searchText))
                             }));
 
                             loadItems(filteredData);
                         });
                     }
+
+
 
                     // Setup search input and button
                     function setupSearch() {
@@ -2088,7 +2094,7 @@
                     function prepareSidebar() {
                         $('.template-sidebar').append(
                             '<div class="template-content" style="width: 100%;"></div>'
-                            ); // Ensure this container is for loading items
+                        ); // Ensure this container is for loading items
                     }
 
                     // Fetch all templates data
