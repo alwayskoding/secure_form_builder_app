@@ -2147,7 +2147,19 @@
                                 "subtype": "textarea"
                             }
                         ],
-                        terms: [{
+                        user_agreement: [
+                            // Define the fields for the user agreement form
+                        ],
+                        medical_provider: [
+                            // Define the fields for the medical provider form
+                        ],
+                        release: [
+                            // Define the fields for the release form
+                        ],
+                        agreement: [
+                            // Define the fields for the agreement form
+                        ],
+                        terms_of_liability: [{
                                 "type": "header",
                                 "subtype": "h1",
                                 "label": "Header",
@@ -2255,7 +2267,16 @@
                                 "subtype": "textarea"
                             }
                         ],
-                        issue: [{
+                        approval: [
+                            // Define the fields for the approval form
+                        ],
+                        doctor_summary: [
+                            // Define the fields for the doctor summary form
+                        ],
+                        complaint: [
+                            // Define the fields for the complaint form
+                        ],
+                        issues: [{
                                 "type": "header",
                                 "subtype": "h1",
                                 "label": "Header",
@@ -2410,7 +2431,13 @@
                                 "multiple": false
                             }
                         ],
-                        register: [{
+                        reassurance: [
+                            // Define the fields for the reassurance form
+                        ],
+                        qa: [
+                            // Define the fields for the Q&A form
+                        ],
+                        registration: [{
                                 "type": "date",
                                 "required": false,
                                 "label": "Date Field",
@@ -2509,6 +2536,15 @@
                                 "access": false,
                                 "style": "default"
                             }
+                        ],
+                        new_member: [
+                            // Define the fields for the new member form
+                        ],
+                        resolution: [
+                            // Define the fields for the resolution form
+                        ],
+                        medicaid: [
+                            // Define the fields for the Medicaid form
                         ]
                     };
 
@@ -2517,12 +2553,12 @@
                     //Update 013 - This updates takes whatever value that is added to the .fld-className input field in the inner panel by the json template and applies directly to the class of the .form-field closest to it
                     $('.template-card').on('click', function () {
                         let temp_gallery_container = document.querySelector(
-                        '.template-sidebar');
+                            '.template-sidebar');
                         temp_gallery_container.style.display =
-                        "none"; // Hide the template gallery
+                            "none"; // Hide the template gallery
 
                         const templateId = this.id.replace('template-',
-                        ''); // Remove 'template-' prefix
+                            ''); // Remove 'template-' prefix
                         console.log("Clicked template ID:", templateId);
 
                         // Check if the modified templateId exists in the templates object
