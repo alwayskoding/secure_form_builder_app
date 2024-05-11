@@ -1996,26 +1996,32 @@
                 $(document).ready(function () {
                     const maxInitial = 8; // Maximum items to load initially
                     let templatesData = []; // To store all templates data
+                    let debounceTimer; // Timer for debouncing search input
 
                     // Function to load items into the gallery
                     function loadItems(data) {
                         const container = $('.template-content'); // New div for content inside sidebar
                         container.empty(); // Clear previous items
-                        let itemCount = 0;
 
+                        if (data.length === 0) {
+                            container.append($('<p>').text('No templates found').css('color', '#ccc'));
+                            return;
+                        }
+
+                        let itemCount = 0;
                         data.forEach(category => {
                             if (itemCount >= maxInitial)
-                                return; // Stop adding if max initial reached
+                        return; // Stop adding if max initial reached
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
 
                             category.templates.forEach(template => {
                                 if (itemCount >= maxInitial)
-                                    return; // Stop adding if max initial reached
+                            return; // Stop adding if max initial reached
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
-                                    cardHolder);
+                                cardHolder);
                                 $('<div></div>').addClass('template-card')
                                     .attr('id', template.id)
                                     .attr('title', template.description)
@@ -2032,45 +2038,27 @@
                         });
                     }
 
-                    // Function to handle search - This will Check Both the Title and Descriptions from the Gallery JSON File for matches
-                    function handleSearch() {
-                        $('#searchBtn').click(function () {
-                            const searchText = $('#searchInput').val().toLowerCase();
-                            const filteredData = templatesData.filter(category => {
-                                const matchedTemplates = category.templates.filter(
-                                    template =>
-                                    template.title.toLowerCase().includes(
-                                        searchText) ||
-                                    template.description.toLowerCase().includes(
-                                        searchText));
-                                return matchedTemplates.length > 0;
-                            }).map(category => ({
-                                ...category,
-                                templates: category.templates.filter(template =>
-                                    template.title.toLowerCase().includes(
-                                        searchText) ||
-                                    template.description.toLowerCase().includes(
-                                        searchText))
-                            }));
-
-                            loadItems(filteredData);
-                        });
+                    // Debounce function to delay processing based on timeout
+                    function debounce(func, delay) {
+                        return function () {
+                            const context = this;
+                            const args = arguments;
+                            clearTimeout(debounceTimer);
+                            debounceTimer = setTimeout(() => func.apply(context, args), delay);
+                        };
                     }
 
-
-
-                    // Setup search input and button
+                    // Setup search input and handle dynamic searching
                     function setupSearch() {
                         const searchContainer = $('<div></div>').addClass('search-container').prependTo(
-                            '.template-sidebar'); // Adjust this if needed
+                            '.template-sidebar');
                         $('<input>').attr({
                             type: 'text',
                             id: 'searchInput',
                             placeholder: 'Search templates...'
                         }).appendTo(searchContainer);
-                        $('<button>').attr('id', 'searchBtn').text('Search').appendTo(searchContainer);
 
-                        // Add some basic styling for visibility
+                        // Styling for the search input and container
                         $('.search-container').css({
                             'width': '100%',
                             'display': 'flex',
@@ -2079,38 +2067,45 @@
                         });
                         $('#searchInput').css({
                             'padding': '10px',
-                            'width': '70%', // Adjust width as needed
-                            'margin-right': '10px'
-                        });
-                        $('#searchBtn').css({
-                            'padding': '10px 20px',
-                            'cursor': 'pointer'
+                            'width': '100%'
                         });
 
-                        handleSearch();
-                    }
+                        // Dynamic search handler with debouncing
+                        $('#searchInput').on('input', debounce(function () {
+                            const searchText = $(this).val().toLowerCase();
+                            const filteredData = templatesData.filter(category => category
+                                .templates.some(template =>
+                                    template.title.toLowerCase().includes(searchText) ||
+                                    template.description.toLowerCase().includes(
+                                        searchText)
+                                )).map(category => ({
+                                ...category,
+                                templates: category.templates.filter(template =>
+                                    template.title.toLowerCase().includes(
+                                        searchText) ||
+                                    template.description.toLowerCase()
+                                    .includes(searchText)
+                                )
+                            }));
 
-                    // Prepare the sidebar for content loading
-                    function prepareSidebar() {
-                        $('.template-sidebar').append(
-                            '<div class="template-content" style="width: 100%;"></div>'
-                        ); // Ensure this container is for loading items
+                            loadItems(filteredData);
+                        }, 300)); // Adjust debounce timing as needed
                     }
 
                     // Fetch all templates data
                     function fetchData() {
                         $.getJSON('form_template_gallery.json', function (data) {
                             templatesData = data; // Store data globally
-                            loadItems(data); // Load initial items
+                            loadItems(data.slice(0, maxInitial)); // Load initial items
                         }).fail(function () {
                             console.error("Error fetching the template data.");
                         });
                     }
 
-                    prepareSidebar();
                     setupSearch();
                     fetchData();
                 });
+
 
 
 
