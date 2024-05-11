@@ -1996,28 +1996,17 @@
                 $(document).ready(function () {
                     const maxInitial = 8; // Maximum items to load initially
                     let templatesData = []; // To store all templates data
-                    let debounceTimer; // Timer for debouncing search input
 
                     // Function to load items into the gallery
-                    function loadItems(data) {
-                        const container = $('.template-content'); // New div for content inside sidebar
+                    function loadItems(data, limit = maxInitial) {
+                        const container = $('.template-content'); // Div for content inside sidebar
                         container.empty(); // Clear previous items
 
-                        if (data.length === 0) {
-                            container.append($('<p>').text('No templates found').css('color', '#ccc'));
-                            return;
-                        }
-
                         let itemCount = 0;
-                        data.forEach(category => {
-                            if (itemCount >= maxInitial)
-                        return; // Stop adding if max initial reached
+                        data.some(category => {
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
-
-                            category.templates.forEach(template => {
-                                if (itemCount >= maxInitial)
-                            return; // Stop adding if max initial reached
+                            return category.templates.some(template => {
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
@@ -2034,18 +2023,23 @@
                                         'height': '500px'
                                     }).appendTo(cardHolder);
                                 itemCount++;
+                                return itemCount >= limit;
                             });
                         });
+
+                        if (itemCount === 0) {
+                            container.append($('<p>').text('No templates found').css('color', '#ccc'));
+                        }
                     }
 
-                    // Debounce function to delay processing based on timeout
-                    function debounce(func, delay) {
-                        return function () {
-                            const context = this;
-                            const args = arguments;
-                            clearTimeout(debounceTimer);
-                            debounceTimer = setTimeout(() => func.apply(context, args), delay);
-                        };
+                    // Fetch all templates data
+                    function fetchData() {
+                        $.getJSON('form_template_gallery.json', function (data) {
+                            templatesData = data; // Store data globally
+                            loadItems(templatesData); // Load initial items
+                        }).fail(function () {
+                            console.error("Error fetching the template data.");
+                        });
                     }
 
                     // Setup search input and handle dynamic searching
@@ -2056,9 +2050,21 @@
                             type: 'text',
                             id: 'searchInput',
                             placeholder: 'Search templates...'
-                        }).appendTo(searchContainer);
+                        }).appendTo(searchContainer).on('input', function () {
+                            const searchText = $(this).val().toLowerCase();
+                            const filteredData = templatesData.map(category => ({
+                                ...category,
+                                templates: category.templates.filter(template =>
+                                    template.title.toLowerCase().includes(
+                                        searchText) ||
+                                    template.description.toLowerCase().includes(
+                                        searchText)
+                                )
+                            })).filter(category => category.templates.length > 0);
+                            loadItems(filteredData, Infinity); // Remove limit when searching
+                        });
 
-                        // Styling for the search input and container
+                        // Styling for the search container
                         $('.search-container').css({
                             'width': '100%',
                             'display': 'flex',
@@ -2069,42 +2075,12 @@
                             'padding': '10px',
                             'width': '100%'
                         });
-
-                        // Dynamic search handler with debouncing
-                        $('#searchInput').on('input', debounce(function () {
-                            const searchText = $(this).val().toLowerCase();
-                            const filteredData = templatesData.filter(category => category
-                                .templates.some(template =>
-                                    template.title.toLowerCase().includes(searchText) ||
-                                    template.description.toLowerCase().includes(
-                                        searchText)
-                                )).map(category => ({
-                                ...category,
-                                templates: category.templates.filter(template =>
-                                    template.title.toLowerCase().includes(
-                                        searchText) ||
-                                    template.description.toLowerCase()
-                                    .includes(searchText)
-                                )
-                            }));
-
-                            loadItems(filteredData);
-                        }, 300)); // Adjust debounce timing as needed
-                    }
-
-                    // Fetch all templates data
-                    function fetchData() {
-                        $.getJSON('form_template_gallery.json', function (data) {
-                            templatesData = data; // Store data globally
-                            loadItems(data.slice(0, maxInitial)); // Load initial items
-                        }).fail(function () {
-                            console.error("Error fetching the template data.");
-                        });
                     }
 
                     setupSearch();
                     fetchData();
                 });
+
 
 
 
