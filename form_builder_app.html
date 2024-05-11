@@ -1993,20 +1993,25 @@
                 //Update 016 Refactoring to Have Template Gallery Cards Be Dynamically Created Using JSON From form_template_galleryjson.js file
                 //The new update here which Im calling 017 is Going To Make Sure That Only a Certain Amount Is Loaded Per Scroll also Using Virtual Scrolling 
                 //It will now only show was is actually visible on the screen at the time and checks to see when they last data has been loaded to not create extra space at the bottom
+                //If Need To Ever Change How Gallery Cards Get Pulled In Or Change The Search of The Galler - Its specifically this function that handles that all
                 $(document).ready(function () {
                     const maxInitial = 8; // Maximum items to load initially
                     let templatesData = []; // To store all templates data
 
                     // Function to load items into the gallery
-                    function loadItems(data, limit = maxInitial) {
+                    function loadItems(data) {
                         const container = $('.template-content'); // Div for content inside sidebar
                         container.empty(); // Clear previous items
-
                         let itemCount = 0;
-                        data.some(category => {
+
+                        data.forEach(category => {
+                            if (itemCount >= maxInitial) return; // Stop if max initial reached
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
-                            return category.templates.some(template => {
+
+                            category.templates.forEach(template => {
+                                if (itemCount >= maxInitial)
+                            return; // Stop if max initial reached
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
@@ -2023,26 +2028,28 @@
                                         'height': '500px'
                                     }).appendTo(cardHolder);
                                 itemCount++;
-                                return itemCount >= limit;
                             });
                         });
-
-                        if (itemCount === 0) {
-                            container.append($('<p>').text('No templates found').css('color', '#ccc'));
-                        }
                     }
 
-                    // Fetch all templates data
-                    function fetchData() {
-                        $.getJSON('form_template_gallery.json', function (data) {
-                            templatesData = data; // Store data globally
-                            loadItems(templatesData); // Load initial items
-                        }).fail(function () {
-                            console.error("Error fetching the template data.");
-                        });
+                    // Function to filter and load templates based on search input
+                    function filterTemplates(searchText) {
+                        const filteredData = templatesData.filter(category => {
+                            return category.templates.some(template =>
+                                template.title.toLowerCase().includes(searchText) ||
+                                template.description.toLowerCase().includes(searchText)
+                            );
+                        }).map(category => ({
+                            ...category,
+                            templates: category.templates.filter(template =>
+                                template.title.toLowerCase().includes(searchText) ||
+                                template.description.toLowerCase().includes(searchText)
+                            )
+                        }));
+                        loadItems(filteredData);
                     }
 
-                    // Setup search input and handle dynamic searching
+                    // Setup search input
                     function setupSearch() {
                         const searchContainer = $('<div></div>').addClass('search-container').prependTo(
                             '.template-sidebar');
@@ -2052,19 +2059,10 @@
                             placeholder: 'Search templates...'
                         }).appendTo(searchContainer).on('input', function () {
                             const searchText = $(this).val().toLowerCase();
-                            const filteredData = templatesData.map(category => ({
-                                ...category,
-                                templates: category.templates.filter(template =>
-                                    template.title.toLowerCase().includes(
-                                        searchText) ||
-                                    template.description.toLowerCase().includes(
-                                        searchText)
-                                )
-                            })).filter(category => category.templates.length > 0);
-                            loadItems(filteredData, Infinity); // Remove limit when searching
+                            filterTemplates(searchText);
                         });
 
-                        // Styling for the search container
+                        // Styling for search input
                         $('.search-container').css({
                             'width': '100%',
                             'display': 'flex',
@@ -2077,10 +2075,27 @@
                         });
                     }
 
+                    // Prepare the sidebar for content loading
+                    function prepareSidebar() {
+                        $('.template-sidebar').append(
+                            '<div class="template-content" style="width: 100%;"></div>');
+                    }
+
+                    // Fetch all templates data
+                    function fetchData() {
+                        $.getJSON('form_template_gallery.json', function (data) {
+                            templatesData = data; // Store data globally
+                            loadItems(data.slice(0,
+                            maxInitial)); // Load initial items with a limit
+                        }).fail(function () {
+                            console.error("Error fetching the template data.");
+                        });
+                    }
+
+                    prepareSidebar();
                     setupSearch();
                     fetchData();
                 });
-
 
 
 
