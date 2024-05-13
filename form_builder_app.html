@@ -2239,6 +2239,14 @@
                     // Setup event listener for opening the gallery
                     $(document).on('click', '#openGalleryText', function (e) {
                         e.preventDefault();
+
+                        let temp_gallery_container = document.querySelector(
+                            '.template-sidebar');
+                        temp_gallery_container.style.display =
+                            "block"; // Hide the template gallery
+
+
+
                         reopenGallery();
                         console.log('form template gallery button was clicked');
                     });
