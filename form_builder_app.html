@@ -564,6 +564,50 @@
         }
 
         /*End of Update 012 - Template Selection Overlay Styles*/
+
+        /*Update 017 Template Gallery Load All Button*/
+
+        .template-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .load-all {
+            border-radius: 8px !important;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-color: #30363d !important;
+            font-weight: bold !important;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            transition-duration: 80ms;
+            transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+            transition-delay: 0s;
+            transition-property: color, fill, background-color, border-color;
+            background-color: rgb(35, 134, 54) !important;
+            width: 200px;
+            margin-top: 40px;
+            align-self: center;
+        }
+
+        .load-all:hover {
+            transition-duration: 80ms !important;
+            background-color: #28921a !important;
+        }
+
+        .no-results {
+            font-size: 22px;
+            color: #fff;
+            align-self: center;
+            margin-top: 20px;
+        }
+
+        /*End of Update 017 Template Gallery Load All*/
     </style>
 
 </head>
@@ -2010,12 +2054,12 @@
                                 container);
                             category.templates.forEach(template => {
                                 if (!all && itemCount >= maxInitial)
-                            return; // Stop adding more templates if the limit is reached
+                                    return; // Stop adding more templates if the limit is reached
 
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
-                                cardHolder);
+                                    cardHolder);
                                 $('<div></div>').addClass('template-card')
                                     .attr('id', template.id)
                                     .attr('title', template.description)
@@ -2085,7 +2129,7 @@
                                         $('#searchInput').val(template.title);
                                         filterTemplates(template.title.toLowerCase());
                                         suggestionsContainer
-                                    .empty(); // Clear suggestions after selection
+                                            .empty(); // Clear suggestions after selection
                                     });
                             });
                         }
