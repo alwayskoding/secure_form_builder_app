@@ -2233,12 +2233,14 @@
                         $('#searchInput').val('');
                         $('#searchSuggestions').empty();
                         loadItems(templatesData.slice(0, maxInitial)); // Reload initial items
+                        console.log('gallery attempted to open');
                     }
 
                     // Setup event listener for opening the gallery
                     $(document).on('click', '#openGalleryText', function (e) {
                         e.preventDefault();
                         reopenGallery();
+                        console.log('form template gallery button was clicked');
                     });
 
 
