@@ -297,7 +297,7 @@
         .builder_top_bar {
             position: absolute;
             width: 100%;
-            height: 15px;
+            height: 40px;
             background-color: #3080F6;
             top: 0;
             left: 0;
@@ -608,7 +608,20 @@
         }
 
         /*End of Update 017 Template Gallery Load All*/
+
+        .builder_top_bar .nav_main_container ul {
+            display: flex;
+            margin-left: auto;
+            color: #fff;
+            list-style-type: none;
+        }
+
+        .nav_main_container ul li {
+            color: #fff;
+            text-decoration: none;
+        }
     </style>
+
 
 </head>
 
@@ -631,7 +644,13 @@
 
 
 
-    <div class="builder_top_bar"></div>
+    <div class="builder_top_bar">
+        <div class="nav_main_container">
+            <ul>
+                <li><a href="#">Form Template Gallery</a></li>
+            </ul>
+        </div>
+    </div>
     <div class="top_info">
         <h1 id="buildit">Builder</h1>
         <p>Simply drag and drop an item from the right onto the form preview on the left. Or choose a template from the
