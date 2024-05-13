@@ -2084,6 +2084,11 @@
                         }).appendTo(searchContainer);
                     }
 
+                    function prepareSidebar() {
+                        $('.template-sidebar').append(
+                            '<div class="template-content" style="width: 100%;"></div>');
+                    }
+
                     function fetchData() {
                         $.getJSON('form_template_gallery.json', function (data) {
                             templatesData = data; // Store data globally
@@ -2097,6 +2102,7 @@
                     setupSearch();
                     fetchData();
                 });
+
 
 
 
