@@ -660,7 +660,7 @@
     <div class="builder_top_bar">
         <div class="nav_main_container">
             <ul>
-                <li><a href="#" id="openGalleryBtn">Form Template Gallery</a></li>
+                <li><a id="openGalleryText">Form Template Gallery</a></li>
             </ul>
         </div>
     </div>
@@ -2230,16 +2230,18 @@
 
                     // Function to reopen the gallery and load initial templates
                     function reopenGallery() {
-                        $('#searchInput').val(''); // Clear the search input
-                        $('#searchSuggestions').empty(); // Clear suggestions
+                        $('#searchInput').val('');
+                        $('#searchSuggestions').empty();
                         loadItems(templatesData.slice(0, maxInitial)); // Reload initial items
                     }
 
-                    // Add click event listener to the gallery button using the ID for better targeting
-                    $('#openGalleryBtn').on('click', function (e) {
-                        e.preventDefault(); // Prevent default anchor behavior
-                        reopenGallery(); // Call the function to reopen the gallery
+                    // Setup event listener for opening the gallery
+                    $('#openGalleryText').on('click', function (e) {
+                        e.preventDefault();
+                        reopenGallery();
                     });
+
+
 
                     prepareSidebar();
                     setupSearch();
