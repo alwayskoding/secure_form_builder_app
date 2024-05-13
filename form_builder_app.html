@@ -1995,23 +1995,21 @@
                 //It will now only show was is actually visible on the screen at the time and checks to see when they last data has been loaded to not create extra space at the bottom
                 //If Need To Ever Change How Gallery Cards Get Pulled In Or Change The Search of The Galler - Its specifically this function that handles that all
                 $(document).ready(function () {
-                    const maxInitial = 8; // Maximum items to load initially
+                    const maxInitial = 8;
                     let templatesData = []; // To store all templates data
 
                     // Function to load items into the gallery
                     function loadItems(data) {
-                        const container = $('.template-content'); // Div for content inside sidebar
+                        const container = $('.template-content');
                         container.empty(); // Clear previous items
                         let itemCount = 0;
 
                         data.forEach(category => {
-                            if (itemCount >= maxInitial) return; // Stop if max initial reached
                             const categoryDiv = $('<div class="category"></div>').appendTo(
                                 container);
-
                             category.templates.forEach(template => {
                                 if (itemCount >= maxInitial)
-                            return; // Stop if max initial reached
+                            return; // Limit initial load
                                 const cardHolder = $('<div class="card_holder"></div>')
                                     .appendTo(categoryDiv);
                                 $('<h4></h4>').text(template.title).appendTo(
@@ -2032,14 +2030,34 @@
                         });
                     }
 
-                    // Function to filter and load templates based on search input
-                    function filterTemplates(searchText) {
-                        const filteredData = templatesData.filter(category => {
-                            return category.templates.some(template =>
+                    // Function to update the suggestions dropdown
+                    function updateSuggestions(searchText) {
+                        const suggestionsContainer = $('#searchSuggestions');
+                        suggestionsContainer.empty(); // Clear previous suggestions
+
+                        const filteredData = templatesData.flatMap(category =>
+                            category.templates.filter(template =>
                                 template.title.toLowerCase().includes(searchText) ||
                                 template.description.toLowerCase().includes(searchText)
-                            );
-                        }).map(category => ({
+                            )
+                        );
+
+                        filteredData.forEach(template => {
+                            $('<div class="suggestion-item"></div>')
+                                .text(template.title)
+                                .appendTo(suggestionsContainer)
+                                .click(function () {
+                                    $('#searchInput').val(template
+                                    .title); // Fill input on click
+                                    filterTemplates(template.title
+                                .toLowerCase()); // Filter templates
+                                });
+                        });
+                    }
+
+                    // Function to filter and load templates based on search input
+                    function filterTemplates(searchText) {
+                        const filteredData = templatesData.map(category => ({
                             ...category,
                             templates: category.templates.filter(template =>
                                 template.title.toLowerCase().includes(searchText) ||
@@ -2049,44 +2067,43 @@
                         loadItems(filteredData);
                     }
 
-                    // Setup search input
+                    // Setup search input and suggestions dropdown
                     function setupSearch() {
-                        const searchContainer = $('<div></div>').addClass('search-container').prependTo(
+                        const searchContainer = $('<div class="search-container"></div>').prependTo(
                             '.template-sidebar');
-                        $('<input>').attr({
-                            type: 'text',
-                            id: 'searchInput',
-                            placeholder: 'Search templates...'
-                        }).appendTo(searchContainer).on('input', function () {
-                            const searchText = $(this).val().toLowerCase();
-                            filterTemplates(searchText);
-                        });
+                        $('<input>', {
+                                type: 'text',
+                                id: 'searchInput',
+                                placeholder: 'Search templates...'
+                            }).appendTo(searchContainer)
+                            .on('input', function () {
+                                const searchText = $(this).val().toLowerCase();
+                                updateSuggestions(searchText); // Update suggestions as user types
+                            });
 
-                        // Styling for search input
-                        $('.search-container').css({
-                            'width': '100%',
-                            'display': 'flex',
-                            'justify-content': 'center',
-                            'margin-bottom': '10px'
-                        });
-                        $('#searchInput').css({
-                            'padding': '10px',
-                            'width': '100%'
-                        });
+                        $('<div>', {
+                            id: 'searchSuggestions'
+                        }).css({
+                            'position': 'absolute',
+                            'background': '#fff',
+                            'width': 'calc(100% - 20px)', // Assuming 10px padding
+                            'box-shadow': '0px 4px 6px rgba(0,0,0,0.1)',
+                            'max-height': '200px',
+                            'overflow-y': 'auto',
+                            'z-index': '1000',
+                            'cursor': 'pointer'
+                        }).appendTo(searchContainer);
                     }
 
-                    // Prepare the sidebar for content loading
                     function prepareSidebar() {
                         $('.template-sidebar').append(
                             '<div class="template-content" style="width: 100%;"></div>');
                     }
 
-                    // Fetch all templates data
                     function fetchData() {
                         $.getJSON('form_template_gallery.json', function (data) {
                             templatesData = data; // Store data globally
-                            loadItems(data.slice(0,
-                            maxInitial)); // Load initial items with a limit
+                            loadItems(data.slice(0, maxInitial)); // Load initial items
                         }).fail(function () {
                             console.error("Error fetching the template data.");
                         });
@@ -2096,6 +2113,7 @@
                     setupSearch();
                     fetchData();
                 });
+
 
 
 
