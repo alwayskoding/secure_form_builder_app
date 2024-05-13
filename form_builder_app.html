@@ -612,6 +612,8 @@
 
         /*End of Update 017 Template Gallery Load All*/
 
+        /*Top Nav Element Positioning*/
+
         .builder_top_bar .nav_main_container ul {
             display: flex;
             margin-left: auto;
@@ -624,6 +626,13 @@
             text-decoration: none;
             margin-top: 10px;
         }
+
+        .nav_main_container ul li a {
+            color: #fff !important;
+            margin-right: 40px;
+        }
+
+        /*End of top nav element positioning*/
     </style>
 
 
@@ -651,10 +660,11 @@
     <div class="builder_top_bar">
         <div class="nav_main_container">
             <ul>
-                <li><a href="#">Form Template Gallery</a></li>
+                <li><a href="#" id="openGalleryBtn">Form Template Gallery</a></li>
             </ul>
         </div>
     </div>
+
     <div class="top_info">
         <h1 id="buildit">Builder</h1>
         <p>Simply drag and drop an item from the right onto the form preview on the left. Or choose a template from the
@@ -2225,8 +2235,8 @@
                         loadItems(templatesData.slice(0, maxInitial)); // Reload initial items
                     }
 
-                    // Add click event listener to the gallery button
-                    $('.nav_main_container ul li a').on('click', function (e) {
+                    // Add click event listener to the gallery button using the ID for better targeting
+                    $('#openGalleryBtn').on('click', function (e) {
                         e.preventDefault(); // Prevent default anchor behavior
                         reopenGallery(); // Call the function to reopen the gallery
                     });
