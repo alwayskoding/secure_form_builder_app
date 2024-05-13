@@ -301,6 +301,9 @@
             background-color: #3080F6;
             top: 0;
             left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: right;
         }
 
         .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn {
@@ -619,6 +622,7 @@
         .nav_main_container ul li {
             color: #fff;
             text-decoration: none;
+            margin-top: 10px;
         }
     </style>
 
@@ -2213,6 +2217,19 @@
                             console.error("Error fetching the template data.");
                         });
                     }
+
+                    // Function to reopen the gallery and load initial templates
+                    function reopenGallery() {
+                        $('#searchInput').val(''); // Clear the search input
+                        $('#searchSuggestions').empty(); // Clear suggestions
+                        loadItems(templatesData.slice(0, maxInitial)); // Reload initial items
+                    }
+
+                    // Add click event listener to the gallery button
+                    $('.nav_main_container ul li a').on('click', function (e) {
+                        e.preventDefault(); // Prevent default anchor behavior
+                        reopenGallery(); // Call the function to reopen the gallery
+                    });
 
                     prepareSidebar();
                     setupSearch();
