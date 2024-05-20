@@ -15,8 +15,10 @@
 
     <style>
         body {
-            padding: 160px !important;
-            background-color: #201f1f;
+            padding: 0px !important;
+            background-color: #ffffff;
+            overflow: hidden;
+            overflow-x: hidden !important;
         }
 
         .prev-holder .form-group p {
@@ -33,17 +35,21 @@
         }
 
         div#render-container {
-            width: 800px;
-            margin: 0 auto;
             border: 1px solid #e1dfdf;
             padding: 2em;
             background-color: #ffffff;
             border: 1px solid #e1dfdf;
             position: relative;
-            left: 250px;
-            top: -51px;
             box-sizing: border-box !important;
             overflow: auto !important;
+            width: 76%;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            border-radius: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+
         }
 
         .form_preview_section p {
@@ -51,6 +57,7 @@
             font-size: 22px;
             color: #fff;
             opacity: .6;
+
         }
 
         /*If you need this back to the original location uncomment this and remove the one after*/
@@ -70,7 +77,7 @@
             font-family: Helvetica;
         } */
 
-        button#copyHTMLBtn {
+        /* button#copyHTMLBtn {
             font-family: Helvetica;
             min-width: 200px;
             margin-top: 28px;
@@ -93,12 +100,12 @@
             transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
             transition-delay: 0s;
             transition-property: color, fill, background-color, border-color;
-        }
+        } */
 
-        button#copyHTMLBtn:hover {
+        /* button#copyHTMLBtn:hover {
             transition-duration: 80ms !important;
             background-color: #28921a !important;
-        }
+        } */
 
         /*added above are the new style form button changes I made to test new position*/
 
@@ -106,7 +113,7 @@
 
 
         .top_info {
-            margin-bottom: 50px;
+            margin-bottom: 19px;
             border-bottom: 1px solid #e1dfdf;
             padding-bottom: 20px;
         }
@@ -119,6 +126,7 @@
             margin-top: 500px !important;
             position: relative;
             left: -519px;
+            display: none;
         }
 
         /*Styles For CSS Grid Predefined Layouts Update*/
@@ -149,11 +157,27 @@
 
         /* Updated Styles for Flex-Wrap */
         .stage-wrap {
+            flex-grow: 1;
             display: flex;
-            flex-wrap: wrap;
-            /* gap: 10px; */
-            /*I removed this because it was messing with bootstrap classes falling over*/
             flex-direction: row !important;
+            flex-wrap: wrap;
+            position: relative;
+            padding: 0;
+            margin: 0;
+            width: calc(74% - 5px);
+            background-color: rgb(34, 34, 34) !important;
+            border-radius: 20px;
+            margin-left: 20px;
+            /* border-top-left-radius: 20px !important; */
+            border: 1px dotted orange;
+            padding-left: 9px;
+            padding-right: 15px;
+            padding-top: 20px;
+            margin-top: 20px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            box-sizing: border-box;
+            min-height: 650px !important;
         }
 
         /* .form-field {
@@ -205,6 +229,7 @@
 
         /*Add specific points in here where it tells the inputs directly inside of the li with form-field the main field to have a 
         width: 100% instead of auto like it is by default so the bootstrap classes take effect*/
+        /*maybe this is where radio and checkbox arent added*/
 
         .form-wrap.form-builder .frmb .prev-holder input[type="text"],
         .form-wrap.form-builder .frmb .prev-holder input[type="number"],
@@ -268,9 +293,26 @@
             display: flex;
         }
 
+        .form-wrap.form-builder .cb-wrap.sticky-controls {
+            height: calc(100vh - 0px);
+            overflow-y: auto;
+        }
+
         /*these are the form-fields background colors*/
         .form-wrap.form-builder .frmb li.form-field {
             background-color: #232222 !important;
+        }
+
+        .form-wrap.form-builder .frmb-control {
+            display: flex;
+            /* flex-wrap: wrap; */
+            flex-direction: column;
+
+        }
+
+        .form-wrap.form-builder .frmb-control li:first-child {
+            border-radius: 0 !important;
+            margin-top: 0;
         }
 
         .form-wrap.form-builder .frmb-control li:hover {
@@ -283,6 +325,7 @@
             position: relative;
             left: 13px;
             opacity: .6;
+            display: none;
         }
 
         #buildit,
@@ -292,6 +335,7 @@
             font-family: verdana;
             font-weight: bold;
             opacity: 0.5;
+            display: none;
         }
 
         .builder_top_bar {
@@ -331,6 +375,15 @@
             padding-top: 20px !important;
             position: relative !important;
             bottom: -100px !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-wrap.form-builder .cb-wrap {
+            width: 30%;
+            max-width: -moz-fit-content;
+            max-width: fit-content;
+            transition: transform 250ms;
         }
 
         .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn,
@@ -632,7 +685,22 @@
             margin-right: 40px;
         }
 
+        .form-wrap.form-builder .frmb-control {
+            border-radius: 0 !important;
+        }
+
         /*End of top nav element positioning*/
+
+
+        #fb-editor {
+            display: flex;
+        }
+
+
+        .form-wrap.form-builder .frmb li.form-field:first-child {
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
     </style>
 
 
@@ -660,7 +728,9 @@
     <div class="builder_top_bar">
         <div class="nav_main_container">
             <ul>
+                <!-- <button id="copyHTMLBtn" style="display:none;">Style Form</button> -->
                 <li><a id="openGalleryText">Form Template Gallery</a></li>
+                <li><a id="copyHTMLBtn">Style Form</a></li>
             </ul>
         </div>
     </div>
@@ -757,7 +827,9 @@
 
     <!--End of Update 012 Template View Setup-->
 
-    <div id="fb-editor"></div>
+    <div id="fb-editor">
+        <div id="render-container"></div>
+    </div>
 
     <!--Update 003 New Bootstrap Grid Class Bar For Sizing-->
     <div id="gridClassBar" style="display:none; position:absolute; z-index:1000;">
@@ -778,12 +850,12 @@
             template for next time if you like and simply hit the Style Form button to start styling your form.
         </p>
         <button id="saveTemplateBtn">Save Template</button>
-        <button id="copyHTMLBtn" style="display:none;">Style Form</button>
+        <!-- <button id="copyHTMLBtn" style="display:none;">Style Form</button> -->
         <!--Hiding Load Template Button For Now But When Ready Come Back and Uncomment and Know That This Should Connect To The LocalStorage JS You Started-->
         <!-- <button id="loadTemplateBtn">Load Template</button> -->
 
     </div>
-    <div id="render-container"></div>
+
     <!-- <button id="copyHTMLBtn" style="display:none;">Style Form</button> -->
     <textarea id="htmlOutput" style="display:none;"></textarea>
 
@@ -883,6 +955,7 @@
                     console.log('Form data loaded from local storage.');
 
                     options = {
+                        controlPosition: 'left',
                         formData: savedData,
                         dataType: 'json',
                         fields: [{
@@ -1182,12 +1255,12 @@
                                         $('#copyHTMLBtn').show();
                                         const targetElement = document.querySelector(
                                             '.form_preview_section');
-                                        if (targetElement) {
-                                            targetElement.scrollIntoView({
-                                                behavior: 'smooth',
-                                                block: 'start'
-                                            });
-                                        }
+                                        // if (targetElement) {
+                                        //     targetElement.scrollIntoView({
+                                        //         behavior: 'smooth',
+                                        //         block: 'start'
+                                        //     });
+                                        // }
                                     }
                                 }
                             },
@@ -1291,6 +1364,7 @@
                     }, 500); // May need to adjust this delay based on your specific conditions
                 } else {
                     options = {
+                        controlPosition: 'left',
                         dataType: 'json',
                         fields: [{
                                 label: "Email",
@@ -2030,17 +2104,17 @@
                     var renderContainer = $('#render-container');
 
                     // Initially hide the elements
-                    formPreview.hide();
-                    renderContainer.hide();
+                    // formPreview.hide();
+                    // renderContainer.hide();
 
                     // Function to show and scroll to the form preview and render container
-                    function showAndScroll() {
-                        formPreview.show();
-                        renderContainer.show();
-                        $('html, body').animate({
-                            scrollTop: formPreview.offset().top
-                        }, 'slow');
-                    }
+                    // function showAndScroll() {
+                    //     formPreview.show();
+                    //     renderContainer.show();
+                    //     $('html, body').animate({
+                    //         scrollTop: formPreview.offset().top
+                    //     }, 'slow');
+                    // }
 
                     // Flag to check if Swal has been shown
                     var swalShown = false;
@@ -2049,13 +2123,13 @@
                         // Check if the button has 'save' in its ID and the Swal has not been shown
                         if (this.id.includes('save') && !swalShown) {
                             $(document).one('swalClosed', function () {
-                                showAndScroll();
+                                // showAndScroll();
                                 swalShown =
                                     true; // Set flag to true after first activation
                             });
                         } else if (this.id.includes('save')) {
                             // For subsequent clicks, just show and scroll
-                            showAndScroll();
+                            // showAndScroll();
                         }
                     });
 
@@ -2844,6 +2918,156 @@
 
 
                 //End of Update 012 Templates View and Loader
+
+
+
+
+
+
+
+                //Huge move of elements and css changes Update 022 - putting the render-container in the dom dynamically above stage-wrap on load to position in app correctly
+
+                $(document).ready(function () {
+                    // Hide the render-container initially
+                    // $('#render-container').hide();
+
+                    // Function to apply styles and move the render-container
+                    function moveAndStyleRenderContainer() {
+                        if ($('.form-wrap .stage-wrap').length) {
+                            // Apply styles to stage-wrap
+                            $('.form-wrap .stage-wrap').css({
+                                'flex-grow': '1',
+                                'display': 'flex',
+                                'flex-direction': 'row',
+                                'flex-wrap': 'wrap',
+                                'position': 'relative',
+                                'padding': '0',
+                                'margin': '0',
+                                'width': 'calc(74% - 5px)',
+                                'background-color': 'rgb(34, 34, 34)',
+                                'border-radius': '20px',
+                                'margin-left': '20px',
+                                'padding-left': '9px',
+                                'padding-right': '15px',
+                                'padding-top': '20px',
+                                'margin-top': '20px',
+                                'box-sizing': 'border-box',
+                                'min-height': '650px !important',
+                                'overflow-x': 'hidden !important'
+                            });
+                            $('.form-wrap .stage-wrap').css('height', 'calc(100vh - 80px)');
+                            $('.form-wrap .stage-wrap').css('overflow-y', 'auto');
+
+                            // Move and apply styles to render-container
+                            $('#render-container').css({
+                                'border': '1px solid #e1dfdf',
+                                'padding': '2em',
+                                'background-color': '#ffffff',
+                                'position': 'relative',
+                                'box-sizing': 'border-box',
+                                'overflow': 'auto',
+                                'width': '76%',
+                                'border-radius': '20px',
+                                'margin-left': '20px',
+                                'margin-right': '20px',
+                                'margin-top': '20px',
+                                'min-height': '650px !important',
+                                'overflow-x': 'hidden !important'
+                            });
+                            $('#render-container').css('height', 'calc(100vh - 80px)');
+                            $('#render-container').css('overflow-y', 'auto');
+
+                            // Move render-container before stage-wrap
+                            $('.form-wrap .stage-wrap').before($('#render-container'));
+
+                            // $('#render-container').show();
+                            console.log('hey dude');
+                        }
+                    }
+
+                    // Create a MutationObserver to watch for changes in the DOM
+                    const observer = new MutationObserver(function (mutations) {
+                        mutations.forEach(function (mutation) {
+                            // Check if .form-wrap and .stage-wrap are present
+                            if ($('.form-wrap .stage-wrap').length) {
+                                moveAndStyleRenderContainer();
+                                observer
+                                    .disconnect(); // Stop observing once the elements are found and moved
+                            }
+                        });
+                    });
+
+                    // Start observing the #fb-editor for changes
+                    observer.observe(document.getElementById('fb-editor'), {
+                        childList: true,
+                        subtree: true
+                    });
+
+                    // Also call the function in case the elements are already present when the script runs
+                    moveAndStyleRenderContainer();
+
+                });
+
+
+                //Update 022 Adding An Autosave and Render To Occur On Every Change in the Stage-Wrap to auto show the current state of the rendered form
+                $(document).ready(function () {
+                    function setupObserverWhenReady() {
+                        const stageWrap = $('.stage-wrap').get(
+                        0); // Get the native DOM element from jQuery object
+
+                        if (stageWrap) {
+                            console.log('.stage-wrap found, setting up observer.');
+                            const observer = new MutationObserver(mutations => {
+                                mutations.forEach(mutation => {
+                                    if (mutation.type === 'childList' && (mutation
+                                            .addedNodes.length > 0 || mutation
+                                            .removedNodes.length > 0)) {
+                                        console.log(
+                                            'Detected changes in .stage-wrap, updating form...'
+                                            );
+                                        handleFormUpdate();
+                                    }
+                                });
+                            });
+
+                            observer.observe(stageWrap, {
+                                childList: true,
+                                subtree: true,
+                            });
+
+                            function handleFormUpdate() {
+                                console.log('Updating form due to changes...');
+                                const formData = formBuilder.actions.getData('json', true);
+                                if (formData) {
+                                    $('#render-container').formRender({
+                                        formData: formData
+                                    });
+                                    const html = $('#render-container').formRender('html');
+                                    const transformedHTML = transformHTML(html);
+                                    const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
+                                    $('#render-container').html(wrappedContent);
+                                }
+
+                                // $('#copyHTMLBtn').show();
+                                // const targetElement = $('.form_preview_section').get(0);
+                                // if (targetElement) {
+                                //     targetElement.scrollIntoView({
+                                //         behavior: 'smooth',
+                                //         block: 'start'
+                                //     });
+                                // }
+                            }
+                        } else {
+                            console.log('.stage-wrap not found, retrying...');
+                            setTimeout(setupObserverWhenReady, 500); // Retry after 500 ms
+                        }
+                    }
+
+                    setupObserverWhenReady(); // Start the checking process
+                });
+
+
+
 
 
 
