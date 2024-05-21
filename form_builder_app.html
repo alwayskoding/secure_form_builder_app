@@ -1803,15 +1803,16 @@
                                 var $toolbar = $('<div/>', {
                                     'class': 'bootstrap-toolbar',
                                     'css': {
-                                        'position': 'absolute',
+                                        'position': 'fixed',
                                         'z-index': '1000',
-                                        'top': '150px',
-                                        'left': 0,
+                                        'top': 0,
+                                        'right': 0,
                                         'display': 'none',
                                         'background-color': '#2b2a2a',
                                         'border': '1px solid #2b2a2a',
                                         'padding': '20px',
-                                        'min-height': '100px'
+                                        'height': '100vh',
+                                        'width': '450px'
                                     }
                                 });
 
@@ -1845,14 +1846,13 @@
 
                                 // Append the toolbar to the form field
                                 $field.css('position', 'relative').append($toolbar);
-                                $toolbar.slideDown();
+                                $toolbar.show();
                             }
                         } else if (action === 'remove') {
-                            // Remove the toolbar if it exists
-                            $field.find('.bootstrap-toolbar').slideUp(function () {
-                                $(this).remove();
-                            });
-                        }
+    // Remove the toolbar if it exists directly without sliding up
+    $field.find('.bootstrap-toolbar').remove();
+}
+
                     }
 
                     // Observe changes in the style attribute of frm-holder to toggle the Bootstrap toolbar
@@ -1868,29 +1868,78 @@
                         });
                     });
 
-                    // Bind mouse enter event to form fields
-                    $(document).on('mouseenter', '.form-field', function () {
-                        var $holder = $(this).find('.frm-holder');
-                        if ($holder.length) {
-                            observer.observe($holder[0], {
-                                attributes: true,
-                                attributeFilter: ['style']
-                            });
-                        }
-                        // Add the toolbar only if the frm-holder is not displayed
-                        if ($holder.css('display') !== 'block') {
-                            toggleBootstrapToolbar($(this), 'add');
-                        }
-                    });
+                   //Where I changed the  mouse enter and mouse leave to now a click event to show toolbar
 
-                    // Hide and remove the toolbar when the mouse leaves the form field
-                    $(document).on('mouseleave', '.form-field', function () {
-                        var $holder = $(this).find('.frm-holder');
-                        if ($holder.length) {
-                            observer.disconnect();
-                        }
-                        toggleBootstrapToolbar($(this), 'remove');
-                    });
+
+                    
+                   $(document).ready(function() {
+    var lastClickedField = null;
+
+    function updateToolbarAndLabel($field) {
+        var $toolbar = $('.bootstrap-toolbar');
+        $('.dynamic-label').remove(); // Clear existing labels if any
+        var currentLabel = $field.find('.field-label').text();
+        $('<div/>', {
+            class: 'dynamic-label',
+            text: currentLabel,
+            style: 'color: #fff; font-size: 18px; padding: 10px;'
+        }).prependTo($toolbar);
+    }
+
+    $(document).on('click', '.form-field', function(e) {
+        e.stopPropagation(); // Prevent the click from bubbling up to the document
+        var $currentField = $(this);
+        clearTimeout($currentField.data('clickTimeout'));
+        $currentField.data('clickTimeout', setTimeout(() => {
+            var $holder = $currentField.find('.frm-holder');
+            if (lastClickedField !== $currentField[0]) {
+                if (lastClickedField) {
+                    var $lastField = $(lastClickedField);
+                    toggleBootstrapToolbar($lastField, 'remove');
+                    $lastField.css('border', 'none'); // Remove the border effect from the last clicked field
+                    if ($lastField.find('.frm-holder').length) {
+                        observer.disconnect();
+                    }
+                }
+                observer.observe($holder[0], {
+                    attributes: true,
+                    attributeFilter: ['style']
+                });
+                toggleBootstrapToolbar($currentField, 'add');
+                updateToolbarAndLabel($currentField);
+                lastClickedField = $currentField[0];
+                $('.form-field').css('border', 'none'); // Remove border from all first
+                $currentField.css('border', '1px dashed #fff'); // Add white dashed border to the current field
+            }
+        }, 300));
+    });
+
+    $(document).on('dblclick', '.form-field', function() {
+        clearTimeout($(this).data('clickTimeout'));
+    });
+
+    // Listen for clicks on the document
+    $(document).on('click', function() {
+        if (lastClickedField) {
+            $(lastClickedField).css('border', 'none'); // Remove the border from the last clicked field
+            toggleBootstrapToolbar($(lastClickedField), 'remove'); // Hide the toolbar
+            $('.dynamic-label').remove(); // Remove the dynamic label
+            lastClickedField = null; // Reset the last clicked field
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
                     // Bind input event to the width input
                     $(document).on('input', '.bootstrap-toolbar input[type="text"]', function () {
@@ -1926,16 +1975,16 @@
                     });
 
                     // Handle mouse leave on the toolbar for delayed hide
-                    $(document).on('mouseleave', '.bootstrap-toolbar', function () {
-                        var $toolbar = $(this);
-                        setTimeout(function () {
-                            if (!$toolbar.is(':hover')) {
-                                $toolbar.slideUp(function () {
-                                    $(this).remove();
-                                });
-                            }
-                        }, 1000); // Delay time in milliseconds
-                    });
+                    // $(document).on('mouseleave', '.bootstrap-toolbar', function () {
+                    //     var $toolbar = $(this);
+                    //     setTimeout(function () {
+                    //         if (!$toolbar.is(':hover')) {
+                    //             $toolbar.slideUp(function () {
+                    //                 $(this).remove();
+                    //             });
+                    //         }
+                    //     }, 200); 
+                    // });
                 });
 
 
@@ -3068,6 +3117,10 @@
 
 
 
+                //Update 024 To Add Glow Around Active Form-Field and Mimic Its Label Inside the Bootstrap Toolbar
+
+
+                //End of Update 024
 
 
 
