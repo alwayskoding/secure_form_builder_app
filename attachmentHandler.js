@@ -27,11 +27,12 @@ window.addAttachmentToForm = function(content) {
 
     const formContent = content + attachmentSection;
 
-    const formEnd = '<div class="submit_btn">' +
-        '<input type="submit" value="Submit">' +
-        '</div></form>';
+    // const formEnd = '<div class="submit_btn">' +
+    //     '<input type="submit" value="Submit">' +
+    //     '</div></form>';
 
-    return formStart + formContent + formEnd;
+    // return formStart + formContent + formEnd;
+    return formStart + formContent;
 };
 
 
