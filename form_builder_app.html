@@ -1794,90 +1794,73 @@
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 //Recently adjusted to also include the width selector input so user can enter specific width for the inputs themselves
-                $(document).ready(function () {
-                    // Function to add or remove the Bootstrap toolbar
-                    function toggleBootstrapToolbar($field, action) {
-                        if (action === 'add') {
-                            // Create the toolbar dynamically if it doesn't exist
-                            if ($field.find('.bootstrap-toolbar').length === 0) {
-                                var $toolbar = $('<div/>', {
-                                    'class': 'bootstrap-toolbar',
-                                    'css': {
-                                        'position': 'fixed',
-                                        'z-index': '1000',
-                                        'top': 0,
-                                        'right': 0,
-                                        'display': 'none',
-                                        'background-color': '#2b2a2a',
-                                        'border': '1px solid #2b2a2a',
-                                        'padding': '20px',
-                                        'height': '100vh',
-                                        'width': '450px'
-                                    }
-                                });
-
-                                // Add buttons to the toolbar
-                                var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
-                                $.each(classes, function (i, gridClass) {
-                                    $('<button/>', {
-                                        'class': 'grid-class-btn',
-                                        'data-class': gridClass,
-                                        'text': '.' + gridClass,
-                                        'type': 'button'
-                                    }).appendTo($toolbar);
-                                });
-
-                                // Check the type of field to decide whether to show the width input
-                                var fieldType = $field.find('input').attr('type');
-                                var isTextAreaOrSelect = $field.is('.textarea-field, .select-field');
-
-                                // Show width input for text areas, selects, and all other types except radio and checkbox
-                                if (fieldType !== 'radio' && fieldType !== 'checkbox' ||
-                                    isTextAreaOrSelect) {
-                                    // Create width input section
-                                    var $widthInput = $('<input/>', {
-                                        'type': 'text',
-                                        'placeholder': 'e.g., 200px or 80%',
-                                        'style': 'margin-left: 10px; width: 200px; padding: 15px;'
-                                    });
-                                    // Append the input to the toolbar
-                                    $toolbar.append($widthInput);
-                                }
-
-                                // Append the toolbar to the form field
-                                $field.css('position', 'relative').append($toolbar);
-                                $toolbar.show();
-                            }
-                        } else if (action === 'remove') {
-    // Remove the toolbar if it exists directly without sliding up
-    $field.find('.bootstrap-toolbar').remove();
-}
-
-                    }
-
-                    // Observe changes in the style attribute of frm-holder to toggle the Bootstrap toolbar
-                    var observer = new MutationObserver(function (mutations) {
-                        mutations.forEach(function (mutation) {
-                            var $holder = $(mutation.target);
-                            var $field = $holder.closest('.form-field');
-                            if ($holder.css('display') === 'block') {
-                                toggleBootstrapToolbar($field, 'remove');
-                            } else {
-                                toggleBootstrapToolbar($field, 'add');
-                            }
-                        });
-                    });
-
-                   //Where I changed the  mouse enter and mouse leave to now a click event to show toolbar
-
-
-                    
-                   $(document).ready(function() {
+                $(document).ready(function() {
     var lastClickedField = null;
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            var $holder = $(mutation.target);
+            var $field = $holder.closest('.form-field');
+            if ($holder.css('display') === 'block') {
+                toggleBootstrapToolbar($field, 'remove');
+            } else {
+                toggleBootstrapToolbar($field, 'add');
+            }
+        });
+    });
+
+    function toggleBootstrapToolbar($field, action) {
+        var $toolbar = $field.children('.bootstrap-toolbar');
+        if (action === 'add' && $toolbar.length === 0) {
+            $toolbar = createToolbar();
+            $field.css('position', 'relative').append($toolbar);
+        }
+        if (action === 'remove') {
+            $toolbar.hide();
+        } else {
+            $toolbar.show();
+            updateToolbarAndLabel($field); // Ensure label is updated when toolbar is shown
+        }
+    }
+
+    function createToolbar() {
+        var $toolbar = $('<div/>', {
+            'class': 'bootstrap-toolbar',
+            'css': {
+                'position': 'fixed',
+                'z-index': '1000',
+                'top': 0,
+                'right': 0,
+                'display': 'none',
+                'background-color': '#2b2a2a',
+                'border': '1px solid #2b2a2a',
+                'padding': '20px',
+                'height': '100vh',
+                'width': '450px'
+            }
+        });
+
+        var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
+        $.each(classes, function(i, gridClass) {
+            $('<button/>', {
+                'class': 'grid-class-btn',
+                'data-class': gridClass,
+                'text': '.' + gridClass,
+                'type': 'button'
+            }).appendTo($toolbar);
+        });
+
+        $('<input/>', {
+            'type': 'text',
+            'placeholder': 'e.g., 200px or 80%',
+            'style': 'margin-left: 10px; width: 200px; padding: 15px;'
+        }).appendTo($toolbar);
+
+        return $toolbar;
+    }
 
     function updateToolbarAndLabel($field) {
-        var $toolbar = $('.bootstrap-toolbar');
-        $('.dynamic-label').remove(); // Clear existing labels if any
+        var $toolbar = $field.find('.bootstrap-toolbar');
+        $toolbar.find('.dynamic-label').remove(); // Clear existing labels if any
         var currentLabel = $field.find('.field-label').text();
         $('<div/>', {
             class: 'dynamic-label',
@@ -1887,105 +1870,61 @@
     }
 
     $(document).on('click', '.form-field', function(e) {
-        e.stopPropagation(); // Prevent the click from bubbling up to the document
+        e.stopPropagation();
         var $currentField = $(this);
-        clearTimeout($currentField.data('clickTimeout'));
-        $currentField.data('clickTimeout', setTimeout(() => {
-            var $holder = $currentField.find('.frm-holder');
-            if (lastClickedField !== $currentField[0]) {
-                if (lastClickedField) {
-                    var $lastField = $(lastClickedField);
-                    toggleBootstrapToolbar($lastField, 'remove');
-                    $lastField.css('border', 'none'); // Remove the border effect from the last clicked field
-                    if ($lastField.find('.frm-holder').length) {
-                        observer.disconnect();
-                    }
-                }
-                observer.observe($holder[0], {
-                    attributes: true,
-                    attributeFilter: ['style']
-                });
-                toggleBootstrapToolbar($currentField, 'add');
-                updateToolbarAndLabel($currentField);
-                lastClickedField = $currentField[0];
-                $('.form-field').css('border', 'none'); // Remove border from all first
-                $currentField.css('border', '1px dashed #fff'); // Add white dashed border to the current field
+        if (lastClickedField !== $currentField[0]) {
+            if (lastClickedField) {
+                toggleBootstrapToolbar($(lastClickedField), 'remove');
+                $(lastClickedField).css('border', 'none');
             }
-        }, 300));
+            observer.observe($currentField.find('.frm-holder')[0], {
+                attributes: true,
+                attributeFilter: ['style']
+            });
+            updateToolbarAndLabel($currentField);
+            toggleBootstrapToolbar($currentField, 'add');
+            lastClickedField = $currentField[0];
+            $('.form-field').css('border', 'none');
+            $currentField.css('border', '1px dashed #fff');
+        }
     });
 
     $(document).on('dblclick', '.form-field', function() {
         clearTimeout($(this).data('clickTimeout'));
     });
 
-    // Listen for clicks on the document
+    $(document.on('click', '.close-field', function() {
+        if (lastClickedField) {
+            updateToolbarAndLabel($(lastClickedField));
+        }
+    });
+
     $(document).on('click', function() {
         if (lastClickedField) {
-            $(lastClickedField).css('border', 'none'); // Remove the border from the last clicked field
-            toggleBootstrapToolbar($(lastClickedField), 'remove'); // Hide the toolbar
-            $('.dynamic-label').remove(); // Remove the dynamic label
-            lastClickedField = null; // Reset the last clicked field
+            $(lastClickedField).css('border', 'none');
+            toggleBootstrapToolbar($(lastClickedField), 'remove');
+            $('.dynamic-label').remove();
+            lastClickedField = null;
+        }
+    });
+
+    $(document).on('input', '.bootstrap-toolbar input[type="text"]', function() {
+        var $input = $(this);
+        var widthValue = $input.val();
+        var $inputFields = $(lastClickedField).find('input, select, textarea');
+        $inputFields.css('width', widthValue);
+    });
+
+    $(document).on('click', '.grid-class-btn', function() {
+        var gridClass = $(this).data('class');
+        if (lastClickedField) {
+            $(lastClickedField).removeClass(function(index, className) {
+                return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
+            }).addClass(gridClass);
         }
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-                    // Bind input event to the width input
-                    $(document).on('input', '.bootstrap-toolbar input[type="text"]', function () {
-                        var $input = $(this);
-                        var $toolbar = $input.closest('.bootstrap-toolbar');
-                        var widthValue = $input.val();
-                        // Apply width style directly
-                        var $inputFields = $toolbar.parent().find('.prev-holder').find(
-                            'input[type="text"], input[type="number"], input[type="email"], input[type="tel"], input[type="date"], select, textarea'
-                        );
-                        $inputFields.each(function () {
-                            this.style.setProperty('width', widthValue, 'important');
-                        });
-                        console.log("Applied width:", widthValue); // Log the applied width
-                    });
-
-                    // Bind click event to the toolbar buttons
-                    $(document).on('click', '.grid-class-btn', function () {
-                        var gridClass = $(this).data('class');
-                        var $target = $(this).closest('.form-field');
-                        if ($target.length) {
-                            // Remove existing grid classes and add the new class
-                            $target.removeClass(function (index, className) {
-                                return (className.match(/\bcol-md-\d+\b/g) || []).join(
-                                    ' ');
-                            }).addClass(gridClass);
-                        }
-                    });
-
-                    // Ensure the toolbar doesn't disappear when hovering over it
-                    $(document).on('mouseenter', '.bootstrap-toolbar', function () {
-                        $(this).stop(true).show();
-                    });
-
-                    // Handle mouse leave on the toolbar for delayed hide
-                    // $(document).on('mouseleave', '.bootstrap-toolbar', function () {
-                    //     var $toolbar = $(this);
-                    //     setTimeout(function () {
-                    //         if (!$toolbar.is(':hover')) {
-                    //             $toolbar.slideUp(function () {
-                    //                 $(this).remove();
-                    //             });
-                    //         }
-                    //     }, 200); 
-                    // });
-                });
 
 
 
