@@ -1893,7 +1893,7 @@
         clearTimeout($(this).data('clickTimeout'));
     });
 
-    $(document.on('click', '.close-field', function() {
+    $(document).on('click', '.close-field', function() {
         if (lastClickedField) {
             updateToolbarAndLabel($(lastClickedField));
         }
