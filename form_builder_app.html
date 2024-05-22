@@ -701,6 +701,40 @@
             border-top-right-radius: 5px;
             border-top-left-radius: 5px;
         }
+
+        /*Updated Toolbar Styles After Dynamically Setting All To Grid*/
+        .dynamic-label {
+            position: absolute;
+            top: 50px;
+            font-size: 14px !important;
+            color: #dddbdb !important;
+            font-weight: 200;
+            border-top: 0.9px solid #393737;
+            padding-top: 5px !important;
+            left: 20px;
+            width: 100%;
+        }
+
+        .descriptionHeader {
+            position: relative;
+            top: -170px;
+        }
+
+        .descriptiveText {
+            position: relative;
+            top: -317px;
+            border-top: 0.9px solid #353434;
+            padding-top: 5px;
+            font-size: 14px !important;
+            font-weight: 200;
+            letter-spacing: 0.5px;
+        }
+
+        .layoutButtonContainer {
+            position: relative;
+            top: -470px;
+            left: -10px;
+        }
     </style>
 
 
@@ -1795,148 +1829,205 @@
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 //Recently adjusted to also include the width selector input so user can enter specific width for the inputs themselves
                 $(document).ready(function () {
-    var lastClickedField = null;
-    var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            var $holder = $(mutation.target);
-            var $field = $holder.closest('.form-field');
-            if ($holder.css('display') === 'block') {
-                toggleBootstrapToolbar($field, 'remove');
-            } else {
-                toggleBootstrapToolbar($field, 'add');
-            }
-        });
-    });
+                    var lastClickedField = null;
+                    var observer = new MutationObserver(function (mutations) {
+                        mutations.forEach(function (mutation) {
+                            var $holder = $(mutation.target);
+                            var $field = $holder.closest('.form-field');
+                            if ($holder.css('display') === 'block') {
+                                toggleBootstrapToolbar($field, 'remove');
+                            } else {
+                                toggleBootstrapToolbar($field, 'add');
+                            }
+                        });
+                    });
 
-    function toggleBootstrapToolbar($field, action) {
-        var $toolbar = $field.children('.bootstrap-toolbar');
-        if (action === 'add' && $toolbar.length === 0) {
-            $toolbar = createToolbar();
-            $field.css('position', 'relative').append($toolbar);
-        }
-        if (action === 'remove') {
-            $toolbar.hide();
-            $('#render-container').css('opacity', '1');
-        } else {
-            $toolbar.show();
-            $('#render-container').css('opacity', '0.33');//fade out rendered form while toolbar open
-            updateToolbarAndLabel($field); // Ensure label is updated when toolbar is shown
-        }
-    }
+                    function toggleBootstrapToolbar($field, action) {
+                        var $toolbar = $field.children('.bootstrap-toolbar');
+                        if (action === 'add' && $toolbar.length === 0) {
+                            $toolbar = createToolbar();
+                            $field.css('position', 'relative').append($toolbar);
+                        }
+                        if (action === 'remove') {
+                            $toolbar.hide();
+                            $('#render-container').css('opacity', '1');
+                        } else {
+                            $toolbar.show();
+                            $('#render-container').css('opacity', '0.33');
+                            updateToolbarAndLabel($field);
+                        }
+                    }
 
-    function createToolbar() {
-        var $toolbar = $('<div/>', {
-            'class': 'bootstrap-toolbar',
-            'css': {
-                'position': 'fixed',
-                'z-index': '1000',
-                'top': 0,
-                'right': 0,
-                'display': 'none',
-                'background-color': '#2b2a2a',
-                'border': '1px solid #2b2a2a',
-                'padding': '20px',
-                'height': '100vh',
-                'width': '450px'
-            }
-        });
+                    function createToolbar() {
+                        var $toolbar = $('<div/>', {
+                            'class': 'bootstrap-toolbar',
+                            'css': {
+                                'display': 'grid',
+                                'grid-template-rows': 'auto auto auto auto', // Define rows for each part
+                                'grid-gap': '10px',
+                                'position': 'fixed',
+                                'z-index': '1000',
+                                'top': 0,
+                                'right': 0,
+                                'background-color': '#2b2a2a',
+                                'border': '1px solid #2b2a2a',
+                                'padding': '20px',
+                                'height': '1000px',
+                                'width': '450px'
+                            }
+                        });
 
-        // Add close button
-        $('<button/>', {
-            'type': 'button',
-            'html': '&#10005;', // Using HTML entity for 'X'
-            'css': {
-                'position': 'absolute',
-                'top': '10px',
-                'right': '10px',
-                'font-size': '20px',
-                'color': '#fff',
-                'background': 'none',
-                'border': 'none',
-                'cursor': 'pointer'
-            }
-        }).on('click', function() {
-            $toolbar.remove();
-            $(lastClickedField).css('border', 'none');
-            $('.dynamic-label').remove();
-            $('#render-container').css('opacity', '1');
-            lastClickedField = null;
-            observer.disconnect();
-        }).appendTo($toolbar);
+                        // Add close button
+                        var $closeButton = $('<button/>', {
+                            'type': 'button',
+                            'html': '&#10005;', // Using HTML entity for 'X'
+                            'css': {
+                                'position': 'absolute',
+                                'top': '10px',
+                                'right': '10px',
+                                'font-size': '20px',
+                                'color': '#fff',
+                                'background': 'none',
+                                'border': 'none',
+                                'cursor': 'pointer'
+                            }
+                        }).on('click', function () {
+                            if (lastClickedField) {
+                                $toolbar.remove(); // Completely remove the toolbar from the DOM
+                                $(lastClickedField).css('border', 'none');
+                                $('.dynamic-label').remove();
+                                $('#render-container').css('opacity',
+                                    '1'); // Restore opacity if needed
+                                lastClickedField =
+                                    null; // Reset the last clicked field if needed
+                            }
+                        }).appendTo($toolbar);
 
-        // Add class buttons
-        var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
-        $.each(classes, function(i, gridClass) {
-            $('<button/>', {
-                'class': 'grid-class-btn',
-                'data-class': gridClass,
-                'text': '.' + gridClass,
-                'type': 'button'
-            }).appendTo($toolbar);
-        });
+                        // Form Element label
+                        $('<div/>', {
+                            'text': 'Form Element:',
+                            'css': {
+                                'color': '#fff',
+                                'font-size': '16px',
+                                'grid-row': '1' // Explicit grid row assignment
+                            }
+                        }).appendTo($toolbar);
 
-        return $toolbar;
-    }
+                        // Dynamic label
+                        $('<div/>', {
+                            'class': 'dynamic-label',
+                            'css': {
+                                'color': '#fff',
+                                'font-size': '18px',
+                                'grid-row': '2' // Explicit grid row assignment
+                            }
+                        }).appendTo($toolbar);
 
-    function updateToolbarAndLabel($field) {
-        var $toolbar = $field.find('.bootstrap-toolbar');
-        $toolbar.find('.dynamic-label').remove(); // Clear existing labels if any
-        var currentLabel = $field.find('.field-label').text();
-        $('<div/>', {
-            class: 'dynamic-label',
-            text: currentLabel,
-            style: 'color: #fff; font-size: 18px; padding: 10px;'
-        }).prependTo($toolbar);
-    }
+                        // Title for Descriptive Text and Buttons
+                        $('<div/>', {
+                            'text': 'General Layout',
+                            'css': {
+                                'color': '#ccc',
+                                'font-size': '16px',
+                                'grid-row': '3' // Explicit grid row assignment
+                            },
+                            'class': 'descriptionHeader'
+                        }).appendTo($toolbar);
 
-    $(document).on('click', '.form-field', function (e) {
-        e.stopPropagation();
-        var $currentField = $(this);
-        if (lastClickedField !== $currentField[0]) {
-            if (lastClickedField) {
-                toggleBootstrapToolbar($(lastClickedField), 'remove');
-                $(lastClickedField).css('border', 'none');
-            }
-            observer.observe($currentField.find('.frm-holder')[0], {
-                attributes: true,
-                attributeFilter: ['style']
-            });
-            updateToolbarAndLabel($currentField);
-            toggleBootstrapToolbar($currentField, 'add');
-            lastClickedField = $currentField[0];
-            $('.form-field').css('border', 'none');
-            $currentField.css('border', '1px dashed #fff');
-        }
-    });
+                        // Description for grid class buttons
+                        $('<div/>', {
+                            'text': 'Adjust the currently selected form element\'s width i.e. the space it takes up in the multi-column layout:',
+                            'css': {
+                                'color': '#ccc',
+                                'font-size': '14px',
+                                'grid-row': '4' // Explicit grid row assignment
+                            },
+                            'class': 'descriptiveText'
+                        }).appendTo($toolbar);
 
-    $(document).on('dblclick', '.form-field', function () {
-        clearTimeout($(this).data('clickTimeout'));
-    });
+                        // Grid class buttons container
+                        var $buttonContainer = $('<div/>', {
+                            'class': 'layoutButtonContainer',
+                            'css': {
+                                'grid-row': '5' // Explicit grid row for buttons
+                            }
+                        }).appendTo($toolbar);
 
-    $(document).on('click', '.close-field', function () {
-        if (lastClickedField) {
-            updateToolbarAndLabel($(lastClickedField));
-        }
-    });
+                        // Grid class buttons
+                        var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
+                        $.each(classes, function (i, gridClass) {
+                            $('<button/>', {
+                                'class': 'grid-class-btn',
+                                'data-class': gridClass,
+                                'text': '.' + gridClass,
+                                'type': 'button'
+                            }).appendTo($buttonContainer);
+                        });
 
-    $(document).on('click', function () {
-        if (lastClickedField) {
-            $(lastClickedField).css('border', 'none');
-            toggleBootstrapToolbar($(lastClickedField), 'remove');
-            $('.dynamic-label').remove();
-            lastClickedField = null;
-        }
-    });
+                        return $toolbar;
+                    }
 
-    $(document).on('click', '.grid-class-btn', function () {
-        var gridClass = $(this).data('class');
-        if (lastClickedField) {
-            $(lastClickedField).removeClass(function (index, className) {
-                return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
-            }).addClass(gridClass);
-        }
-    });
-});
+
+                    function updateToolbarAndLabel($field) {
+                        var $toolbar = $field.find('.bootstrap-toolbar');
+                        $toolbar.find('.dynamic-label').remove();
+                        var currentLabel = $field.find('.field-label').text();
+                        $('<div/>', {
+                            class: 'dynamic-label',
+                            text: currentLabel,
+                            style: 'color: #fff; font-size: 18px; padding: 5px 0;'
+                        }).appendTo($toolbar);
+                    }
+
+                    $(document).on('click', '.form-field', function (e) {
+                        e.stopPropagation();
+                        var $currentField = $(this);
+                        if (lastClickedField !== $currentField[0]) {
+                            if (lastClickedField) {
+                                toggleBootstrapToolbar($(lastClickedField), 'remove');
+                                $(lastClickedField).css('border', 'none');
+                            }
+                            observer.observe($currentField.find('.frm-holder')[0], {
+                                attributes: true,
+                                attributeFilter: ['style']
+                            });
+                            updateToolbarAndLabel($currentField);
+                            toggleBootstrapToolbar($currentField, 'add');
+                            lastClickedField = $currentField[0];
+                            $('.form-field').css('border', 'none');
+                            $currentField.css('border', '1px dashed #fff');
+                        }
+                    });
+
+                    $(document).on('dblclick', '.form-field', function () {
+                        clearTimeout($(this).data('clickTimeout'));
+                    });
+
+                    $(document).on('click', '.close-field', function () {
+                        if (lastClickedField) {
+                            updateToolbarAndLabel($(lastClickedField));
+                        }
+                    });
+
+                    $(document).on('click', function () {
+                        if (lastClickedField) {
+                            $(lastClickedField).css('border', 'none');
+                            toggleBootstrapToolbar($(lastClickedField), 'remove');
+                            $('.dynamic-label').remove();
+                            lastClickedField = null;
+                        }
+                    });
+
+                    $(document).on('click', '.grid-class-btn', function () {
+                        var gridClass = $(this).data('class');
+                        if (lastClickedField) {
+                            $(lastClickedField).removeClass(function (index, className) {
+                                return (className.match(/\bcol-md-\d+\b/g) || []).join(
+                                    ' ');
+                            }).addClass(gridClass);
+                        }
+                    });
+                });
 
 
 
