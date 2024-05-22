@@ -44,11 +44,12 @@
             overflow: auto !important;
             width: 76%;
             height: calc(100vh - 80px);
-            overflow-y: auto;
+            overflow: auto;
             border-radius: 20px;
             margin-left: 20px;
             margin-right: 20px;
             margin-top: 20px;
+            min-width: 700px !important;
 
         }
 
@@ -169,15 +170,15 @@
             border-radius: 20px;
             margin-left: 20px;
             /* border-top-left-radius: 20px !important; */
-            border: 1px dotted orange;
-            padding-left: 9px;
+            padding-left: 15px;
             padding-right: 15px;
             padding-top: 20px;
             margin-top: 20px;
             height: calc(100vh - 80px);
-            overflow-y: auto;
+            overflow: auto;
             box-sizing: border-box;
-            min-height: 650px !important;
+            min-height: auto !important;
+            min-width: 700px !important;
         }
 
         /* .form-field {
@@ -359,6 +360,7 @@
 
         .form-wrap.form-builder .stage-wrap.empty {
             background-color: #232222 !important;
+            border: none !important;
         }
 
         /*End of Main Builder Style Page Mimic*/
@@ -461,12 +463,11 @@
 
         /*Swal PopUP Style*/
         div:where(.swal2-container) div:where(.swal2-popup) {
-            background: #1d4d94 !important;
+            background: none;
             color: #fff !important;
             width: 40em !important;
             padding: 5px 0 1.25em !important;
             font-size: 12px !important;
-            border: 2px solid #2c2c2c !important;
         }
 
         div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm,
@@ -476,6 +477,49 @@
         }
 
         /*End of Swal PopUP Style*/
+
+
+        div:where(.swal2-container).swal2-backdrop-show,
+        div:where(.swal2-container).swal2-noanimation {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            background-color: #3080F6 !important;
+        }
+
+        div:where(.swal2-container) h2:where(.swal2-title) {
+            display: none !important;
+        }
+
+        div:where(.swal2-container) label:where(.swal2-input-label) {
+            font-size: 24px !important;
+            color: #3080F6 !important;
+            margin-left: 27px !important;
+            margin-bottom: 20px !important;
+        }
+
+        div:where(.swal2-container) .swal2-input {
+            color: rgb(101, 101, 101) !important;
+            font-weight: 500;
+        }
+
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+            width: 800px !important;
+        }
+
+        div:where(.swal2-container) input:where(.swal2-input) {
+            border: 1px solid #3080F6 !important;
+        }
+
+        div:where(.swal2-container) div:where(.swal2-actions) {
+            position: relative;
+            right: -332px;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+            margin-right: 89px;
+        }
 
         /*Hide Preview Renderer Initially Until Generate Form is Clicked*/
         /* .form_preview_section {
@@ -989,6 +1033,7 @@
                     console.log('Form data loaded from local storage.');
 
                     options = {
+                        scrollToFieldOnAdd: false,
                         controlPosition: 'left',
                         formData: savedData,
                         dataType: 'json',
@@ -1205,7 +1250,7 @@
                                                     Swal.fire({
                                                         title: 'Enter Form Name',
                                                         input: 'text',
-                                                        inputLabel: 'Form Name',
+                                                        inputLabel: 'What would you like to call your form?',
                                                         inputPlaceholder: 'Enter the Form Name',
                                                         inputValidator: (value) => {
                                                             if (!value)
@@ -1313,7 +1358,7 @@
                                         Swal.fire({
                                             title: 'Change Form Name',
                                             input: 'text',
-                                            inputLabel: 'New Form Name',
+                                            inputLabel: 'What would you like to change your form name to instead?',
                                             inputValue: hiddenInput
                                                 .value, // Provide the current name as a default value
                                             inputPlaceholder: 'Enter a new Form Name',
@@ -1398,6 +1443,7 @@
                     }, 500); // May need to adjust this delay based on your specific conditions
                 } else {
                     options = {
+                        scrollToFieldOnAdd: false,
                         controlPosition: 'left',
                         dataType: 'json',
                         fields: [{
@@ -1613,7 +1659,7 @@
                                                     Swal.fire({
                                                         title: 'Enter Form Name',
                                                         input: 'text',
-                                                        inputLabel: 'Form Name',
+                                                        inputLabel: 'What would you like to call your form?',
                                                         inputPlaceholder: 'Enter the Form Name',
                                                         inputValidator: (value) => {
                                                             if (!value)
@@ -1721,7 +1767,7 @@
                                         Swal.fire({
                                             title: 'Change Form Name',
                                             input: 'text',
-                                            inputLabel: 'New Form Name',
+                                            inputLabel: 'What would you like to change your form name to instead?',
                                             inputValue: hiddenInput
                                                 .value, // Provide the current name as a default value
                                             inputPlaceholder: 'Enter a new Form Name',
@@ -2161,7 +2207,7 @@
                         // Update the text for the 'Save Template' button that has an ID containing 'save'
                         $('.special').each(function () {
                             if (this.id.includes('save')) {
-                                $(this).text('Generate Form');
+                                $(this).text('Save As');
                                 console.log("Generate Form button updated.");
                             }
                         });
@@ -2187,7 +2233,7 @@
 
                 //End of Update 007
 
-                //Update 008 - When Generate Form Button Is Clicked Show The Renderer Preview - Also on the first click making sure swal popup has already opened and closed
+                //Update 008 - Update- The following comment is null it no longer scrolls to the generated form its saved auto and saved with name by clicking the save as When Generate Form Button Is Clicked Show The Renderer Preview - Also on the first click making sure swal popup has already opened and closed
 
 
 
@@ -3039,16 +3085,17 @@
                                 'background-color': 'rgb(34, 34, 34)',
                                 'border-radius': '20px',
                                 'margin-left': '20px',
-                                'padding-left': '9px',
+                                'padding-left': '15px',
                                 'padding-right': '15px',
                                 'padding-top': '20px',
                                 'margin-top': '20px',
                                 'box-sizing': 'border-box',
-                                'min-height': '650px !important',
-                                'overflow-x': 'hidden !important'
+                                'overflow-x': 'hidden !important',
+                                'min-height': 'auto !important',
+                                'min-width': '700px'
                             });
                             $('.form-wrap .stage-wrap').css('height', 'calc(100vh - 80px)');
-                            $('.form-wrap .stage-wrap').css('overflow-y', 'auto');
+                            $('.form-wrap .stage-wrap').css('overflow', 'auto');
 
                             // Move and apply styles to render-container
                             $('#render-container').css({
@@ -3063,11 +3110,12 @@
                                 'margin-left': '20px',
                                 'margin-right': '20px',
                                 'margin-top': '20px',
-                                'min-height': '650px !important',
-                                'overflow-x': 'hidden !important'
+                                'min-height': 'auto !important',
+                                'overflow-x': 'hidden !important',
+                                'min-width': '700px !important'
                             });
                             $('#render-container').css('height', 'calc(100vh - 80px)');
-                            $('#render-container').css('overflow-y', 'auto');
+                            $('#render-container').css('overflow', 'auto');
 
                             // Move render-container before stage-wrap
                             $('.form-wrap .stage-wrap').before($('#render-container'));

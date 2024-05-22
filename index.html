@@ -8,10 +8,14 @@
     <!--and links-->
 
     <style>
+        .body {
+            position: relative;
+        }
+
         .full_splash_container {
             display: flex;
             flex-direction: column;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             width: 100%;
             justify-content: center;
             align-items: center;
@@ -19,12 +23,13 @@
         }
 
         .text_instruction {
-            color: #f5f5f5;
+            color: #3080F6;
             font-family: Helvetica;
             position: relative;
             left: -167px;
             font-weight: 300;
             top: 80px;
+            display: none;
         }
 
         .form_builder_entry_screen {
@@ -121,7 +126,7 @@
         .build_form_from_scratch .instructional_text {
             position: relative;
             top: 180px;
-            color: #f5f5f5;
+            color: rgb(172, 173, 175);
             font-family: Helvetica;
             line-height: 1.4;
             text-align: center;
@@ -130,7 +135,7 @@
         .build_form_from_template .instructional_text {
             position: relative;
             top: 80px;
-            color: #f5f5f5;
+            color: rgb(172, 173, 175);
             font-family: Helvetica;
             line-height: 1.4;
             text-align: center;
@@ -139,7 +144,7 @@
         .last_form_you_were_working_on .instructional_text {
             position: relative;
             top: 178px;
-            color: #f5f5f5;
+            color: rgb(172, 173, 175);
             font-family: Helvetica;
             line-height: 1.4;
             text-align: center;
@@ -212,13 +217,40 @@
             margin-top: 20px;
             border-radius: 2px;
         }
+
+
+        .builder_top_bar {
+            position: absolute;
+            width: 100% !important;
+            top: 0;
+            left: 0;
+            height: 40px;
+            background-color: #3080F6;
+        }
+
+        .builder_top_bar {
+            display: flex;
+            align-items: center;
+            padding-top: 5px;
+        }
+
+        .builder_top_bar ul {
+            list-style-type: none;
+            color: white;
+            font-family: Helvetica;
+            
+        }
     </style>
 </head>
 
 
 <body>
 
-
+    <div class="builder_top_bar">
+        <ul>
+            <li>Secure Form Builder</li>
+        </ul>
+    </div>
 
 
     <div class="full_splash_container">
@@ -281,7 +313,7 @@
                 // Display the last saved datetime
                 const lastSavedDateTime = new Date(Number(localStorage.getItem('lastSavedDateTime')));
                 document.querySelector('.savedTime').textContent = lastSavedDateTime
-            .toLocaleString(); // Display in a human-readable format
+                    .toLocaleString(); // Display in a human-readable format
             } else {
                 // Hide the div indicating recent activity
                 document.querySelector('.last_form_you_were_working_on').style.display = 'none';
