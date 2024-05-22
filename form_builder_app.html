@@ -1794,10 +1794,10 @@
                 // Show the grid class bar when hovering over a form-field element
                 // When mouse enters any form-field, display the gridClassBar for that field.
                 //Recently adjusted to also include the width selector input so user can enter specific width for the inputs themselves
-                $(document).ready(function() {
+                $(document).ready(function () {
     var lastClickedField = null;
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
             var $holder = $(mutation.target);
             var $field = $holder.closest('.form-field');
             if ($holder.css('display') === 'block') {
@@ -1816,8 +1816,10 @@
         }
         if (action === 'remove') {
             $toolbar.hide();
+            $('#render-container').css('opacity', '1');
         } else {
             $toolbar.show();
+            $('#render-container').css('opacity', '0.33');//fade out rendered form while toolbar open
             updateToolbarAndLabel($field); // Ensure label is updated when toolbar is shown
         }
     }
@@ -1839,6 +1841,30 @@
             }
         });
 
+        // Add close button
+        $('<button/>', {
+            'type': 'button',
+            'html': '&#10005;', // Using HTML entity for 'X'
+            'css': {
+                'position': 'absolute',
+                'top': '10px',
+                'right': '10px',
+                'font-size': '20px',
+                'color': '#fff',
+                'background': 'none',
+                'border': 'none',
+                'cursor': 'pointer'
+            }
+        }).on('click', function() {
+            $toolbar.remove();
+            $(lastClickedField).css('border', 'none');
+            $('.dynamic-label').remove();
+            $('#render-container').css('opacity', '1');
+            lastClickedField = null;
+            observer.disconnect();
+        }).appendTo($toolbar);
+
+        // Add class buttons
         var classes = ['col-md-4', 'col-md-6', 'col-md-8', 'col-md-12'];
         $.each(classes, function(i, gridClass) {
             $('<button/>', {
@@ -1848,12 +1874,6 @@
                 'type': 'button'
             }).appendTo($toolbar);
         });
-
-        $('<input/>', {
-            'type': 'text',
-            'placeholder': 'e.g., 200px or 80%',
-            'style': 'margin-left: 10px; width: 200px; padding: 15px;'
-        }).appendTo($toolbar);
 
         return $toolbar;
     }
@@ -1869,7 +1889,7 @@
         }).prependTo($toolbar);
     }
 
-    $(document).on('click', '.form-field', function(e) {
+    $(document).on('click', '.form-field', function (e) {
         e.stopPropagation();
         var $currentField = $(this);
         if (lastClickedField !== $currentField[0]) {
@@ -1889,17 +1909,17 @@
         }
     });
 
-    $(document).on('dblclick', '.form-field', function() {
+    $(document).on('dblclick', '.form-field', function () {
         clearTimeout($(this).data('clickTimeout'));
     });
 
-    $(document).on('click', '.close-field', function() {
+    $(document).on('click', '.close-field', function () {
         if (lastClickedField) {
             updateToolbarAndLabel($(lastClickedField));
         }
     });
 
-    $(document).on('click', function() {
+    $(document).on('click', function () {
         if (lastClickedField) {
             $(lastClickedField).css('border', 'none');
             toggleBootstrapToolbar($(lastClickedField), 'remove');
@@ -1908,17 +1928,10 @@
         }
     });
 
-    $(document).on('input', '.bootstrap-toolbar input[type="text"]', function() {
-        var $input = $(this);
-        var widthValue = $input.val();
-        var $inputFields = $(lastClickedField).find('input, select, textarea');
-        $inputFields.css('width', widthValue);
-    });
-
-    $(document).on('click', '.grid-class-btn', function() {
+    $(document).on('click', '.grid-class-btn', function () {
         var gridClass = $(this).data('class');
         if (lastClickedField) {
-            $(lastClickedField).removeClass(function(index, className) {
+            $(lastClickedField).removeClass(function (index, className) {
                 return (className.match(/\bcol-md-\d+\b/g) || []).join(' ');
             }).addClass(gridClass);
         }
@@ -3001,7 +3014,7 @@
                 $(document).ready(function () {
                     function setupObserverWhenReady() {
                         const stageWrap = $('.stage-wrap').get(
-                        0); // Get the native DOM element from jQuery object
+                            0); // Get the native DOM element from jQuery object
 
                         if (stageWrap) {
                             console.log('.stage-wrap found, setting up observer.');
@@ -3012,7 +3025,7 @@
                                             .removedNodes.length > 0)) {
                                         console.log(
                                             'Detected changes in .stage-wrap, updating form...'
-                                            );
+                                        );
                                         handleFormUpdate();
                                     }
                                 });
