@@ -14,9 +14,12 @@
             gap: 10px;
             width: 100%;
             justify-content: space-between;
-            background-color: #2b2a2a;
+            background-color: #3080F6;
             box-sizing: border-box;
             padding: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .button {
@@ -26,12 +29,14 @@
 
         body {
             padding: 80px 40px 40px 40px;
-            background-color: #201f1f;
+            background-color: #fff;
+            overflow:hidden;
         }
 
         #htmlPreview textarea {
             border: none;
             padding: 20px;
+
         }
 
         #cssEditor {
@@ -41,6 +46,10 @@
             color: #adb6ff;
             padding: 20px;
             font-size: 13px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100vh;
         }
 
         #copyHtmlButton {
@@ -72,9 +81,13 @@
         }
 
         #htmlPreview {
-            background-color: white;
-            padding: 20px;
             box-sizing: border-box;
+            border-radius: 20px;
+            margin-top: 20px;
+            margin-right: 20px;
+            border: 1px solid rgb(225, 223, 223);
+            padding: 2em;
+            background-color: rgb(255, 255, 255);
         }
 
         /*Freeze Button Styles For Overlay Inspector Mode Visual*/
@@ -114,13 +127,17 @@
         }
 
 
-        
+
 
 
 
 
 
         /*End of Freeze Button Styles*/
+
+        .outer_container_for_styles_page {
+            margin-top: 50px;
+        }
     </style>
 </head>
 
@@ -131,7 +148,7 @@
         <button id="copyHtmlButton" class="button">Copy HTML</button>
         <button id="copyCssButton" class="button">Copy CSS</button>
     </div>
-    <div style="display: flex; height: 100vh;">
+    <div class="outer_container_for_styles_page" style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
         <textarea id="cssEditor" style="width: 50%;" placeholder="Write your forms CSS here."></textarea>
 

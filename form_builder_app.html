@@ -368,6 +368,7 @@
             border-bottom-left-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
             /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+            border: none !important;
         }
 
         .form-wrap.form-builder .stage-wrap.empty {
@@ -435,11 +436,11 @@
             color: #fff;
             cursor: pointer;
             outline: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
             padding: 10px 20px;
-            border-width: 1px !important;
-            border-style: solid !important;
-            border-color: #30363d !important;
+            /* border-width: 1px !important; */
+            /* border-style: solid !important; */
+            /* border-color: #30363d !important; */
             font-weight: bold !important;
             font-size: 15px;
             letter-spacing: 0.5px;
@@ -474,7 +475,8 @@
             height: 30px !important;
             gap: 5px !important;
             left: 620px;
-            top: 25px;
+            top: 35px;
+            z-index: 9999;
         }
 
         .cb-wrap .form-actions button.btn-success {
@@ -915,6 +917,46 @@
             font-weight: 900;
             font-size: 16px;
             margin-right: 5px;
+        }
+
+
+        /*Clear All Dialogue Box Positioning Once Delete Is Clicked*/
+
+        .form-builder-dialog:not(.data-dialog) {
+            transform: unset !important;
+            max-height: 100% !important;
+            min-height: 100% !important;
+            flex-direction: column !important;
+            background-color: rgba(0, 0, 0, 0.87) !important;
+            color: #dedbdb;
+            font-size: 18px;
+        }
+
+        .form-builder-dialog:not(.data-dialog) .button-wrap button {
+            width: 155px !important;
+        }
+
+        .form-builder-dialog:not(.data-dialog) .button-wrap {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-builder-dialog:not(.data-dialog) .button-wrap .btn {
+            margin: 0 !important;
+        }
+
+        .form-builder-dialog.positioned .button-wrap::before {
+            display: none !important;
+        }
+
+        .button-wrap .btn.yes {
+            background-color: #3080F6 !important;
+            border: none;
+        }
+
+        .button-wrap .btn.no {
+            background-color: #6e7881 !important;
+            border: none;
         }
     </style>
 
@@ -3427,13 +3469,70 @@
                 //Forces title for default two buttons Clear Fields and JSON Button
                 $(document).ready(function () {
                     setTimeout(function () {
-                    // Set the title for the button with the class 'clear-all'
-                    $('.clear-all').attr('title', 'Remove All Fields');
+                        // Set the title for the button with the class 'clear-all'
+                        $('.clear-all').attr('title', 'Remove All Fields');
 
-                    // Set the title for the button with the class 'get-data'
-                    $('.get-data').attr('title', 'JSON');
+                        // Set the title for the button with the class 'get-data'
+                        $('.get-data').attr('title', 'JSON');
                     }, 500);
                 });
+
+
+                //Position Delete All Fields In Front of Stage Wrap
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $('.clear-all').click(function () {
+                            var stageWrap = $('.stage-wrap');
+                            var dialog = $('.form-builder-dialog').detach();
+
+                            // Append the dialog inside the stage-wrap and position it
+                            stageWrap.append(dialog);
+                            dialog.css({
+                                'position': 'absolute',
+                                'top': '0',
+                                'left': '0',
+                                'width': '100%',
+                                'height': '100%',
+                                'display': 'flex',
+                                'align-items': 'center',
+                                'justify-content': 'center',
+                                'background-color': 'rgba(0, 0, 0, 0.5)'
+                            }).show();
+
+                            // Apply event stopping mechanism to block mouse events related to dragging
+                            dialog.on('mousedown touchstart dragstart', function (
+                            event) {
+                                event
+                            .preventDefault(); // Prevent any default action from occurring
+                                event
+                            .stopPropagation(); // Stop the event from bubbling up to prevent drag initiation
+                                return false; // Return false to prevent any further handling
+                            });
+
+                        });
+
+                        $(window).resize(function () {
+                            $('.form-builder-dialog').css({
+                                'width': $('.stage-wrap').width(),
+                                'height': $('.stage-wrap').height()
+                            });
+                        });
+                    }, 500);
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
