@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Form Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -48,7 +50,7 @@
             border-radius: 20px;
             margin-left: 20px;
             margin-right: 20px;
-            margin-top: 20px;
+            margin-top: 50px !important;
             min-width: 700px !important;
 
         }
@@ -173,12 +175,13 @@
             padding-left: 15px;
             padding-right: 15px;
             padding-top: 20px;
-            margin-top: 20px;
+            margin-top: 50px !important;
             height: calc(100vh - 80px);
             overflow: auto;
             box-sizing: border-box;
             min-height: auto !important;
             min-width: 700px !important;
+
         }
 
         /* .form-field {
@@ -297,6 +300,7 @@
         .form-wrap.form-builder .cb-wrap.sticky-controls {
             height: calc(100vh - 0px);
             overflow-y: auto;
+            background-color: color(srgb 0.1381 0.1332 0.1333);
         }
 
         /*these are the form-fields background colors*/
@@ -356,6 +360,14 @@
             float: left;
             background-color: #3080F6;
             border-radius: 0 !important;
+            width: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 25px !important;
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
         }
 
         .form-wrap.form-builder .stage-wrap.empty {
@@ -368,7 +380,7 @@
         /* Save UI Bar & Other Main Function Buttons */
 
         .form-wrap.form-builder .cb-wrap .form-actions {
-            float: right;
+            /* float: right;
             margin-top: 5px !important;
             display: flex !important;
             gap: 10px !important;
@@ -378,7 +390,20 @@
             position: relative !important;
             bottom: -100px !important;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; */
+            position: absolute;
+            /* Adjust width as needed */
+            z-index: 10;
+            /* Make sure it's above the .stage-wrap */
+            top: 12px;
+            /* Start hidden above the .stage-wrap */
+            transition: top 0.3s;
+            /* Smooth transition */
+            pointer-events: none;
+            /* Initially disable pointer events */
+            width: 440px;
+            left: 611px;
+
         }
 
         .form-wrap.form-builder .cb-wrap {
@@ -392,7 +417,7 @@
         #saveTemplateBtn {
             position: relative;
             float: left;
-            background-color: rgb(33, 38, 45);
+            background-color: rgb(34, 34, 34) !important;
             border: none !important;
             border-top-width: medium;
             border-top-style: none;
@@ -433,7 +458,23 @@
 
         .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn:hover,
         #saveTemplateBtn {
-            background-color: #232222;
+            background-color: rgb(34, 34, 34) !important;
+        }
+
+        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group>.btn:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-bottom-left-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+        }
+
+
+        .form-wrap.form-builder.formbuilder-embedded-bootstrap .btn-group {
+            position: absolute !important;
+            display: flex !important;
+            height: 30px !important;
+            gap: 5px !important;
+            left: 620px;
+            top: 25px;
         }
 
         .cb-wrap .form-actions button.btn-success {
@@ -778,6 +819,102 @@
             position: relative;
             top: -470px;
             left: -10px;
+        }
+
+
+        /*Main Utility Function Save ChangeFormName Remove Fields etc FontAwesome Styles*/
+        /* Ensuring the FontAwesome font family is applied to all icons */
+
+        .form-wrap.form-builder {
+            position: relative;
+            /*did this spec to get icons positioned correctly above stagewrap*/
+        }
+
+        .form-actions .btn:before {
+            font-family: 'Font Awesome 5 Free';
+            /* Ensure this matches your FontAwesome version */
+            font-weight: 900;
+            /* Required for solid icons */
+            content: '';
+            margin-right: 5px;
+            /* Space between icon and text */
+        }
+
+        /* Setting specific icons for each button class */
+        .form-actions .btn.clear-all:before {
+            content: '\f2ed';
+            /* 'trash-alt' icon */
+        }
+
+        .form-actions .btn.get-data:before {
+            content: '\f1c0';
+            /* 'database' icon, used to represent JSON-related functionalities */
+        }
+
+        .form-actions .btn.save-template:before {
+            content: '\f0c7';
+            /* 'save' icon, not using currently hidden - the actual button is hidden for now */
+        }
+
+
+        .form-actions .btn.saveIcon:before {
+            content: '\f0c7';
+            /* 'save' icon, directly applicable for save actions */
+        }
+
+        /* 'paperclip' icon, used for attachments */
+        /* .form-actions .btn.addAttachmentIcon:before {
+            content: '\f0c6';
+            
+        } */
+
+        .form-actions .btn.changeFormIcon:before {
+            content: '\f044';
+            position: relative;
+            left: 2px;
+            /* 'edit' icon, change name of saved form */
+        }
+
+        /*Style To Toggle Icons for Form Types Button*/
+        /* CSS for the button when it is set to normal form */
+        .toggleFormTypeMailOrNormal.normal:before {
+            content: '\f0e0 ';
+            /* FontAwesome icon for 'envelope' (representing if you click it you will turn form into a mailbox form) */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 16px;
+
+        }
+
+        /* CSS for the button when it is set to mailbox form */
+        .toggleFormTypeMailOrNormal.mailbox:before {
+            content: '\f15c';
+            /* FontAwesome icon for 'file-alt' (representing if you click again it will turn form back into a normal form without a mailbox id) */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 16px;
+
+        }
+
+        /*Styles for changing the add attachment icon back and forth*/
+        /* CSS for the button when adding an attachment */
+        .addAttachmentIcon.add:before {
+            content: '\f0c6';
+            /* FontAwesome icon for 'paperclip' */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        /* CSS for the button when removing an attachment */
+        .addAttachmentIcon.remove:before {
+            content: '\f00d';
+            /* FontAwesome icon for 'times' (used here to denote removal) */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 16px;
+            margin-right: 5px;
         }
     </style>
 
@@ -1127,21 +1264,29 @@
                         },
                         actionButtons: [{
                                 id: 'toggleFormType',
-                                className: 'btn btn-info',
-                                label: window.isMailboxForm ? "Set as Normal Form" :
-                                    "Toggle Mailbox Form",
+                                className: 'btn btn-info toggleFormTypeMailOrNormal normal', // Start with normal icon
                                 type: 'button',
+                                title: 'Convert To Mailbox Form', // Default title for normal start
                                 events: {
                                     click: function () {
                                         console.log(
                                             "toggleFormType button clicked. Previous state:",
-                                            window
-                                            .isMailboxForm);
+                                            window.isMailboxForm);
                                         window.isMailboxForm = !window.isMailboxForm;
                                         console.log("New state:", window.isMailboxForm);
 
-                                        // Check if the form is now set as a mailbox form
+                                        // Toggle icon class based on form state
+                                        var toggleButton = document.querySelector(
+                                            ".toggleFormTypeMailOrNormal");
+
+                                        // Update title based on the new form state
+                                        toggleButton.title = window.isMailboxForm ?
+                                            'Convert To Normal Form' : 'Convert To Mailbox Form';
+
                                         if (window.isMailboxForm) {
+                                            toggleButton.classList.remove('normal');
+                                            toggleButton.classList.add('mailbox');
+                                            // Handling mailbox form transition
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
                                                 input: 'text',
@@ -1185,34 +1330,26 @@
                                                         mailboxInput.value = window
                                                             .mailboxID;
                                                     }
-
                                                 }
                                             });
                                         } else {
-                                            // If it is a normal form, remove the hidden mailbox input if it exists
+                                            toggleButton.classList.remove('mailbox');
+                                            toggleButton.classList.add('normal');
+                                            // Handling transition back to normal form
                                             let mailboxInput = document.querySelector(
                                                 'input[name="sf:recipient_mailbox"]');
                                             if (mailboxInput) {
-                                                console.log(
-                                                    'Removing mailbox input as it is a normal form'
-                                                );
                                                 mailboxInput.remove();
                                             }
                                         }
-
-
-                                        // Getting a reference to the button using its ID
-                                        var toggleButton = document.querySelector(
-                                            "[id$='-toggleFormType-action']");
-                                        toggleButton.innerHTML = window.isMailboxForm ?
-                                            "Set as Normal Form" : "Toggle Mailbox Form";
                                     }
                                 }
                             },
                             {
                                 id: 'toggleAttachmentBtn',
-                                className: 'btn btn-warning',
+                                className: 'btn btn-warning addAttachmentIcon add',
                                 label: 'Add Attachment to Form',
+                                title: hasAttachment ? "Remove Attachment" : "Add Attachment",
                                 type: 'button',
                                 events: {
                                     click: function () {
@@ -1227,8 +1364,9 @@
                             },
                             {
                                 "id": "saveTemplate",
-                                "className": "btn btn-success special",
+                                "className": "btn btn-success special saveIcon",
                                 "label": "Save Template",
+                                "title": "Save Current Form",
                                 "type": "button",
                                 "events": {
                                     "click": function () {
@@ -1345,8 +1483,9 @@
                             },
                             {
                                 "id": "changeFormNameBtn",
-                                "className": "btn btn-warning special",
+                                "className": "btn btn-warning special changeFormIcon",
                                 "label": "Change Form Name",
+                                "title": "Change Form Name",
                                 "type": "button",
                                 "events": {
                                     "click": function () {
@@ -1536,21 +1675,29 @@
                         },
                         actionButtons: [{
                                 id: 'toggleFormType',
-                                className: 'btn btn-info',
-                                label: window.isMailboxForm ? "Set as Normal Form" :
-                                    "Toggle Mailbox Form",
+                                className: 'btn btn-info toggleFormTypeMailOrNormal normal', // Start with normal icon
                                 type: 'button',
+                                title: 'Convert To Mailbox Form', // Default title for normal start
                                 events: {
                                     click: function () {
                                         console.log(
                                             "toggleFormType button clicked. Previous state:",
-                                            window
-                                            .isMailboxForm);
+                                            window.isMailboxForm);
                                         window.isMailboxForm = !window.isMailboxForm;
                                         console.log("New state:", window.isMailboxForm);
 
-                                        // Check if the form is now set as a mailbox form
+                                        // Toggle icon class based on form state
+                                        var toggleButton = document.querySelector(
+                                            ".toggleFormTypeMailOrNormal");
+
+                                        // Update title based on the new form state
+                                        toggleButton.title = window.isMailboxForm ?
+                                            'Convert To Normal Form' : 'Convert To Mailbox Form';
+
                                         if (window.isMailboxForm) {
+                                            toggleButton.classList.remove('normal');
+                                            toggleButton.classList.add('mailbox');
+                                            // Handling mailbox form transition
                                             Swal.fire({
                                                 title: 'Enter Mailbox ID',
                                                 input: 'text',
@@ -1594,34 +1741,26 @@
                                                         mailboxInput.value = window
                                                             .mailboxID;
                                                     }
-
                                                 }
                                             });
                                         } else {
-                                            // If it is a normal form, remove the hidden mailbox input if it exists
+                                            toggleButton.classList.remove('mailbox');
+                                            toggleButton.classList.add('normal');
+                                            // Handling transition back to normal form
                                             let mailboxInput = document.querySelector(
                                                 'input[name="sf:recipient_mailbox"]');
                                             if (mailboxInput) {
-                                                console.log(
-                                                    'Removing mailbox input as it is a normal form'
-                                                );
                                                 mailboxInput.remove();
                                             }
                                         }
-
-
-                                        // Getting a reference to the button using its ID
-                                        var toggleButton = document.querySelector(
-                                            "[id$='-toggleFormType-action']");
-                                        toggleButton.innerHTML = window.isMailboxForm ?
-                                            "Set as Normal Form" : "Toggle Mailbox Form";
                                     }
                                 }
                             },
                             {
                                 id: 'toggleAttachmentBtn',
-                                className: 'btn btn-warning',
+                                className: 'btn btn-warning addAttachmentIcon add',
                                 label: 'Add Attachment to Form',
+                                title: hasAttachment ? "Remove Attachment" : "Add Attachment",
                                 type: 'button',
                                 events: {
                                     click: function () {
@@ -1636,8 +1775,9 @@
                             },
                             {
                                 "id": "saveTemplate",
-                                "className": "btn btn-success special",
+                                "className": "btn btn-success special saveIcon",
                                 "label": "Save Template",
+                                "title": "Save Current Form",
                                 "type": "button",
                                 "events": {
                                     "click": function () {
@@ -1754,8 +1894,9 @@
                             },
                             {
                                 "id": "changeFormNameBtn",
-                                "className": "btn btn-warning special",
+                                "className": "btn btn-warning special changeFormIcon",
                                 "label": "Change Form Name",
+                                "title": "Change Form Name",
                                 "type": "button",
                                 "events": {
                                     "click": function () {
@@ -3208,10 +3349,92 @@
 
 
 
-                //Update 024 To Add Glow Around Active Form-Field and Mimic Its Label Inside the Bootstrap Toolbar
+                //Update 101 - Moving Form Actions Attached and Above the Stage-Wrap For Convenience
+                $(document).ready(function () {
+                    // Delay the DOM manipulation to ensure all elements are fully loaded
+                    setTimeout(function () {
+                        // Move .form-actions as a sibling above .stage-wrap
+                        $('.form-wrap.form-builder .stage-wrap').before($(
+                            '.form-wrap.form-builder .cb-wrap .form-actions'));
 
 
-                //End of Update 024
+                        // Adjust CSS for .form-actions now inside .stage-wrap
+                        $('.form-wrap.form-builder .cb-wrap .form-actions').css({
+                            'position': 'absolute',
+                            'width': '100%', // Ensure it covers the .stage-wrap width
+                            'top': '-50px', // Start hidden above the .stage-wrap
+                            'transition': 'top 0.3s', // Smooth transition for moving down
+                            'pointer-events': 'none' // Disable pointer events initially
+                        });
+                    }, 500); // Delay of 500 milliseconds, adjust as necessary
+
+                    // Hover functionality remains the same
+                    $('.form-wrap.form-builder .stage-wrap').hover(
+                        function () {
+                            $('.form-wrap.form-builder .cb-wrap .form-actions').css({
+                                'top': '0',
+                                'pointer-events': 'auto'
+                            });
+                        },
+                        function () {
+                            if (!$('.form-wrap.form-builder .cb-wrap .form-actions:hover').length) {
+                                $('.form-wrap.form-builder .cb-wrap .form-actions').css({
+                                    'top': '-50px',
+                                    'pointer-events': 'none'
+                                });
+                            }
+                        }
+                    );
+
+                    $('.form-wrap.form-builder .cb-wrap .form-actions').hover(
+                        function () {
+                            $(this).css({
+                                'top': '0',
+                                'pointer-events': 'auto'
+                            });
+                        },
+                        function () {
+                            $(this).css({
+                                'top': '-50px',
+                                'pointer-events': 'none'
+                            });
+                        }
+                    );
+                });
+
+
+
+                //End of Update 101
+
+
+                //Set Utility Button Text on DomContentLoaded since it wont allow you to remove it it will just use the id if no lable is present: 
+                $(document).ready(function () {
+
+                    setTimeout(function () {
+                        // Select the button by its partial ID or class and clear its text content
+                        $(".addAttachmentIcon").text('');
+                        $(".clear-all").text('');
+                        $(".toggleFormTypeMailOrNormal").text('');
+                        $(".saveIcon").text('');
+                        $(".changeFormIcon").text('');
+                        $(".get-data").text('');
+
+                    }, 500);
+
+
+                });
+
+                //Forces title for default two buttons Clear Fields and JSON Button
+                $(document).ready(function () {
+                    setTimeout(function () {
+                    // Set the title for the button with the class 'clear-all'
+                    $('.clear-all').attr('title', 'Remove All Fields');
+
+                    // Set the title for the button with the class 'get-data'
+                    $('.get-data').attr('title', 'JSON');
+                    }, 500);
+                });
+
 
 
 

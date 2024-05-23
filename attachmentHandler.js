@@ -40,10 +40,32 @@ function toggleAttachmentStatus(buttonElement) {
     console.log("toggleAttachmentStatus called. Previous state:", hasAttachment);
     hasAttachment = !hasAttachment;  // Toggle the attachment status
     console.log("New state:", hasAttachment);
-    buttonElement.innerText = hasAttachment ? "Remove Attachment from Form" : "Add Attachment to Form";
+
+    // Update the button's title based on the new state - this is tied to the action in form builder app both if an else versions
+    buttonElement.title = hasAttachment ? 'Remove Attachment' : 'Add Attachment';
+
+    // Update the button class to reflect the new state
+    if (hasAttachment) {
+        buttonElement.classList.remove('add');
+        buttonElement.classList.add('remove');
+    } else {
+        buttonElement.classList.remove('remove');
+        buttonElement.classList.add('add');
+    }
 }
 
 window.toggleAttachmentStatus = toggleAttachmentStatus; // Set it in global scope
+
+
+
+// function toggleAttachmentStatus(buttonElement) {
+//     console.log("toggleAttachmentStatus called. Previous state:", hasAttachment);
+//     hasAttachment = !hasAttachment;  
+//     console.log("New state:", hasAttachment);
+//     buttonElement.innerText = hasAttachment ? "Remove Attachment from Form" : "Add Attachment to Form";
+// }
+
+// window.toggleAttachmentStatus = toggleAttachmentStatus; // Set it in global scope
 
 // If you have other functionalities that rely on DOMContentLoaded, keep them separate.
 document.addEventListener("DOMContentLoaded", function(event) {
