@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>CSS Styling</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
@@ -30,7 +34,7 @@
         body {
             padding: 80px 40px 40px 40px;
             background-color: #fff;
-            overflow:hidden;
+            overflow: hidden;
         }
 
         #htmlPreview textarea {
@@ -41,7 +45,6 @@
 
         #cssEditor {
             border: none;
-            border-left: 1px solid #dfdfdf;
             background-color: #232222;
             color: #adb6ff;
             padding: 20px;
@@ -50,6 +53,7 @@
             right: 0;
             top: 0;
             height: 100vh;
+            width: 33% !important;
         }
 
         #copyHtmlButton {
@@ -88,6 +92,11 @@
             border: 1px solid rgb(225, 223, 223);
             padding: 2em;
             background-color: rgb(255, 255, 255);
+            position: relative;
+            left: 125px;
+            height: 700px;
+            margin-right: 40px;
+
         }
 
         /*Freeze Button Styles For Overlay Inspector Mode Visual*/
@@ -138,6 +147,75 @@
         .outer_container_for_styles_page {
             margin-top: 50px;
         }
+
+        /*Styling Panel*/
+        /* Styles specific to the Styling Panel */
+        /* Styling for the Styling Panel at the bottom of the page */
+        /* Styling for the Styling Panel at the bottom of the page */
+        #stylingPanel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Flexbox setup for control groups within the styling panel */
+        #stylingPanel .spacing-control,
+        #stylingPanel .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        /* Labels for better visibility within the styling panel */
+        #stylingPanel .spacing-control label,
+        #stylingPanel .form-group label {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Grid setup for input controls within the styling panel */
+        #stylingPanel .inputs,
+        #stylingPanel .form-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        /* Styling for input elements within the styling panel */
+        #stylingPanel .inputs input,
+        #stylingPanel .form-group input[type="text"],
+        #stylingPanel .form-group select,
+        #stylingPanel .form-group button {
+            width: 50px;
+            padding: 5px;
+            background-color: #555;
+            border: none;
+            color: white;
+            text-align: center;
+        }
+
+        /* Button styling specific to the styling panel */
+        #stylingPanel .form-group button {
+            background-color: #777;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Placeholder color adjustment for visibility within the styling panel */
+        #stylingPanel .inputs input::placeholder,
+        #stylingPanel .form-group input::placeholder {
+            color: #ccc;
+        }
     </style>
 </head>
 
@@ -153,6 +231,66 @@
         <textarea id="cssEditor" style="width: 50%;" placeholder="Write your forms CSS here."></textarea>
 
     </div>
+
+    <div id="stylingPanel">
+        <div style="display: flex; justify-content: space-around;">
+            <div class="spacing-control">
+                <label>Spacing</label>
+                <div class="inputs">
+                    <input type="number" id="marginTop" placeholder="Top Margin">
+                    <input type="number" id="marginRight" placeholder="Right Margin">
+                    <input type="number" id="marginBottom" placeholder="Bottom Margin">
+                    <input type="number" id="marginLeft" placeholder="Left Margin">
+                    <input type="number" id="paddingTop" placeholder="Top Padding">
+                    <input type="number" id="paddingRight" placeholder="Right Padding">
+                    <input type="number" id="paddingBottom" placeholder="Bottom Padding">
+                    <input type="number" id="paddingLeft" placeholder="Left Padding">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Colors</label>
+                <input type="text" id="borderColorPicker" title="Border Color">
+                <input type="text" id="backgroundColorPicker" title="Background Color">
+                <input type="color" id="colorPicker" title="Font Color"> <!-- Changed to color type and updated ID -->
+                <button id="backgroundColorNone">No Background</button>
+            </div>
+            <div class="form-group">
+                <label>Border</label>
+                <input type="number" id="borderWidth" placeholder="Width (px)">
+                <select id="borderStyle">
+                    <option value="solid">Solid</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="dashed">Dashed</option>
+                </select>
+                <button id="borderNone">No Border</button>
+            </div>
+            <div class="form-group">
+                <label>Typography</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="Montserrat" selected>Montserrat</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+                <select id="fontWeight">
+                    <option value="400" selected>400 - Normal</option>
+                    <option value="700">700 - Bold</option>
+                </select>
+                <input type="number" id="fontSize" placeholder="Size (px)">
+                <input type="number" id="lineHeight" placeholder="Line Height (px)">
+                <button id="textAlignLeft">&#x2194;</button>
+                <button id="textAlignCenter">&#x2195;</button>
+                <button id="textAlignRight">&#x2192;</button>
+                <button id="textItalic">&#x1D5B7;</button>
+                <button id="textDecoration">&#x1D6E5;</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -269,6 +407,160 @@
                     overlay.style.display = 'none';
                     infoBox.style.display = 'none';
                 }
+            });
+        });
+
+
+
+
+
+
+
+
+
+        //Update Here 
+
+        $(document).ready(function () {
+            var selectedElement = null;
+            var styleCache = {}; // Cache for storing styles in memory
+
+            function toCssProperty(name) {
+                switch (name) {
+                    case 'colorPicker':
+                        return 'color';
+                    case 'backgroundColorPicker':
+                        return 'background-color';
+                    case 'borderColorPicker':
+                        return 'border-color';
+                    default:
+                        return name.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+                }
+            }
+
+            function appendUnitIfNeeded(property, value) {
+                const unitProperties = ['margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+                    'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+                    'font-size', 'line-height', 'border-width'
+                ];
+                if (unitProperties.includes(property) && !isNaN(parseFloat(value)) && value !== '') {
+                    return value + 'px';
+                }
+                return value;
+            }
+
+            function updateCssEditor() {
+                var cssText = "";
+                Object.keys(styleCache).forEach(function (key) {
+                    var element = document.getElementById(key);
+                    var escapedId = key.replace(/:/g, '\\:'); // Escape colons in the ID
+                    var selectorPrefix = element && element.tagName.toLowerCase() === 'input' ?
+                        "input.form-control#" : "#";
+                    cssText += selectorPrefix + escapedId + " { ";
+                    Object.keys(styleCache[key]).forEach(function (style) {
+                        var cssProperty = toCssProperty(style);
+                        var cssValue = appendUnitIfNeeded(cssProperty, styleCache[key][style]);
+                        cssText += cssProperty + ": " + cssValue + "; ";
+                    });
+                    cssText += "} ";
+                });
+                $('#cssEditor').val(cssText);
+                $('#cssEditor').trigger('input'); // Trigger input event to mimic manual typing
+                console.log("CSS Editor updated");
+            }
+
+
+            function loadStyles() {
+                if (styleCache[selectedElement.id]) {
+                    var styles = styleCache[selectedElement.id];
+                    Object.keys(styles).forEach(function (prop) {
+                        var input = $('#' + prop);
+                        if (input.data('spectrum')) {
+                            input.spectrum("set", styles[prop]);
+                        } else {
+                            input.val(styles[prop]);
+                        }
+                    });
+                    console.log("Loaded styles for: " + selectedElement.id);
+                } else {
+                    console.log("No stored styles for: " + selectedElement.id);
+                    resetInputs();
+                }
+            }
+
+            function resetInputs() {
+                $('#stylingPanel input[type="text"], #stylingPanel input[type="number"], #stylingPanel select')
+                    .val('');
+                $('#stylingPanel input[type="color"]').spectrum("set", "");
+                console.log("Inputs reset");
+            }
+
+            function saveStyles() {
+                var styles = {};
+                $('#stylingPanel input, #stylingPanel select').each(function () {
+                    var prop = this.id;
+                    var value = $(this).val();
+                    styles[prop] = value;
+                    selectedElement.style[prop] = value; // Apply styles directly to the element
+                });
+                styleCache[selectedElement.id] = styles; // Save styles in cache
+                localStorage.setItem('centralStyleStore', JSON.stringify(styleCache));
+                updateCssEditor();
+                console.log("Saved styles for: " + selectedElement.id);
+            }
+
+            $("#htmlPreview").on("click", "*", function (event) {
+                event.stopPropagation();
+                selectedElement = this;
+                if (!this.id) {
+                    this.id = 'styled-' + $(this).prop('tagName').toLowerCase() + '-' + Math.random()
+                        .toString(36).substr(2, 4);
+                }
+                loadStyles();
+            });
+
+            $("#htmlPreview").on("click", "label", function (event) {
+                event.preventDefault(); // Prevent the label from focusing the associated input
+                event.stopPropagation();
+                selectedElement = this;
+                if (!this.id) {
+                    this.id = 'styled-label-' + $(this).text().trim().replace(/\s+/g, '-')
+                    .toLowerCase() + '-' + Math.random().toString(36).substr(2, 4);
+                }
+                loadStyles();
+            });
+
+            $("#borderColorPicker, #backgroundColorPicker, #colorPicker").spectrum({
+                preferredFormat: "hex",
+                showInput: true,
+                showInitial: true,
+                chooseText: "Select",
+                cancelText: "Cancel",
+                change: function (color) {
+                    if (!selectedElement || !color) return;
+                    var prop = this.id.replace('Picker', '');
+                    selectedElement.style[prop] = color.toHexString();
+                    saveStyles();
+                }
+            });
+
+            $("#stylingPanel").on("input change", "input, select", function () {
+                if (!selectedElement) return;
+                var prop = this.id;
+                var value = $(this).val();
+                selectedElement.style[prop] = value;
+                saveStyles();
+            });
+
+            // Add input event listener to update htmlPreview
+            $('#cssEditor').on('input', function () {
+                var cssContent = $(this).val();
+                var styleElement = document.getElementById('dynamicStyles');
+                if (!styleElement) {
+                    styleElement = document.createElement('style');
+                    styleElement.id = 'dynamicStyles';
+                    document.head.appendChild(styleElement);
+                }
+                styleElement.innerHTML = cssContent;
             });
         });
     </script>
