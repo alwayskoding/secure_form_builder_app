@@ -232,6 +232,49 @@
 
     </div>
 
+    <div id="globalStylesPanel"
+        style="display:none; position: fixed; right: 0; top: 0; width: 300px; height: 100%; background: #f1f1f1; padding: 20px;">
+        <h3>Global Styles</h3>
+        <div>
+            <label>Color:</label>
+            <input type="color" id="globalColor">
+        </div>
+        <div>
+            <label>Background Color:</label>
+            <input type="color" id="globalBackgroundColor">
+        </div>
+        <div>
+            <label>Font Size:</label>
+            <input type="number" id="globalFontSize">
+        </div>
+        <div>
+            <label>Font Weight:</label>
+            <select id="globalFontWeight">
+                <option value="normal">Normal</option>
+                <option value="bold">Bold</option>
+            </select>
+        </div>
+        <div>
+            <label>Margin (px):</label>
+            <input type="number" id="globalMargin">
+        </div>
+        <div>
+            <label>Padding (px):</label>
+            <input type="number" id="globalPadding">
+        </div>
+        <div>
+            <label>Font Family:</label>
+            <select id="globalFontFamily">
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Helvetica">Helvetica</option>
+            </select>
+        </div>
+        <button id="clearGlobalStylesButton">Clear Global Styles</button>
+        <button id="closePanel">Close</button>
+    </div>
+
+
     <div id="stylingPanel">
         <div style="display: flex; justify-content: space-around;">
             <div class="spacing-control">
@@ -251,7 +294,7 @@
                 <label>Colors</label>
                 <input type="text" id="borderColorPicker" title="Border Color">
                 <input type="text" id="backgroundColorPicker" title="Background Color">
-                <input type="color" id="colorPicker" title="Font Color"> <!-- Changed to color type and updated ID -->
+                <input type="color" id="colorPicker" title="Font Color">
                 <button id="backgroundColorNone">No Background</button>
             </div>
             <div class="form-group">
@@ -283,8 +326,10 @@
                 <button id="textItalic">&#x1D5B7;</button>
                 <button id="textDecoration">&#x1D6E5;</button>
             </div>
+
         </div>
     </div>
+
 
 
 
@@ -424,6 +469,14 @@
             var selectedElement = null;
             var styleCache = {}; // Cache for storing styles in memory
 
+            // Ensure a unique style element for independent styles
+            var styleElementIndependent = document.getElementById('dynamicStylesIndependent');
+            if (!styleElementIndependent) {
+                styleElementIndependent = document.createElement('style');
+                styleElementIndependent.id = 'dynamicStylesIndependent';
+                document.head.appendChild(styleElementIndependent);
+            }
+
             function toCssProperty(name) {
                 switch (name) {
                     case 'colorPicker':
@@ -463,11 +516,8 @@
                     });
                     cssText += "} ";
                 });
-                $('#cssEditor').val(cssText);
-                $('#cssEditor').trigger('input'); // Trigger input event to mimic manual typing
-                console.log("CSS Editor updated");
+                styleElementIndependent.innerHTML = cssText; // Update the dedicated style element
             }
-
 
             function loadStyles() {
                 if (styleCache[selectedElement.id]) {
@@ -524,7 +574,7 @@
                 selectedElement = this;
                 if (!this.id) {
                     this.id = 'styled-label-' + $(this).text().trim().replace(/\s+/g, '-')
-                    .toLowerCase() + '-' + Math.random().toString(36).substr(2, 4);
+                        .toLowerCase() + '-' + Math.random().toString(36).substr(2, 4);
                 }
                 loadStyles();
             });
@@ -550,18 +600,134 @@
                 selectedElement.style[prop] = value;
                 saveStyles();
             });
+        });
 
-            // Add input event listener to update htmlPreview
-            $('#cssEditor').on('input', function () {
-                var cssContent = $(this).val();
-                var styleElement = document.getElementById('dynamicStyles');
-                if (!styleElement) {
-                    styleElement = document.createElement('style');
-                    styleElement.id = 'dynamicStyles';
-                    document.head.appendChild(styleElement);
-                }
-                styleElement.innerHTML = cssContent;
+
+
+
+
+
+        //Update Global Styling Panel Addition
+
+        $(document).ready(function () {
+            var currentType = null; // 'label', 'input', 'textarea'
+            var globalStyles = {
+                label: {},
+                input: {},
+                textarea: {}
+            };
+            var styleElementGlobal = document.getElementById('dynamicStylesGlobal');
+
+            if (!styleElementGlobal) {
+                styleElementGlobal = document.createElement('style');
+                styleElementGlobal.id = 'dynamicStylesGlobal';
+                document.head.appendChild(styleElementGlobal);
+            }
+
+
+            $('#clearGlobalStylesButton').click(function () {
+                // Clear global style settings
+                globalStyles = {
+                    label: {},
+                    input: {},
+                    textarea: {}
+                };
+                localStorage.removeItem('globalStyleslabel');
+                localStorage.removeItem('globalStylesinput');
+                localStorage.removeItem('globalStylestextarea');
+
+                // Clear the global styles from the style element
+                styleElementGlobal.innerHTML = "";
+
+                // Optionally clear the CSS editor if it should also reflect this reset
+                $('#cssEditor').val('');
+                alert("Global styles have been cleared.");
             });
+
+            function updateCssEditor() {
+                console.log("Updating CSS Editor for:", currentType, globalStyles[
+                currentType]); // Debugging output
+                var cssText = "";
+                for (let type in globalStyles) {
+                    if (Object.keys(globalStyles[type]).length) {
+                        var selector = (type === 'input') ?
+                            'input.form-control:not(#globalStylesPanel *, #stylingPanel *)' : type +
+                            ':not(#globalStylesPanel *, #stylingPanel *)';
+                        cssText += selector + " {";
+                        for (let prop in globalStyles[type]) {
+                            cssText +=
+                                ` ${toCssProperty(prop)}: ${appendUnitIfNeeded(prop, globalStyles[type][prop])} !important;`;
+                        }
+                        cssText += " }\n";
+                    }
+                }
+                styleElementGlobal.innerHTML = cssText; // Update the dedicated style element for global styles
+            }
+
+            function toCssProperty(propertyName) {
+                return propertyName.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');
+            }
+
+            function appendUnitIfNeeded(property, value) {
+                const unitProperties = [
+                    'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+                    'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+                    'font-size', 'line-height', 'border-width', 'width', 'height'
+                ];
+                if (unitProperties.includes(property) && !isNaN(parseFloat(value)) && value !== '') {
+                    return value + 'px';
+                }
+                return value;
+            }
+
+            function updateLivePreview() {
+                var cssContent = styleElementGlobal.innerHTML;
+                // Updates are now directly handled when updating the CSS editor so this might not be needed unless CSS is directly manipulated
+            }
+
+            $("#htmlPreview").on("click", "label, input[type='text'], textarea", function (e) {
+                e.stopPropagation();
+                currentType = this.tagName.toLowerCase();
+                console.log("Element clicked:", currentType); // Debugging output
+                if (['label', 'input', 'textarea'].includes(currentType)) {
+                    $('#globalStylesPanel').show();
+                    fillGlobalPanel(globalStyles[currentType] || {});
+                }
+            });
+
+            function fillGlobalPanel(styles) {
+                console.log("Filling panel for:", currentType, styles); // Debugging output
+                for (const prop in styles) {
+                    var inputId = 'global' + prop.charAt(0).toUpperCase() + prop.slice(1);
+                    $('#' + inputId).val(styles[prop]);
+                }
+            }
+
+            $("#globalStylesPanel input, #globalStylesPanel select").on("change", function () {
+                var prop = $(this).attr('id').substring(6); // Remove 'global' prefix
+                var value = $(this).val();
+                console.log("Property changed:", prop, "Value:", value); // Debugging output
+                globalStyles[currentType][toCssProperty(prop)] = value;
+                updateCssEditor();
+                localStorage.setItem('globalStyles' + currentType, JSON.stringify(globalStyles[
+                    currentType]));
+            });
+
+            $('#closePanel').on('click', function () {
+                $('#globalStylesPanel').hide();
+            });
+
+            function loadGlobalStyles() {
+                ['label', 'input', 'textarea'].forEach(type => {
+                    var savedStyles = localStorage.getItem('globalStyles' + type);
+                    if (savedStyles) {
+                        globalStyles[type] = JSON.parse(savedStyles);
+                        updateCssEditor();
+                    }
+                });
+            }
+
+            loadGlobalStyles(); // Load stored global styles on ready
         });
     </script>
 </body>
