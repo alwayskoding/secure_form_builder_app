@@ -17,7 +17,6 @@
             display: flex;
             gap: 10px;
             width: 100%;
-            justify-content: space-between;
             background-color: #3080F6;
             box-sizing: border-box;
             padding: 15px;
@@ -70,9 +69,12 @@
             color: #fff;
             cursor: pointer;
             outline: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             /* Subtle shadow */
             transition: all 0.3s ease;
+            position: relative;
+            top: 74px;
+            left: 81px;
+            padding: 5px 10px;
         }
 
         #toggleButton:hover,
@@ -93,7 +95,7 @@
             padding: 2em;
             background-color: rgb(255, 255, 255);
             position: relative;
-            left: 125px;
+            left: 55px;
             height: 700px;
             margin-right: 40px;
 
@@ -155,14 +157,24 @@
         #stylingPanel {
             position: fixed;
             bottom: 0;
-            left: 0;
-            width: 100%;
+            right: 563px;
+            width: 150px;
             background: #333;
             color: #fff;
             padding: 10px;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             font-family: Arial, sans-serif;
+            overflow-y: auto;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main_controls_wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
         /* Flexbox setup for control groups within the styling panel */
@@ -171,7 +183,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-right: 20px;
         }
 
         /* Labels for better visibility within the styling panel */
@@ -184,8 +195,8 @@
         /* Grid setup for input controls within the styling panel */
         #stylingPanel .inputs,
         #stylingPanel .form-group {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex !important;
+            flex-direction: column;
             gap: 5px;
         }
 
@@ -216,6 +227,885 @@
         #stylingPanel .form-group input::placeholder {
             color: #ccc;
         }
+
+        .spacing-control .inputs input {
+            width: 100% !important;
+            background-color: rgb(31, 30, 30) !important;
+            color: var(--colors-text-active) !important;
+            cursor: auto;
+            display: block;
+            font-family: inherit;
+            font-size: inherit;
+            height: 100%;
+            line-height: 1;
+            outline-color: transparent;
+            outline-style: solid;
+            outline-width: 2px;
+            border-radius: 4px;
+            padding: 10px !important;
+            border-color: grey;
+            border-width: 1px;
+            border: 1px solid rgb(68, 67, 67) !important;
+        }
+
+        .main_controls_wrapper * label {
+            margin-bottom: 12px !important;
+            margin-top: 20px;
+            align-self: flex-start;
+        }
+
+        #stylingPanel .form-group {
+            width: 100%;
+        }
+
+        .sp-original-input-container {
+            width: 100%;
+        }
+
+        #stylingPanel .form-group input[type="text"] {
+            width: 100%;
+        }
+
+        #stylingPanel .form-group button {
+            width: 100%;
+        }
+
+        #stylingPanel .form-group input[type="number"],
+        #stylingPanel .form-group select {
+            width: 100%;
+        }
+
+
+        /*Custom Dropdowns Were Created In Place of Selects For Custom Styling*/
+        .custom-dropdown {
+            position: relative;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            /* Ensures the dropdown takes full width of its container */
+        }
+
+        .dropdown-selected {
+            background-color: DodgerBlue;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left-color: var(--colors-border-1);
+            border-right-color: var(--colors-border-1);
+            border-top-color: var(--colors-border-1);
+            outline: 0px;
+            cursor: default;
+            -webkit-user-select: none;
+            color: var(--colors-text-active);
+            padding: 0px 4px 0px 8px;
+            box-sizing: border-box;
+            height: 24px;
+            border-radius: 4px;
+            background: var(--colors-action-secondary-background);
+            border-width: 0px;
+            border-style: solid;
+            box-shadow: var(--box-shadows-action-secondary);
+        }
+
+        .dropdown-selected:after {
+            content: "\25BC";
+            /* Unicode character for downward arrow */
+            font-size: 12px;
+            color: white;
+            padding-left: 10px;
+        }
+
+        .dropdown-options {
+            /* Match width to parent */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            /* Adds shadow to dropdown */
+            display: none;
+            /* Initially hide the dropdown options */
+            top: -540px;
+            left: 0;
+            width: 130px;
+            height: 100vh;
+            opacity: 100;
+            background-color: var(--colors-background-3);
+            border-color: var(--colors-border-2);
+            border-radius: 4px;
+            transform: translate3d(0px, 549px, 0px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-option {
+            padding: 8px 16px;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .dropdown-option:hover,
+        .dropdown-option:active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fancy_line {
+            width: 150px;
+            background-color: rgb(82, 82, 82);
+            height: 1px;
+            margin-top: 15px;
+        }
+
+
+        #globalStylesPanel {
+            background-color: #333 !important;
+            color: #fff;
+        }
+
+        .global_parent {
+            display: flex;
+            flex-direction: column;
+            margin-top: 15px;
+        }
+
+        .global_parent input {
+            width: 100% !important;
+            background-color: rgb(31, 30, 30) !important;
+            color: var(--colors-text-active) !important;
+            cursor: auto;
+            display: block;
+            font-family: inherit;
+            font-size: inherit;
+            height: 100%;
+            line-height: 1;
+            outline-color: transparent;
+            outline-style: solid;
+            outline-width: 2px;
+            border-radius: 4px;
+            padding: 10px !important;
+            border-color: grey;
+            border-width: 1px;
+            border: 1px solid rgb(68, 67, 67) !important;
+        }
+
+        select#globalFontWeight,
+        select#globalFontFamily,
+        #clearGlobalStylesButton,
+        #closePanel {
+            color: #000 !important;
+        }
+
+        #clearGlobalStylesButton {
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+
+        /*Fancy Variables*/
+
+        :root {
+
+
+            --box-shadows-0: 0 0px 0px 0;
+            --box-shadows-1: 0 1px 3px -1px rgba(0, 0, 0, 0.4);
+            --box-shadows-2: 0 0.5px 2px -1px rgba(0, 0, 0, 0.34), 0 3px 6px -2px rgba(0, 0, 0, 0.36);
+            --box-shadows-3: 0 1px 3px -1px rgba(0, 0, 0, 0.34), 0 5px 10px -2px rgba(0, 0, 0, 0.32);
+            --box-shadows-4: 0 1.5px 4px -1px rgba(0, 0, 0, 0.34), 0 8px 20px -3px rgba(0, 0, 0, 0.28);
+            --box-shadows-5: 0 1.5px 4px -1px rgba(0, 0, 0, 0.3), 0 10px 35px -4px rgba(0, 0, 0, 0.25);
+            --box-shadows-action-colored: 0px 0.5px 1px 0px rgba(0, 0, 0, 0.8), 0px 0.5px 0.5px 0px rgba(255, 255, 255, 0.2) inset;
+            --box-shadows-action-secondary: 0px 0.5px 1px rgba(0, 0, 0, 0.8), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.12);
+            --box-shadows-input-inner: 0px 1px 1px -1px rgba(0, 0, 0, 0.13) inset, 0px 3px 3px -3px rgba(0, 0, 0, 0.17) inset, 0px 4px 4px -4px rgba(0, 0, 0, 0.17) inset, 0px 8px 8px -8px rgba(0, 0, 0, 0.17) inset, 0px 12px 12px -12px rgba(0, 0, 0, 0.13) inset, 0px 16px 16px -16px rgba(0, 0, 0, 0.13) inset;
+            --box-shadows-menu: 0px 12px 24px 8px rgba(0, 0, 0, 0.08), 0px 8px 16px 4px rgba(0, 0, 0, 0.08), 0px 4px 8px 2px rgba(0, 0, 0, 0.08), 0px 2px 6px 0px rgba(0, 0, 0, 0.08), 0px -0.5px 0.5px 0px rgba(0, 0, 0, 0.12) inset, 0px 0.5px 0.5px 0px rgba(255, 255, 255, 0.12) inset;
+            --box-shadows-ui-select: 0px 0.5px 1px rgba(0, 0, 0, 0.8), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.12);
+            --CloseButton--hover--backgroundColor: transparent;
+            --CloseButton--hover--color: currentColor;
+            --colors-action-primary-background: #006acc;
+            --colors-action-primary-background-hover: #187cd9;
+            --colors-action-primary-text: #ffffff;
+            --colors-action-primary-text-hover: #ffffff;
+            --colors-action-secondary-background: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.11) 100%);
+            --colors-action-secondary-background-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0.17) 100%);
+            --colors-action-secondary-background-pressed: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.1) 100%);
+            --colors-action-secondary-border: rgba(255, 255, 255, 0.13);
+            --colors-action-secondary-border-hover: rgba(255, 255, 255, 0.22);
+            --colors-action-secondary-selected-background: rgba(0, 0, 0, 0.5);
+            --colors-action-secondary-selected-background-pressed: rgba(0, 0, 0, 0.5);
+            --colors-action-secondary-text: #ffffff;
+            --colors-action-secondary-text-hover: #ffffff;
+            --colors-background-1: #292929;
+            --colors-background-2: #353535;
+            --colors-background-3: #404040;
+            --colors-background-4: #373737;
+            --colors-background-5: #404040;
+            --colors-background-inactive: #292929;
+            --colors-background-inverse: #e8e8e8;
+            --colors-background-inverse-hover: #e8e8e8;
+            --colors-blue-background: #006acc;
+            --colors-blue-background-hover: #187cd9;
+            --colors-blue-background-pressed: #006acc;
+            --colors-blue-border: #007df0;
+            --colors-blue-canvas: #007df0;
+            --colors-blue-canvas-transparent: rgba(0, 125, 240, 0.1);
+            --colors-blue-chart: #007df0;
+            --colors-blue-chart-2: #a7d1ff;
+            --colors-blue-icon: #a7d1ff;
+            --colors-blue-outline: 0 0 0 2px rgba(0, 115, 230, 0.2);
+            --colors-blue-text: #a7d1ff;
+            --colors-blue-transparent: rgba(0, 125, 240, 0.25);
+            --colors-blue-transparent-hover: rgba(0, 125, 240, 0.35);
+            --colors-border-1: rgba(255, 255, 255, 0.13);
+            --colors-border-2: rgba(255, 255, 255, 0.16);
+            --colors-border-3: rgba(255, 255, 255, 0.19);
+            --colors-border-4: rgba(255, 255, 255, 0.19);
+            --colors-close-button-background: rgba(255, 255, 255, 0.1);
+            --colors-gray-icon: #c4c4c4;
+            --colors-green-background: #007a41;
+            --colors-green-background-hover: #0d8a4f;
+            --colors-green-background-pressed: #007a41;
+            --colors-green-border: #259d4d;
+            --colors-green-canvas: #259d4d;
+            --colors-green-canvas-transparent: rgba(37, 157, 77, 0.1);
+            --colors-green-chart: #259d4d;
+            --colors-green-icon: #79e09c;
+            --colors-green-outline: 0 0 0 2px rgba(0, 133, 71, 0.2);
+            --colors-green-text: #79e09c;
+            --colors-green-transparent: rgba(37, 157, 77, 0.25);
+            --colors-green-transparent-hover: rgba(37, 157, 77, 0.35);
+            --colors-orange-background: #bf4707;
+            --colors-orange-background-hover: #c95616;
+            --colors-orange-background-pressed: #bf4707;
+            --colors-orange-border: #df640c;
+            --colors-orange-canvas: #df640c;
+            --colors-orange-canvas-transparent: rgba(223, 100, 12, 0.1);
+            --colors-orange-chart: #df640c;
+            --colors-orange-icon: #ffbc86;
+            --colors-orange-text: #ffbc86;
+            --colors-orange-transparent: rgba(223, 100, 12, 0.2);
+            --colors-orange-transparent-hover: rgba(223, 100, 12, 0.3);
+            --colors-pink-background: #b53a9a;
+            --colors-pink-background-hover: #c44aa9;
+            --colors-pink-background-pressed: #b53a9a;
+            --colors-pink-border: #dd2cac;
+            --colors-pink-canvas: #dd2cac;
+            --colors-pink-canvas-transparent: rgba(221, 44, 172, 0.1);
+            --colors-pink-chart: #dd2cac;
+            --colors-pink-icon: #febdff;
+            --colors-pink-outline: 0 0 0 2px rgba(190, 74, 165, 0.2);
+            --colors-pink-text: #febdff;
+            --colors-pink-transparent: rgba(221, 44, 172, 0.25);
+            --colors-pink-transparent-hover: rgba(221, 44, 172, 0.35);
+            --colors-purple-background: #734ce0;
+            --colors-purple-background-hover: #815beb;
+            --colors-purple-background-pressed: #734ce0;
+            --colors-purple-border: #875ffd;
+            --colors-purple-canvas: #875ffd;
+            --colors-purple-chart: #875ffd;
+            --colors-purple-chart-2: #c4afff;
+            --colors-purple-icon: #c4afff;
+            --colors-purple-outline: 0 0 0 2px rgba(127, 90, 233, 0.2);
+            --colors-purple-text: #c4afff;
+            --colors-purple-transparent: rgba(135, 95, 253, 0.25);
+            --colors-purple-transparent-hover: rgba(135, 95, 253, 0.35);
+            --colors-red-background: #cf313b;
+            --colors-red-background-hover: #cb3535;
+            --colors-red-background-pressed: #cf313b;
+            --colors-red-border: #e42f3a;
+            --colors-red-canvas: #e42f3a;
+            --colors-red-canvas-transparent: rgba(228, 47, 58, 0.1);
+            --colors-red-chart: #e42f3a;
+            --colors-red-icon: #ff9c9c;
+            --colors-red-outline: 0 0 0 2px rgba(207, 49, 59, 0.2);
+            --colors-red-text: #ff9c9c;
+            --colors-red-transparent: rgba(228, 47, 58, 0.25);
+            --colors-red-transparent-hover: rgba(228, 47, 58, 0.35);
+            --colors-text-4: rgba(255, 255, 255, 0.67);
+            --colors-text-active: #ffffff;
+            --colors-text-default: rgba(255, 255, 255, 0.67);
+            --colors-text-dimmed: rgba(255, 255, 255, 0.5);
+            --colors-text-heading: #ffffff;
+            --colors-text-inverse: #000000;
+            --colors-text-placeholder: rgba(255, 255, 255, 0.5);
+            --colors-text-primary: #ffffff;
+            --colors-text-secondary: rgba(255, 255, 255, 0.67);
+            --colors-title: #ffffff;
+            --colors-ui-background-active: rgba(255, 255, 255, 0.1);
+            --colors-ui-background-hover: rgba(255, 255, 255, 0.07);
+            --colors-ui-badge-background: #e8e8e8;
+            --colors-ui-badge-background-hover: #dbdbdb;
+            --colors-ui-badge-background-pressed: #e8e8e8;
+            --colors-ui-border-solid: #464646;
+            --colors-ui-button-group-active: rgba(0, 0, 0, 0.5);
+            --colors-ui-canvas-background: #404040;
+            --colors-ui-card-background: rgba(255, 255, 255, 0.07);
+            --colors-ui-checkbox-radio-border-color: rgba(255, 255, 255, 0.19);
+            --colors-ui-input-background: rgba(0, 0, 0, 0.22);
+            --colors-ui-input-border-color: rgba(255, 255, 255, 0.16);
+            --colors-ui-input-border-color-hover: rgba(255, 255, 255, 0.19);
+            --colors-ui-menu-content-background: #404040;
+            --colors-ui-menu-divider: rgba(255, 255, 255, 0.13);
+            --colors-ui-modal-backdrop: rgba(0, 0, 0, 0.7);
+            --colors-ui-popover-backdrop: rgba(0, 0, 0, 0.5);
+            --colors-ui-scrollbar-thumb: rgba(255, 255, 255, 0.3);
+            --colors-ui-scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+            --colors-ui-select-background: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.11) 100%);
+            --colors-ui-select-background-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0.17) 100%);
+            --colors-ui-select-border: none;
+            --colors-ui-table-zebra-stripe-background: rgba(255, 255, 255, 0.02);
+            --colors-yellow-background: #FFD301;
+            --colors-yellow-background-hover: #FFDE5B;
+            --colors-yellow-background-pressed: #FFD301;
+            --colors-yellow-border: #FFD301;
+            --colors-yellow-canvas: #FFD301;
+            --colors-yellow-canvas-transparent: rgba(255, 211, 1, 0.1);
+            --colors-yellow-chart: #FFD301;
+            --colors-yellow-icon: #FFD301;
+            --colors-yellow-outline: 0 0 0 2px rgba(255, 199, 0, 0.2);
+            --colors-yellow-text: #FFD301;
+            --colors-yellow-transparent: rgba(215, 162, 32, 0.15);
+            --colors-yellow-transparent-hover: rgba(215, 162, 32, 0.25);
+            --component-icon-color: rgba(255, 255, 255, 0.67);
+            --controls-border-radius: 2px;
+            --controls-border-width: 1px;
+            --controls-font-size-large: calc(11.5/16 * 1rem);
+            --controls-font-size-medium: calc(11.5/16 * 1rem);
+            --controls-font-size-x-large: calc(11.5/16 * 1rem);
+            --controls-gutter-large: 12px;
+            --controls-gutter-medium: 8px;
+            --controls-gutter-x-large: 12px;
+            --controls-height-large: 32px;
+            --controls-height-medium: 24px;
+            --controls-height-x-large: 40px;
+            --controls-line-height-large: calc(32px - 1px * 2);
+            --controls-line-height-medium: calc(24px - 1px * 2);
+            --controls-line-height-x-large: calc(40px - 1px * 2);
+            --controls-opacity-disabled: 0.6;
+            --local-gap: 8px;
+            --opacities-default: 1;
+            --opacities-disabled: 0.6;
+            --opacities-low: 0.8;
+            --opacities-minimum: 0.7;
+            --space: 4;
+            --toastify-color-dark: #121212;
+            --toastify-color-error: #e74c3c;
+            --toastify-color-info: #3498db;
+            --toastify-color-light: #fff;
+            --toastify-color-success: #07bc0c;
+            --toastify-color-transparent: rgba(255, 255, 255, 0.7);
+            --toastify-color-warning: #f1c40f;
+            --toastify-font-family: sans-serif;
+            --toastify-spinner-color: #616161;
+            --toastify-spinner-color-empty-area: #e0e0e0;
+            --toastify-text-color-dark: #fff;
+            --toastify-text-color-error: #fff;
+            --toastify-text-color-info: #fff;
+            --toastify-text-color-light: #757575;
+            --toastify-text-color-success: #fff;
+            --toastify-text-color-warning: #fff;
+            --toastify-toast-background: #fff;
+            --toastify-toast-max-height: 800px;
+            --toastify-toast-min-height: 64px;
+            --toastify-toast-width: 320px;
+            --toastify-z-index: 9999;
+            --wf-designer--borderColor: rgba(255, 255, 255, 0.16);
+            --wf-designer--borderColorDark: rgba(255, 255, 255, 0.13);
+            --wf-designer--borderColorDarker: rgba(255, 255, 255, 0.13);
+            --wf-designer--bottomBarHeight: 29px;
+            --wf-designer--breadcrumbColor: #292929;
+            --wf-designer--breadcrumbRulerColor: rgba(255, 255, 255, 0.19);
+            --wf-designer--breadcrumbTextColor: rgba(255, 255, 255, 0.67);
+            --wf-designer--buttonBlue: #0073e6;
+            --wf-designer--buttonBlueHover: #0084ff;
+            --wf-designer--buttonBorder: none;
+            --wf-designer--buttonBoxShadow: 0px 0.5px 1px rgba(0, 0, 0, 0.8), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.12);
+            --wf-designer--buttonColor: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.11) 100%);
+            --wf-designer--buttonColorActive: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.11) 100%);
+            --wf-designer--buttonColorHover: linear-gradient(180deg, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0.17) 100%);
+            --wf-designer--buttonGreen: #008547;
+            --wf-designer--buttonGreenHover: #00944f;
+            --wf-designer--buttonGroupBackground: transparent;
+            --wf-designer--buttonGroupHeight: 25px;
+            --wf-designer--buttonHeadHeight: 24px;
+            --wf-designer--buttonHeadLineHeight: 1;
+            --wf-designer--buttonHeight: 22px;
+            --wf-designer--buttonLineHeight: 24px;
+            --wf-designer--buttonOrange: #c75300;
+            --wf-designer--buttonOrangeHover: #dd7124;
+            --wf-designer--buttonPurple: #7f5ae9;
+            --wf-designer--buttonPurpleHover: #8a61ff;
+            --wf-designer--buttonRed: #cf313b;
+            --wf-designer--buttonRedHover: #db434c;
+            --wf-designer--buttonText: #ffffff;
+            --wf-designer--canvasColor: #404040;
+            --wf-designer--canvasColorDark: #292929;
+            --wf-designer--canvasColorDarker: #404040;
+            --wf-designer--checkboxBorderColor: rgba(255, 255, 255, 0.19);
+            --wf-designer--checkboxCheckedBackgroundColor: #006acc;
+            --wf-designer--checkboxCheckedBorderColor: #006acc;
+            --wf-designer--checkboxLabelColor: rgba(255, 255, 255, 0.67);
+            --wf-designer--checkboxMarginRight: 4px;
+            --wf-designer--checkboxSize: 12px;
+            --wf-designer--checkboxTopOffset: -1px;
+            --wf-designer--checkboxVerticalAlign: middle;
+            --wf-designer--classShadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+            --wf-designer--controlBigFontSize: 11.5px;
+            --wf-designer--controlBigHeight: 24px;
+            --wf-designer--controlFontSize: 11.5px;
+            --wf-designer--cssTokenHeight: 23px;
+            --wf-designer--datePickerWidth: 254px;
+            --wf-designer--disabledOpacity: 0.5;
+            --wf-designer--firstSlatePanelWidth: 250px;
+            --wf-designer--fontCode: "SF Mono", "Liberation Mono", Inconsolata, Consolas, Monaco, Menlo, monospace;
+            --wf-designer--fontDefault: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            --wf-designer--fontHeading: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            --wf-designer--fontHeadingWeight: 600;
+            --wf-designer--fontSize0: 11.5px;
+            --wf-designer--fontSize1: 11.5px;
+            --wf-designer--fontSize2: 11.5px;
+            --wf-designer--fontSize3: 11.5px;
+            --wf-designer--fontSize4: 12.5px;
+            --wf-designer--fontSize5: 13px;
+            --wf-designer--fontSize6: 13px;
+            --wf-designer--fontSize8: 13px;
+            --wf-designer--fontSize10: 13px;
+            --wf-designer--fontWeightMedium: 600;
+            --wf-designer--inputBorderColor: rgba(255, 255, 255, 0.16);
+            --wf-designer--inputBorderColorHover: rgba(255, 255, 255, 0.19);
+            --wf-designer--inputBoxShadow: 0px 1px 1px -1px rgba(0, 0, 0, 0.13) inset, 0px 3px 3px -3px rgba(0, 0, 0, 0.17) inset, 0px 4px 4px -4px rgba(0, 0, 0, 0.17) inset, 0px 8px 8px -8px rgba(0, 0, 0, 0.17) inset, 0px 12px 12px -12px rgba(0, 0, 0, 0.13) inset, 0px 16px 16px -16px rgba(0, 0, 0, 0.13) inset;
+            --wf-designer--inputColor: rgba(0, 0, 0, 0.22);
+            --wf-designer--inputColorHover: rgba(0, 0, 0, 0.22);
+            --wf-designer--inputFontSize: 11.5px;
+            --wf-designer--inputHeighlightBg: rgba(138, 194, 255, 0.35);
+            --wf-designer--inputHeighlightBorderColor: rgba(138, 194, 255, 0.8);
+            --wf-designer--inputHeighlightColor: white;
+            --wf-designer--inputHeight: 24px;
+            --wf-designer--inputNoticeBg: #6f6452;
+            --wf-designer--inputNoticeBorderColor: #9e8863;
+            --wf-designer--inputNoticeColor: #b99f76;
+            --wf-designer--inputOutlineFocus: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 1px #2496ff;
+            --wf-designer--inputOutlineFocusError: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 1px #ed273e;
+            --wf-designer--inputOutlineFocusErrorLight: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 1px #ff424d;
+            --wf-designer--inputOutlineFocusPurple: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 1px #a484ff;
+            --wf-designer--inputPaddingX: 9px;
+            --wf-designer--inputPaddingY: 4px;
+            --wf-designer--inputPlaceholderColor: rgba(255, 255, 255, 0.5);
+            --wf-designer--inputPreviewBg: #4d4d4d;
+            --wf-designer--inputPreviewBorderColor: #5e5e5e;
+            --wf-designer--inputPreviewColor: #ababab;
+            --wf-designer--inputTickWidth: 16px;
+            --wf-designer--insetBorderColor: #2b2b2b;
+            --wf-designer--insetColor: #363636;
+            --wf-designer--leftSidebarBorderColor: rgba(255, 255, 255, 0.13);
+            --wf-designer--leftSidebarBorderDisplay: none;
+            --wf-designer--leftSidebarBottomButtonPadding: 8px;
+            --wf-designer--leftSidebarButtonActiveBackground: #404040;
+            --wf-designer--leftSidebarButtonActiveBorder: transparent;
+            --wf-designer--leftSidebarButtonActiveLeftBorder: none;
+            --wf-designer--leftSidebarButtonBackgroundHover: #353535;
+            --wf-designer--leftSidebarButtonBorderColor: rgba(255, 255, 255, 0.13);
+            --wf-designer--leftSidebarButtonPadding: 8px;
+            --wf-designer--leftSidebarDividerMargin: 10px;
+            --wf-designer--leftSidebarDividerOffset: -5px;
+            --wf-designer--leftSidebarFirstButtonTopMargin: 4px;
+            --wf-designer--leftSidebarHelpTriggerPadding: 8px;
+            --wf-designer--leftSidebarSpacerDisplay: none;
+            --wf-designer--leftSidebarSpacerOffsetLeft: -1px;
+            --wf-designer--leftSidebarSpacerWidth: 0px;
+            --wf-designer--leftSidebarWidth: 35px;
+            --wf-designer--listBorderColor: rgba(255, 255, 255, 0.16);
+            --wf-designer--listColor: #353535;
+            --wf-designer--listColorHover: rgba(255, 255, 255, 0.07);
+            --wf-designer--listGridBorder: none;
+            --wf-designer--listRowBackgroundHover: rgba(255, 255, 255, 0.07);
+            --wf-designer--listRowBigHeight: 32px;
+            --wf-designer--listRowBorder: none;
+            --wf-designer--listRowColorHover: #353535;
+            --wf-designer--listRowSelectedBackground: #404040;
+            --wf-designer--listSourceBorderColor: rgba(255, 255, 255, 0.19);
+            --wf-designer--maskCanvas: rgba(0, 0, 0, 0.6);
+            --wf-designer--maskLoading: rgba(0, 0, 0, 0.8);
+            --wf-designer--maskPanel: rgba(0, 0, 0, 0.6);
+            --wf-designer--menuBackground: #404040;
+            --wf-designer--menuBorder: none;
+            --wf-designer--menuCardOffset: 4px;
+            --wf-designer--menuCardTopBorderRadius: 4px;
+            --wf-designer--menuDividerColor: rgba(255, 255, 255, 0.13);
+            --wf-designer--menuItemCaretOffset: 0px;
+            --wf-designer--menuItemHoverBackground: rgba(255, 255, 255, 0.07);
+            --wf-designer--menuItemHoverColor: #ffffff;
+            --wf-designer--menuItemLineHeight: 18px;
+            --wf-designer--menuItemPadding: 3px 8px;
+            --wf-designer--miniSettingsModalBackground: #292929;
+            --wf-designer--modalBackground: #353535;
+            --wf-designer--modalHeaderBackground: transparent;
+            --wf-designer--modalHeaderHeight: 32px;
+            --wf-designer--modalPadding: 8px;
+            --wf-designer--modalShadow: 0px 12px 24px 8px rgba(0, 0, 0, 0.08), 0px 8px 16px 4px rgba(0, 0, 0, 0.08), 0px 4px 8px 2px rgba(0, 0, 0, 0.08), 0px 2px 6px 0px rgba(0, 0, 0, 0.08), 0px -0.5px 0.5px 0px rgba(0, 0, 0, 0.12) inset, 0px 0.5px 0.5px 0px rgba(255, 255, 255, 0.12) inset;
+            --wf-designer--modalTitleSize: 26px;
+            --wf-designer--modalTitleWeight: 600;
+            --wf-designer--notificationColor: rgba(0, 0, 0, 0.8);
+            --wf-designer--notificationTextColor: #ffffff;
+            --wf-designer--paneBorderColor: rgba(255, 255, 255, 0.13);
+            --wf-designer--paneCardBorder: 1px solid transparent;
+            --wf-designer--paneCardColor: #353535;
+            --wf-designer--paneHeadHeight: 40px;
+            --wf-designer--panelActiveShadow: 0 -1.5px 0 #ffffff inset;
+            --wf-designer--panelActiveShadowLast: 0 -1.5px 0 #ffffff inset;
+            --wf-designer--panelBorder: rgba(255, 255, 255, 0.13);
+            --wf-designer--panelColor: #292929;
+            --wf-designer--panelColorDark: #292929;
+            --wf-designer--panelColorDarker: #212121;
+            --wf-designer--panelColorLight: #292929;
+            --wf-designer--panelColorLighter: #353535;
+            --wf-designer--panelHeadDividerBorder: none;
+            --wf-designer--panelShadow: none;
+            --wf-designer--panelShadowLast: none;
+            --wf-designer--panelTabBackground: transparent;
+            --wf-designer--panelTabBarShadow: 0 -1px 0 0 rgba(255, 255, 255, 0.13);
+            --wf-designer--panelTabsShadow: 0 -1px 0 0 rgba(255, 255, 255, 0.13) inset;
+            --wf-designer--pillBackground: rgba(255, 255, 255, 0.1);
+            --wf-designer--popoverBackground: #353535;
+            --wf-designer--popoverBorder: none;
+            --wf-designer--popoverHeaderBackground: #353535;
+            --wf-designer--popoverShadow: 0px 12px 24px 8px rgba(0, 0, 0, 0.08), 0px 8px 16px 4px rgba(0, 0, 0, 0.08), 0px 4px 8px 2px rgba(0, 0, 0, 0.08), 0px 2px 6px 0px rgba(0, 0, 0, 0.08), 0px -0.5px 0.5px 0px rgba(0, 0, 0, 0.12) inset, 0px 0.5px 0.5px 0px rgba(255, 255, 255, 0.12) inset;
+            --wf-designer--popoverShadowHard: 0px 12px 24px 8px rgba(0, 0, 0, 0.08), 0px 8px 16px 4px rgba(0, 0, 0, 0.08), 0px 4px 8px 2px rgba(0, 0, 0, 0.08), 0px 2px 6px 0px rgba(0, 0, 0, 0.08), 0px -0.5px 0.5px 0px rgba(0, 0, 0, 0.12) inset, 0px 0.5px 0.5px 0px rgba(255, 255, 255, 0.12) inset;
+            --wf-designer--radius: 4px;
+            --wf-designer--radiusButtonGroup: 0px;
+            --wf-designer--radiusMedium: 4px;
+            --wf-designer--radiusRound: 100px;
+            --wf-designer--radiusSmall: 2px;
+            --wf-designer--rightSidebarBorderWidth: 1px;
+            --wf-designer--rightSidebarPanelWidth: 224px;
+            --wf-designer--rightSidebarWidth: calc(240px + 1px);
+            --wf-designer--rightSidebarWidthInner: 240px;
+            --wf-designer--rightSidebarWidthPlusScrollbar: calc(240px + 1px + 10px);
+            --wf-designer--scrollbarBaseColor: #404040 #353535;
+            --wf-designer--scrollbarThumbColor: rgba(255, 255, 255, 0.3);
+            --wf-designer--scrollbarThumbColorDisabled: #353535;
+            --wf-designer--scrollbarThumbColorHover: rgba(255, 255, 255, 0.4);
+            --wf-designer--scrollbarTrackBorderColor: #404040;
+            --wf-designer--scrollbarTrackColor: #292929;
+            --wf-designer--secondSlatePanelWidth: 400px;
+            --wf-designer--sectionClosedBorderBottom: 1px solid rgba(255, 255, 255, 0.13);
+            --wf-designer--sectionHeaderPaddingLeft: 0;
+            --wf-designer--sectionOpenedBorderBottom: 1px solid rgba(255, 255, 255, 0.13);
+            --wf-designer--sectionPadding: 0 8px;
+            --wf-designer--sectionTitleBorderBottom: none;
+            --wf-designer--sectionTitleHeight: 40px;
+            --wf-designer--slateHeaderHeight: 44px;
+            --wf-designer--switchActiveBorderColor: #006acc;
+            --wf-designer--switchActiveColor: #006acc;
+            --wf-designer--switchBorderColor: rgba(255, 255, 255, 0.19);
+            --wf-designer--switchColor: #404040;
+            --wf-designer--switchKnobColor: #ffffff;
+            --wf-designer--switchKnobColorHover: #ffffff;
+            --wf-designer--switchWidth: 28px;
+            --wf-designer--tabHeight: 35px;
+            --wf-designer--textColor: #ffffff;
+            --wf-designer--textColorDim: rgba(255, 255, 255, 0.67);
+            --wf-designer--textColorDimmer: rgba(255, 255, 255, 0.67);
+            --wf-designer--textColorLight: #ffffff;
+            --wf-designer--textColorPreloader: rgba(255, 255, 255, 0.67);
+            --wf-designer--token-input-background-disabled: rgba(255, 255, 255, 0.1);
+            --wf-designer--token-input-text-disabled: rgba(255, 255, 255, 0.5);
+            --wf-designer--tooltipColor: #404040;
+            --wf-designer--tooltipColorBlue: #0073e6;
+            --wf-designer--tooltipColorBlueText: white;
+            --wf-designer--tooltipColorText: rgba(255, 255, 255, 0.67);
+            --wf-designer--topBarBorderColor: transparent;
+            --wf-designer--topBarHeight: 35px;
+            --wf-designer--topBarIconActiveBackground: #404040;
+            --wf-designer--topBarIconActiveColor: #ffffff;
+            --wf-designer--webkitScrollBarWidth: 9px;
+            --wf-system---black: #000000;
+            --wf-system---black-a-7: rgba(0, 0, 0, 0.07);
+            --wf-system---black-a-10: rgba(0, 0, 0, 0.1);
+            --wf-system---black-a-13: rgba(0, 0, 0, 0.13);
+            --wf-system---black-a-16: rgba(0, 0, 0, 0.16);
+            --wf-system---black-a-19: rgba(0, 0, 0, 0.19);
+            --wf-system---black-a-22: rgba(0, 0, 0, 0.22);
+            --wf-system---black-a-25: rgba(0, 0, 0, 0.25);
+            --wf-system---black-a-30: rgba(0, 0, 0, 0.3);
+            --wf-system---black-a-40: rgba(0, 0, 0, 0.4);
+            --wf-system---black-a-50: rgba(0, 0, 0, 0.5);
+            --wf-system---black-a-60: rgba(0, 0, 0, 0.6);
+            --wf-system---black-a-67: rgba(0, 0, 0, 0.67);
+            --wf-system---black-a-70: rgba(0, 0, 0, 0.7);
+            --wf-system---black-a-80: rgba(0, 0, 0, 0.8);
+            --wf-system---blue-100: #a7d1ff;
+            --wf-system---blue-200: #187cd9;
+            --wf-system---blue-300: #006acc;
+            --wf-system---blue-400: #007df0;
+            --wf-system---blue-a-10: rgba(0, 125, 240, 0.1);
+            --wf-system---blue-a-15: rgba(0, 125, 240, 0.15);
+            --wf-system---blue-a-20: rgba(0, 125, 240, 0.2);
+            --wf-system---blue-a-25: rgba(0, 125, 240, 0.25);
+            --wf-system---blue-a-30: rgba(0, 125, 240, 0.3);
+            --wf-system---blue-a-35: rgba(0, 125, 240, 0.35);
+            --wf-system---brand-blue-100: #2C80FD;
+            --wf-system---brand-blue-200: #146EF5;
+            --wf-system---brand-blue-300: #1961F0;
+            --wf-system---brand-blue-400: #1755E0;
+            --wf-system---brand-blue-a-10: rgba(20, 110, 245, 0.1);
+            --wf-system---brand-blue-a-15: rgba(20, 110, 245, 0.15);
+            --wf-system---brand-blue-a-20: rgba(20, 110, 245, 0.2);
+            --wf-system---brand-blue-a-25: rgba(20, 110, 245, 0.25);
+            --wf-system---brand-blue-a-30: rgba(20, 110, 245, 0.3);
+            --wf-system---brand-blue-a-35: rgba(20, 110, 245, 0.35);
+            --wf-system---d1-black: rgba(0, 0, 0, 1);
+            --wf-system---d1-black-a-5: rgba(0, 0, 0, 0.05);
+            --wf-system---d1-black-a-10: rgba(0, 0, 0, 0.1);
+            --wf-system---d1-black-a-25: rgba(0, 0, 0, 0.25);
+            --wf-system---d1-black-a-50: rgba(0, 0, 0, 0.5);
+            --wf-system---d1-black-a-75: rgba(0, 0, 0, 0.75);
+            --wf-system---d1-blue-100: #8AC2FF;
+            --wf-system---d1-blue-200: #2496FF;
+            --wf-system---d1-blue-300: #0084FF;
+            --wf-system---d1-blue-350: #1280EE;
+            --wf-system---d1-blue-400: #0073E6;
+            --wf-system---d1-blue-500: #0066FF;
+            --wf-system---d1-blue-600: #005CE5;
+            --wf-system---d1-blue-a-10: rgba(0, 115, 230, 0.1);
+            --wf-system---d1-blue-a-20: rgba(0, 115, 230, 0.2);
+            --wf-system---d1-blue-a-30: rgba(0, 115, 230, 0.3);
+            --wf-system---d1-gray-25: #f6f6f6;
+            --wf-system---d1-gray-50: #ebebeb;
+            --wf-system---d1-gray-100: #d9d9d9;
+            --wf-system---d1-gray-200: #ababab;
+            --wf-system---d1-gray-300: #757575;
+            --wf-system---d1-gray-350: #696969;
+            --wf-system---d1-gray-400: #5e5e5e;
+            --wf-system---d1-gray-500: #4d4d4d;
+            --wf-system---d1-gray-600: #404040;
+            --wf-system---d1-gray-700: #363636;
+            --wf-system---d1-gray-800: #2b2b2b;
+            --wf-system---d1-gray-900: #212121;
+            --wf-system---d1-green-100: #63D489;
+            --wf-system---d1-green-200: #2FC862;
+            --wf-system---d1-green-300: #00a457;
+            --wf-system---d1-green-350: #00944F;
+            --wf-system---d1-green-400: #008547;
+            --wf-system---d1-green-500: #00713C;
+            --wf-system---d1-green-a-10: rgba(0, 133, 71, 0.1);
+            --wf-system---d1-green-a-20: rgba(0, 133, 71, 0.2);
+            --wf-system---d1-green-a-30: rgba(0, 133, 71, 0.3);
+            --wf-system---d1-orange-100: #FFAB66;
+            --wf-system---d1-orange-200: #F67E28;
+            --wf-system---d1-orange-300: #F85900;
+            --wf-system---d1-orange-350: #DD7124;
+            --wf-system---d1-orange-400: #C75300;
+            --wf-system---d1-orange-a-10: rgba(248, 89, 0, 0.1);
+            --wf-system---d1-orange-a-20: rgba(248, 89, 0, 0.2);
+            --wf-system---d1-orange-a-30: rgba(248, 89, 0, 0.3);
+            --wf-system---d1-pink-100: #F7A9F9;
+            --wf-system---d1-pink-200: #F775D3;
+            --wf-system---d1-pink-300: #E148C0;
+            --wf-system---d1-pink-350: #D34EB7;
+            --wf-system---d1-pink-400: #BE4AA5;
+            --wf-system---d1-pink-500: #D914AE;
+            --wf-system---d1-pink-600: #C3129D;
+            --wf-system---d1-pink-a-10: rgba(190, 74, 165, 0.1);
+            --wf-system---d1-pink-a-20: rgba(190, 74, 165, 0.2);
+            --wf-system---d1-pink-a-30: rgba(190, 74, 165, 0.3);
+            --wf-system---d1-purple-100: #B89EFF;
+            --wf-system---d1-purple-200: #A484FF;
+            --wf-system---d1-purple-300: #8A61FF;
+            --wf-system---d1-purple-400: #7F5AE9;
+            --wf-system---d1-purple-500: #7140FF;
+            --wf-system---d1-purple-600: #663AE5;
+            --wf-system---d1-purple-a-10: rgba(127, 90, 233, 0.1);
+            --wf-system---d1-purple-a-20: rgba(127, 90, 233, 0.2);
+            --wf-system---d1-purple-a-30: rgba(127, 90, 233, 0.3);
+            --wf-system---d1-red-100: #FF8A8A;
+            --wf-system---d1-red-200: #FF424D;
+            --wf-system---d1-red-300: #ED273E;
+            --wf-system---d1-red-350: #DB434C;
+            --wf-system---d1-red-400: #CF313B;
+            --wf-system---d1-red-500: #D50000;
+            --wf-system---d1-red-600: #B50000;
+            --wf-system---d1-red-a-10: rgba(207, 49, 59, 0.1);
+            --wf-system---d1-red-a-20: rgba(207, 49, 59, 0.2);
+            --wf-system---d1-red-a-30: rgba(207, 49, 59, 0.3);
+            --wf-system---d1-webflow-blue-100: #738cff;
+            --wf-system---d1-webflow-blue-200: #4d6bff;
+            --wf-system---d1-webflow-blue-300: #4353ff;
+            --wf-system---d1-webflow-blue-400: #3545ee;
+            --wf-system---d1-webflow-blue-500: #323ed1;
+            --wf-system---d1-webflow-blue-a-10: rgba(67, 83, 255, 0.1);
+            --wf-system---d1-webflow-blue-a-20: rgba(67, 83, 255, 0.2);
+            --wf-system---d1-webflow-blue-a-30: rgba(67, 83, 255, 0.3);
+            --wf-system---d1-white: rgba(255, 255, 255, 1);
+            --wf-system---d1-white-a-5: rgba(255, 255, 255, 0.05);
+            --wf-system---d1-white-a-10: rgba(255, 255, 255, 0.1);
+            --wf-system---d1-white-a-25: rgba(255, 255, 255, 0.25);
+            --wf-system---d1-white-a-50: rgba(255, 255, 255, 0.5);
+            --wf-system---d1-white-a-75: rgba(255, 255, 255, 0.75);
+            --wf-system---d1-yellow-300: #FFC700;
+            --wf-system---d1-yellow-400: #EAA700;
+            --wf-system---d1-yellow-450: #AD7D00;
+            --wf-system---d1-yellow-500: #996E00;
+            --wf-system---d1-yellow-a-10: rgba(255, 199, 0, 0.1);
+            --wf-system---d1-yellow-a-20: rgba(255, 199, 0, 0.2);
+            --wf-system---d1-yellow-a-30: rgba(255, 199, 0, 0.3);
+            --wf-system---d1-yellow-a-70: rgba(255, 199, 0, 0.7);
+            --wf-system---gray-0: #f5f5f5;
+            --wf-system---gray-100: #e8e8e8;
+            --wf-system---gray-200: #e0e0e0;
+            --wf-system---gray-300: #dbdbdb;
+            --wf-system---gray-400: #c4c4c4;
+            --wf-system---gray-500: #a6a6a6;
+            --wf-system---gray-550: #8a8a8a;
+            --wf-system---gray-600: #6d6d6d;
+            --wf-system---gray-700: #5e5e5e;
+            --wf-system---gray-800: #404040;
+            --wf-system---gray-900: #373737;
+            --wf-system---gray-1000: #353535;
+            --wf-system---gray-1100: #292929;
+            --wf-system---gray-1200: #1e1e1e;
+            --wf-system---green-100: #79e09c;
+            --wf-system---green-200: #0d8a4f;
+            --wf-system---green-300: #007a41;
+            --wf-system---green-400: #259d4d;
+            --wf-system---green-a-10: rgba(37, 157, 77, 0.1);
+            --wf-system---green-a-15: rgba(37, 157, 77, 0.15);
+            --wf-system---green-a-20: rgba(37, 157, 77, 0.2);
+            --wf-system---green-a-25: rgba(37, 157, 77, 0.25);
+            --wf-system---green-a-30: rgba(37, 157, 77, 0.3);
+            --wf-system---green-a-35: rgba(37, 157, 77, 0.35);
+            --wf-system---orange-100: #ffbc86;
+            --wf-system---orange-200: #c95616;
+            --wf-system---orange-300: #bf4707;
+            --wf-system---orange-400: #df640c;
+            --wf-system---orange-a-10: rgba(223, 100, 12, 0.1);
+            --wf-system---orange-a-15: rgba(223, 100, 12, 0.15);
+            --wf-system---orange-a-20: rgba(223, 100, 12, 0.2);
+            --wf-system---orange-a-25: rgba(223, 100, 12, 0.25);
+            --wf-system---orange-a-30: rgba(223, 100, 12, 0.3);
+            --wf-system---orange-a-35: rgba(223, 100, 12, 0.35);
+            --wf-system---pink-100: #febdff;
+            --wf-system---pink-200: #c44aa9;
+            --wf-system---pink-300: #b53a9a;
+            --wf-system---pink-400: #dd2cac;
+            --wf-system---pink-a-10: rgba(221, 44, 172, 0.1);
+            --wf-system---pink-a-15: rgba(221, 44, 172, 0.15);
+            --wf-system---pink-a-20: rgba(221, 44, 172, 0.2);
+            --wf-system---pink-a-25: rgba(221, 44, 172, 0.25);
+            --wf-system---pink-a-30: rgba(221, 44, 172, 0.3);
+            --wf-system---pink-a-35: rgba(221, 44, 172, 0.35);
+            --wf-system---purple-100: #c4afff;
+            --wf-system---purple-200: #815beb;
+            --wf-system---purple-300: #734ce0;
+            --wf-system---purple-400: #875ffd;
+            --wf-system---purple-a-10: rgba(135, 95, 253, 0.1);
+            --wf-system---purple-a-15: rgba(135, 95, 253, 0.15);
+            --wf-system---purple-a-20: rgba(135, 95, 253, 0.2);
+            --wf-system---purple-a-25: rgba(135, 95, 253, 0.25);
+            --wf-system---purple-a-30: rgba(135, 95, 253, 0.3);
+            --wf-system---purple-a-35: rgba(135, 95, 253, 0.35);
+            --wf-system---red-100: #ff9c9c;
+            --wf-system---red-200: #cb3535;
+            --wf-system---red-300: #cf313b;
+            --wf-system---red-400: #e42f3a;
+            --wf-system---red-a-10: rgba(228, 47, 58, 0.1);
+            --wf-system---red-a-15: rgba(228, 47, 58, 0.15);
+            --wf-system---red-a-20: rgba(228, 47, 58, 0.2);
+            --wf-system---red-a-25: rgba(228, 47, 58, 0.25);
+            --wf-system---red-a-30: rgba(228, 47, 58, 0.3);
+            --wf-system---red-a-35: rgba(228, 47, 58, 0.35);
+            --wf-system---typography-font-family-display: Graphik, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            --wf-system---typography-font-family-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            --wf-system---typography-font-family-sans-serif: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            --wf-system---typography-font-size-body: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-body-large: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-caption: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-code: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-display-1: calc(13/16 * 1rem);
+            --wf-system---typography-font-size-display-2: calc(13/16 * 1rem);
+            --wf-system---typography-font-size-display-3: calc(13/16 * 1rem);
+            --wf-system---typography-font-size-heading: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-help-text: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-subheading: calc(11.5/16 * 1rem);
+            --wf-system---typography-font-size-title: calc(13/16 * 1rem);
+            --wf-system---typography-font-weight-bold: 600;
+            --wf-system---typography-font-weight-light: 400;
+            --wf-system---typography-font-weight-medium: 500;
+            --wf-system---typography-font-weight-normal: 400;
+            --wf-system---typography-font-weight-semibold: 500;
+            --wf-system---typography-letter-spacing-cramped: -0.006em;
+            --wf-system---typography-letter-spacing-narrow: -0.4px;
+            --wf-system---typography-letter-spacing-normal: 0px;
+            --wf-system---typography-letter-spacing-subheading: -0.011em;
+            --wf-system---typography-letter-spacing-wide: 0.5px;
+            --wf-system---typography-line-height-body: 1rem;
+            --wf-system---typography-line-height-body-large: 1rem;
+            --wf-system---typography-line-height-caption: 1rem;
+            --wf-system---typography-line-height-code: 1rem;
+            --wf-system---typography-line-height-display-1: 1rem;
+            --wf-system---typography-line-height-display-2: 1rem;
+            --wf-system---typography-line-height-display-3: 1rem;
+            --wf-system---typography-line-height-heading: 1rem;
+            --wf-system---typography-line-height-help-text: 1rem;
+            --wf-system---typography-line-height-subheading: 1rem;
+            --wf-system---typography-line-height-title: 1rem;
+            --wf-system---ui-active-cursor: default;
+            --wf-system---ui-avatar-large: 40px;
+            --wf-system---ui-avatar-medium: 24px;
+            --wf-system---ui-avatar-small: 20px;
+            --wf-system---ui-avatar-x-large: 64px;
+            --wf-system---ui-avatar-x-small: 16px;
+            --wf-system---ui-button-padding-comfortable: 4px 8px;
+            --wf-system---ui-button-padding-compact: 4px;
+            --wf-system---ui-checkbox-box-size: 12px;
+            --wf-system---ui-checkbox-check-size: 10px;
+            --wf-system---ui-dialog-header-padding: 8px;
+            --wf-system---ui-input-padding: calc(4px - 1px);
+            --wf-system---ui-menu-content-padding: 4px 0px;
+            --wf-system---ui-menu-item-padding: 4px 8px;
+            --wf-system---ui-navbar-height-dashboard: 48px;
+            --wf-system---ui-navbar-height-marketplace: 48px;
+            --wf-system---ui-select-content-padding: 4px;
+            --wf-system---ui-select-control-chevron-right-padding: 4px;
+            --wf-system---ui-select-control-padding: 4px 4px;
+            --wf-system---ui-select-group-header-padding: 0px 8px 4px 8px;
+            --wf-system---ui-select-option-padding: 4px 8px;
+            --wf-system---ui-select-option-spacing: 4px;
+            --wf-system---ui-table-padding-comfortable: 12px 16px;
+            --wf-system---ui-table-padding-compact: 8px 12px;
+            --wf-system---ui-tabs-tab-height: 40px;
+            --wf-system---ui-tabs-tab-list-spacing: 12px;
+            --wf-system---ui-tabs-tab-margin: 1px;
+            --wf-system---ui-tabs-tab-padding-comfortable: 12px 8px;
+            --wf-system---ui-tabs-tab-padding-compact: 12px 0px;
+            --wf-system---ui-tabs-tab-panel-padding: 16px 0px;
+            --wf-system---ui-timeline-body-padding: 12px;
+            --wf-system---ui-timeline-header-padding: 12px;
+            --wf-system---white: #ffffff;
+            --wf-system---white-a-7: rgba(255, 255, 255, 0.07);
+            --wf-system---white-a-10: rgba(255, 255, 255, 0.1);
+            --wf-system---white-a-13: rgba(255, 255, 255, 0.13);
+            --wf-system---white-a-16: rgba(255, 255, 255, 0.16);
+            --wf-system---white-a-19: rgba(255, 255, 255, 0.19);
+            --wf-system---white-a-22: rgba(255, 255, 255, 0.22);
+            --wf-system---white-a-25: rgba(255, 255, 255, 0.25);
+            --wf-system---white-a-30: rgba(255, 255, 255, 0.3);
+            --wf-system---white-a-40: rgba(255, 255, 255, 0.4);
+            --wf-system---white-a-50: rgba(255, 255, 255, 0.5);
+            --wf-system---white-a-60: rgba(255, 255, 255, 0.6);
+            --wf-system---white-a-67: rgba(255, 255, 255, 0.67);
+            --wf-system---white-a-70: rgba(255, 255, 255, 0.7);
+            --wf-system---white-a-80: rgba(255, 255, 255, 0.8);
+            --wf-system---yellow-100: #FFDE5B;
+            --wf-system---yellow-200: #F0C000;
+            --wf-system---yellow-300: #8B6D00;
+            --wf-system---yellow-400: #FFD301;
+            --wf-system---yellow-a-10: rgba(255, 211, 1, 0.1);
+            --wf-system---yellow-a-15: rgba(215, 162, 32, 0.15);
+            --wf-system---yellow-a-20: rgba(215, 162, 32, 0.2);
+            --wf-system---yellow-a-25: rgba(215, 162, 32, 0.25);
+            --wf-system---yellow-a-30: rgba(215, 162, 32, 0.3);
+            --wf-system---yellow-a-35: rgba(215, 162, 32, 0.35);
+        }
     </style>
 </head>
 
@@ -233,36 +1123,36 @@
     </div>
 
     <div id="globalStylesPanel"
-        style="display:none; position: fixed; right: 0; top: 0; width: 300px; height: 100%; background: #f1f1f1; padding: 20px;">
+        style="display:none; position: fixed; right: 0; top: 0; width: 562px; height: 100%; background: #f1f1f1; padding: 20px;">
         <h3>Global Styles</h3>
-        <div>
+        <div class="global_parent">
             <label>Color:</label>
             <input type="color" id="globalColor">
         </div>
-        <div>
+        <div class="global_parent">
             <label>Background Color:</label>
             <input type="color" id="globalBackgroundColor">
         </div>
-        <div>
+        <div class="global_parent">
             <label>Font Size:</label>
             <input type="number" id="globalFontSize">
         </div>
-        <div>
+        <div class="global_parent">
             <label>Font Weight:</label>
             <select id="globalFontWeight">
                 <option value="normal">Normal</option>
                 <option value="bold">Bold</option>
             </select>
         </div>
-        <div>
+        <div class="global_parent">
             <label>Margin (px):</label>
             <input type="number" id="globalMargin">
         </div>
-        <div>
+        <div class="global_parent">
             <label>Padding (px):</label>
             <input type="number" id="globalPadding">
         </div>
-        <div>
+        <div class="global_parent">
             <label>Font Family:</label>
             <select id="globalFontFamily">
                 <option value="Arial">Arial</option>
@@ -276,7 +1166,7 @@
 
 
     <div id="stylingPanel">
-        <div style="display: flex; justify-content: space-around;">
+        <div class="main_controls_wrapper">
             <div class="spacing-control">
                 <label>Spacing</label>
                 <div class="inputs">
@@ -290,41 +1180,74 @@
                     <input type="number" id="paddingLeft" placeholder="Left Padding">
                 </div>
             </div>
+            <div class="fancy_line"></div>
             <div class="form-group">
-                <label>Colors</label>
-                <input type="text" id="borderColorPicker" title="Border Color">
+                <label>Background Color</label>
+                <!-- <input type="text" id="borderColorPicker" title="Border Color"> -->
                 <input type="text" id="backgroundColorPicker" title="Background Color">
+                <label>Text Color</label>
                 <input type="color" id="colorPicker" title="Font Color">
                 <button id="backgroundColorNone">No Background</button>
             </div>
+            <div class="fancy_line"></div>
             <div class="form-group">
-                <label>Border</label>
+                <label>Border Width</label>
                 <input type="number" id="borderWidth" placeholder="Width (px)">
-                <select id="borderStyle">
+                <!-- <select id="borderStyle">
                     <option value="solid">Solid</option>
                     <option value="dotted">Dotted</option>
                     <option value="dashed">Dashed</option>
-                </select>
+                </select> -->
+                <label>Border Style</label>
+                <div class="custom-dropdown" id="borderStyle">
+                    <div class="dropdown-selected" data-value="none">None</div>
+                    <div class="dropdown-options select-hide">
+                        <div class="dropdown-option" data-value="none">None</div>
+                        <div class="dropdown-option" data-value="solid">Solid</div>
+                        <div class="dropdown-option" data-value="dotted">Dotted</div>
+                        <div class="dropdown-option" data-value="dashed">Dashed</div>
+                    </div>
+                </div>
+                <label>Border Color</label>
+                <input type="text" id="borderColorPicker" title="Border Color">
+
                 <button id="borderNone">No Border</button>
             </div>
+            <div class="fancy_line"></div>
             <div class="form-group">
                 <label>Typography</label>
-                <select id="fontFamily">
+                <!-- <select id="fontFamily">
                     <option value="Arial">Arial</option>
                     <option value="Montserrat" selected>Montserrat</option>
                     <option value="Verdana">Verdana</option>
-                </select>
-                <select id="fontWeight">
+                </select> -->
+                <div class="custom-dropdown" id="fontFamily">
+                    <div class="dropdown-selected" data-value="Montserrat">Arial</div>
+                    <div class="dropdown-options select-hide">
+                        <div class="dropdown-option" data-value="Arial">Arial</div>
+                        <div class="dropdown-option" data-value="Verdana">Verdana</div>
+                        <div class="dropdown-option" data-value="Baskerville">Baskerville</div>
+                    </div>
+                </div>
+                <!-- <select id="fontWeight">
                     <option value="400" selected>400 - Normal</option>
                     <option value="700">700 - Bold</option>
-                </select>
+                </select> -->
+                <div class="custom-dropdown" id="fontWeight">
+                    <div class="dropdown-selected" data-value="400">400 - Normal</div>
+                    <div class="dropdown-options select-hide">
+                        <div class="dropdown-option" data-value="400">400 - Normal</div>
+                        <div class="dropdown-option" data-value="700">700 - Bold</div>
+                    </div>
+                </div>
+
                 <input type="number" id="fontSize" placeholder="Size (px)">
                 <input type="number" id="lineHeight" placeholder="Line Height (px)">
-                <button id="textAlignLeft">&#x2194;</button>
+                <!-- <button id="textAlignLeft">&#x2194;</button>
                 <button id="textAlignCenter">&#x2195;</button>
                 <button id="textAlignRight">&#x2192;</button>
                 <button id="textItalic">&#x1D5B7;</button>
-                <button id="textDecoration">&#x1D6E5;</button>
+                <button id="textDecoration">&#x1D6E5;</button> -->
             </div>
 
         </div>
@@ -519,15 +1442,59 @@
                 styleElementIndependent.innerHTML = cssText; // Update the dedicated style element
             }
 
+            //Update to use custom dropdowns instead of selects in this ui
+
+            // Add click event listener to toggle dropdown
+            $('.custom-dropdown .dropdown-selected').click(function () {
+                $(this).next('.dropdown-options').toggle();
+            });
+
+            // Option selection handling
+            $('.custom-dropdown .dropdown-option').click(function () {
+                var selectedValue = $(this).data('value');
+                $(this).parent().prev('.dropdown-selected').text($(this).text()).data('value',
+                    selectedValue);
+                $(this).parent().hide();
+
+                // Mimic the existing logic for select change
+                var prop = $(this).closest('.custom-dropdown').attr('id');
+                var styles = {};
+                styles[prop] = selectedValue;
+                applyStylesToSelectedElement(styles);
+            });
+
+            // Function to apply styles to selected element
+            function applyStylesToSelectedElement(styles) {
+                $.each(styles, function (prop, value) {
+                    if (prop === 'borderStyle' && value === 'none') {
+                        selectedElement.style.borderWidth = '0px'; // Reset border width
+                        selectedElement.style.borderStyle = 'none'; // Hide border
+                    } else {
+                        selectedElement.style[prop] = value;
+                    }
+                    saveStyles();
+                });
+            }
+
+
             function loadStyles() {
                 if (styleCache[selectedElement.id]) {
                     var styles = styleCache[selectedElement.id];
-                    Object.keys(styles).forEach(function (prop) {
+                    $.each(styles, function (prop, value) {
                         var input = $('#' + prop);
-                        if (input.data('spectrum')) {
-                            input.spectrum("set", styles[prop]);
+                        if (input.hasClass('custom-dropdown')) {
+                            var displayValue = input.find('.dropdown-option[data-value="' + value +
+                                '"]').text();
+                            input.find('.dropdown-selected').text(displayValue).data('value', value);
+                        } else if (input.data('spectrum')) {
+                            input.spectrum("set", value);
                         } else {
-                            input.val(styles[prop]);
+                            input.val(value);
+                            if (prop === 'borderWidth' && (value === '' || value === '0')) {
+                                input.val(
+                                    '0'
+                                ); // Ensure zero is displayed if there's no stored value or it's explicitly zero
+                            }
                         }
                     });
                     console.log("Loaded styles for: " + selectedElement.id);
@@ -537,29 +1504,69 @@
                 }
             }
 
+
+
+
+
+
+
+
             function resetInputs() {
-                $('#stylingPanel input[type="text"], #stylingPanel input[type="number"], #stylingPanel select')
-                    .val('');
+                $('#stylingPanel input[type="text"], #stylingPanel input[type="number"]').val('');
                 $('#stylingPanel input[type="color"]').spectrum("set", "");
+                $('#stylingPanel .custom-dropdown .dropdown-selected').each(function () {
+                    var defaultText = $(this).next('.dropdown-options').find('.dropdown-option').first()
+                        .text();
+                    var defaultValue = $(this).next('.dropdown-options').find('.dropdown-option')
+                        .first().data('value');
+                    $(this).text(defaultText).data('value', defaultValue);
+                });
                 console.log("Inputs reset");
             }
 
+
+            // Ensure the 'borderWidth' changes are applied and updated correctly
+            $('#borderWidth').on('input change', function () {
+                var borderWidthValue = $(this).val().trim() === "" ? "0" : $(this).val().trim();
+                if (!isNaN(borderWidthValue)) {
+                    selectedElement.style.borderWidth = borderWidthValue +
+                        'px'; // Apply directly to preview
+                    saveStyles(); // Save all styles including updated border width
+                }
+            });
+
+
             function saveStyles() {
                 var styles = {};
-                $('#stylingPanel input, #stylingPanel select').each(function () {
+                $('#stylingPanel input, #stylingPanel .custom-dropdown').each(function () {
                     var prop = this.id;
-                    var value = $(this).val();
-                    styles[prop] = value;
-                    selectedElement.style[prop] = value; // Apply styles directly to the element
+                    var value = $(this).hasClass('custom-dropdown') ? $(this).find('.dropdown-selected')
+                        .data('value') : $(this).val();
+
+                    if (prop === 'borderWidth') {
+                        value = value.trim() === "" ? "0" : value; // Normalize empty input as "0"
+                        selectedElement.style[prop] = value + 'px'; // Apply style with px unit
+                    } else {
+                        selectedElement.style[prop] = value;
+                    }
+
+                    styles[prop] = value; // Store value
                 });
+
                 styleCache[selectedElement.id] = styles; // Save styles in cache
                 localStorage.setItem('centralStyleStore', JSON.stringify(styleCache));
                 updateCssEditor();
-                console.log("Saved styles for: " + selectedElement.id);
+                console.log("Saved styles for: " + selectedElement.id + ", Styles: ", JSON.stringify(styles));
             }
 
-            $("#htmlPreview").on("click", "*", function (event) {
-                event.stopPropagation();
+
+
+
+
+
+            // Handling only non-label elements to avoid label-input conflict
+            $("#htmlPreview").on("click", ":not(label)", function (event) {
+                event.stopPropagation(); // This allows other handlers on the same element to execute
                 selectedElement = this;
                 if (!this.id) {
                     this.id = 'styled-' + $(this).prop('tagName').toLowerCase() + '-' + Math.random()
@@ -568,9 +1575,10 @@
                 loadStyles();
             });
 
+            // Specific handling for labels
             $("#htmlPreview").on("click", "label", function (event) {
-                event.preventDefault(); // Prevent the label from focusing the associated input
-                event.stopPropagation();
+                event.preventDefault();
+                event.stopPropagation(); // This allows other handlers on the same element to execute
                 selectedElement = this;
                 if (!this.id) {
                     this.id = 'styled-label-' + $(this).text().trim().replace(/\s+/g, '-')
@@ -578,6 +1586,7 @@
                 }
                 loadStyles();
             });
+
 
             $("#borderColorPicker, #backgroundColorPicker, #colorPicker").spectrum({
                 preferredFormat: "hex",
@@ -646,7 +1655,7 @@
 
             function updateCssEditor() {
                 console.log("Updating CSS Editor for:", currentType, globalStyles[
-                currentType]); // Debugging output
+                    currentType]); // Debugging output
                 var cssText = "";
                 for (let type in globalStyles) {
                     if (Object.keys(globalStyles[type]).length) {
