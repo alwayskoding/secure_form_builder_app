@@ -1268,6 +1268,7 @@
             var copyHtmlButton = document.getElementById('copyHtmlButton');
             var copyCssButton = document.getElementById('copyCssButton');
             var styleTag = document.createElement('style');
+            styleTag.id = 'editorStyles'; // Assign an ID to the style tag for the CSS editor
             document.head.appendChild(styleTag);
             var isCodeView = false;
             var rawHTML = localStorage.getItem('renderedHTML') || ''; // Store raw HTML
@@ -1330,10 +1331,66 @@
                 }
             });
 
-            copyCssButton.addEventListener('click', function () {
-                cssEditor.select();
-                document.execCommand('copy');
-            });
+
+
+            //CLEAN UPDATE: New CSS Clean UP Function That Will Take the CSS That is Grabbed When you Hit The Copy CSS Button and remove any empty values
+            function cleanUpCss(cssString) {
+    console.log("Original CSS:", cssString);  // Debug original CSS
+    const cssRules = cssString.split("}");
+    const cleanedRules = cssRules.map(rule => {
+        const parts = rule.split("{");
+        if (parts.length < 2) return "";
+        const declarations = parts[1]
+            .split(";")
+            .map(decl => decl.trim())
+            .filter(decl => {
+                const colonIndex = decl.indexOf(":");
+                if (colonIndex === -1) return false;
+                const property = decl.substring(0, colonIndex).trim();
+                const value = decl.substring(colonIndex + 1).trim();
+                return value !== "";
+            })
+            .join("; ");  // Ensure all declarations are separated by a semicolon and a space
+        if (declarations) {
+            const cleanRule = `${parts[0].trim()} { ${declarations}; }`;  // Add a semicolon after the last declaration
+            console.log("Processed Rule:", cleanRule);  // Debug each rule
+            return cleanRule;
+        }
+        return "";
+    }).filter(rule => rule !== "");
+
+    const cleanedCss = cleanedRules.join(" ");  // Join rules with a space for readability
+    console.log("Cleaned CSS:", cleanedCss);  // Debug cleaned CSS
+    return cleanedCss;
+}
+
+
+
+
+
+
+
+
+copyCssButton.addEventListener('click', function () {
+    var cssFromIndependent = document.getElementById('dynamicStylesIndependent')?.innerHTML || "";
+    var cssFromGlobal = document.getElementById('dynamicStylesGlobal')?.innerHTML || "";
+    var cssFromEditor = document.getElementById('editorStyles')?.innerHTML || "";
+
+    var allCss = cssFromIndependent + "\n" + cssFromGlobal + "\n" + cssFromEditor;
+    var cleanedCss = cleanUpCss(allCss); // Clean the CSS
+
+    var temporaryTextarea = document.createElement('textarea');
+    document.body.appendChild(temporaryTextarea);
+    temporaryTextarea.value = cleanedCss;  // Use cleanedCss instead of allCss
+    temporaryTextarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(temporaryTextarea);
+
+    alert('CSS copied to clipboard!');
+    console.log(cleanedCss);  // Log cleanedCss instead of allCss
+});
+
+
         });
 
         //Below is for Update 011 Where we are now giving the option to turn on inspector and see elements breadcrumbs for easier styling and allow freezing the current overlay on click and release on second
@@ -1392,6 +1449,43 @@
             var selectedElement = null;
             var styleCache = {}; // Cache for storing styles in memory
 
+
+            //Update 300 to reapply saved styles to htmlpreview if reloaded or styles change in independent style panel
+            // Function to load styles from local storage
+            function loadStylesFromLocalStorage() {
+                var storedStyles = localStorage.getItem('centralStyleStore');
+                if (storedStyles) {
+                    styleCache = JSON.parse(storedStyles);
+                    applyStylesToElements();
+                }
+            }
+
+
+            // Function to apply styles to elements based on the styleCache
+            function applyStylesToElements() {
+                Object.keys(styleCache).forEach(function (elementId) {
+                    var element = document.getElementById(elementId);
+                    var styles = styleCache[elementId];
+                    if (element && styles) {
+                        Object.keys(styles).forEach(function (style) {
+                            var cssProperty = toCssProperty(style);
+                            var cssValue = appendUnitIfNeeded(cssProperty, styles[style]);
+                            element.style[cssProperty] = cssValue;
+                        });
+                    }
+                });
+                updateCssEditor(); // Update the style editor to reflect the current styles
+            }
+
+            // Call the function to load and apply styles when the document is ready
+            loadStylesFromLocalStorage();
+
+
+            //End of Update 300
+
+
+
+
             // Ensure a unique style element for independent styles
             var styleElementIndependent = document.getElementById('dynamicStylesIndependent');
             if (!styleElementIndependent) {
@@ -1424,6 +1518,25 @@
                 return value;
             }
 
+            //Original UpdateCssEditor just commenting out while I try update 300 version
+            // function updateCssEditor() {
+            //     var cssText = "";
+            //     Object.keys(styleCache).forEach(function (key) {
+            //         var element = document.getElementById(key);
+            //         var escapedId = key.replace(/:/g, '\\:'); 
+            //         var selectorPrefix = element && element.tagName.toLowerCase() === 'input' ?
+            //             "input.form-control#" : "#";
+            //         cssText += selectorPrefix + escapedId + " { ";
+            //         Object.keys(styleCache[key]).forEach(function (style) {
+            //             var cssProperty = toCssProperty(style);
+            //             var cssValue = appendUnitIfNeeded(cssProperty, styleCache[key][style]);
+            //             cssText += cssProperty + ": " + cssValue + "; ";
+            //         });
+            //         cssText += "} ";
+            //     });
+            //     styleElementIndependent.innerHTML = cssText; 
+            // }
+
             function updateCssEditor() {
                 var cssText = "";
                 Object.keys(styleCache).forEach(function (key) {
@@ -1439,8 +1552,17 @@
                     });
                     cssText += "} ";
                 });
+
+                // Ensure the style element exists or create it
+                var styleElementIndependent = document.getElementById('dynamicStylesIndependent');
+                if (!styleElementIndependent) {
+                    styleElementIndependent = document.createElement('style');
+                    styleElementIndependent.id = 'dynamicStylesIndependent';
+                    document.head.appendChild(styleElementIndependent);
+                }
                 styleElementIndependent.innerHTML = cssText; // Update the dedicated style element
             }
+
 
             //Update to use custom dropdowns instead of selects in this ui
 
@@ -1555,6 +1677,8 @@
 
                 styleCache[selectedElement.id] = styles; // Save styles in cache
                 localStorage.setItem('centralStyleStore', JSON.stringify(styleCache));
+                applyStylesToElements
+            (); // Apply styles immediately after saving to ensure consistency Update made in update 300
                 updateCssEditor();
                 console.log("Saved styles for: " + selectedElement.id + ", Styles: ", JSON.stringify(styles));
             }
@@ -1654,24 +1778,27 @@
             });
 
             function updateCssEditor() {
-                console.log("Updating CSS Editor for:", currentType, globalStyles[
-                    currentType]); // Debugging output
-                var cssText = "";
-                for (let type in globalStyles) {
-                    if (Object.keys(globalStyles[type]).length) {
-                        var selector = (type === 'input') ?
-                            'input.form-control:not(#globalStylesPanel *, #stylingPanel *)' : type +
-                            ':not(#globalStylesPanel *, #stylingPanel *)';
-                        cssText += selector + " {";
-                        for (let prop in globalStyles[type]) {
-                            cssText +=
-                                ` ${toCssProperty(prop)}: ${appendUnitIfNeeded(prop, globalStyles[type][prop])} !important;`;
-                        }
-                        cssText += " }\n";
-                    }
-                }
-                styleElementGlobal.innerHTML = cssText; // Update the dedicated style element for global styles
+    console.log("Updating CSS Editor for:", currentType, globalStyles[currentType]); // Debugging output
+    var cssText = "";
+    for (let type in globalStyles) {
+        if (Object.keys(globalStyles[type]).length) {
+            var selector = (type === 'input') ?
+                '#htmlPreview input.form-control:not(#globalStylesPanel *, #stylingPanel *)' :
+                `#htmlPreview ${type}:not(#globalStylesPanel *, #stylingPanel *)`;
+            cssText += selector + " {";
+            for (let prop in globalStyles[type]) {
+                cssText +=
+                    ` ${toCssProperty(prop)}: ${appendUnitIfNeeded(prop, globalStyles[type][prop])} !important;`;
             }
+            cssText += " }\n";
+        }
+    }
+    styleElementGlobal.innerHTML = cssText; // Update the dedicated style element for global styles
+}
+
+
+
+            
 
             function toCssProperty(propertyName) {
                 return propertyName.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');

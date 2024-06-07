@@ -961,9 +961,6 @@
 
 
         /*Testing Input Menu Styles*/
-
-
-
     </style>
 
 
@@ -1157,6 +1154,20 @@
         function mainScript() {
             jQuery(function ($) {
                 window.isMailboxForm = false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 //Update 014 Huge Save and Loading Data Update
 
@@ -3507,11 +3518,11 @@
 
                             // Apply event stopping mechanism to block mouse events related to dragging
                             dialog.on('mousedown touchstart dragstart', function (
-                            event) {
+                                event) {
                                 event
-                            .preventDefault(); // Prevent any default action from occurring
+                                    .preventDefault(); // Prevent any default action from occurring
                                 event
-                            .stopPropagation(); // Stop the event from bubbling up to prevent drag initiation
+                                    .stopPropagation(); // Stop the event from bubbling up to prevent drag initiation
                                 return false; // Return false to prevent any further handling
                             });
 
@@ -3530,9 +3541,108 @@
 
 
 
+                //Update 500 
+
+                $(document).ready(function () {
+                    function setupDragWidthObserver() {
+                        const stageWrap = $('.stage-wrap').get(
+                            0); // Get the native DOM element from jQuery object
+
+                        if (stageWrap) {
+                            console.log('.stage-wrap found, setting up observer for drag actions.');
+                            const observer = new MutationObserver(mutations => {
+                                mutations.forEach(mutation => {
+                                    // Check for attributes changes specifically looking for class changes
+                                    if (mutation.type === 'attributes' && mutation
+                                        .attributeName === 'class') {
+                                        const targetElement = mutation.target;
+                                        // Check if the element is currently being dragged
+                                        if ($(targetElement).hasClass('moving')) {
+                                            const movingWidth = $(targetElement)
+                                                .outerWidth();
+                                            // Update the width with !important using direct style manipulation
+                                            $('.form-wrap.form-builder .stage-wrap > .hoverDropStyleInverse')
+                                                .each(function () {
+                                                    this.style.cssText = 'width: ' +
+                                                        movingWidth +
+                                                        'px !important;';
+                                                });
+                                            console.log(
+                                                'Adjusted hover style width to match the moving element.'
+                                            );
+                                        } else {
+                                            // Optional: Reset hover styles when not dragging
+                                            $('.form-wrap.form-builder .stage-wrap > .hoverDropStyleInverse')
+                                                .each(function () {
+                                                    this.style.cssText = '';
+                                                });
+                                        }
+                                    }
+                                });
+                            });
+
+                            observer.observe(stageWrap, {
+                                attributes: true,
+                                subtree: true,
+                                attributeFilter: ['class'] // Observe only class changes
+                            });
+                        } else {
+                            console.log('.stage-wrap not found, retrying...');
+                            setTimeout(setupDragWidthObserver, 500); // Retry after 500 ms if not found
+                        }
+                    }
+
+                    setupDragWidthObserver(); // Start the observer setup
+                });
 
 
 
+                //End of 500
+
+
+                //Update 600 - Setting All Fields That Get Added To Col-MD-12 By Default
+
+                $(document).ready(function () {
+                    function setupObserver() {
+                        var stageWrap = document.querySelector('.stage-wrap');
+
+                        if (stageWrap) {
+                            console.log('.stage-wrap found, setting up observer.');
+                            var observer = new MutationObserver(function (mutations) {
+                                mutations.forEach(function (mutation) {
+                                    if (mutation.addedNodes.length) {
+                                        mutation.addedNodes.forEach(function (node) {
+                                            if (node.nodeName === 'LI' && node
+                                                .classList.contains(
+                                                    'form-field')) {
+                                                node.classList.add('col-md-12');
+                                                console.log(
+                                                    `Added 'col-md-12' class to new field with ID: ${node.dataset.fieldId}`
+                                                    );
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+
+                            var config = {
+                                childList: true
+                            };
+
+                            observer.observe(stageWrap, config);
+                            console.log('Observer is now monitoring .stage-wrap.');
+                        } else {
+                            console.log('.stage-wrap not found, retrying in 500ms...');
+                            setTimeout(setupObserver, 500);
+                        }
+                    }
+
+                    setupObserver(); // Start the checking and setup process
+                });
+
+
+
+                //End of 600
 
 
 
