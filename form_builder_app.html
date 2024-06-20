@@ -961,6 +961,16 @@
 
 
         /*Testing Input Menu Styles*/
+
+
+        /*Smoother Transition For Child Divs Of Rendered Form - Less Jump As They Are Given Col MD 12*/
+        .rendered-form div {
+            transition: all 0.3s ease;
+            /* Adjust the duration and timing function as needed */
+        }
+
+
+        
     </style>
 
 
@@ -1157,9 +1167,17 @@
 
 
 
+                //Smooth Transition of Child Divs of Rendered Form So They Dont Jump As Col MD 12s are Added
 
-
-
+                function updateElementsSmoothly(elements) {
+                    requestAnimationFrame(() => {
+                        elements.forEach(elem => {
+                            if (!elem.className.match(/\bcol-md-\d+\b/)) {
+                                elem.classList.add('col-md-12');
+                            }
+                        });
+                    });
+                }
 
 
 
@@ -1192,13 +1210,25 @@
                     });
                 }
 
+                // UPdate 900 Function to ensure all form-fields have a default 'col-md-12' class if no specific col-md-* class exists
+                function ensureAllFieldsHaveDefaultGridClasses() {
+                    $('.stage-wrap .form-field').each(function() {
+                        if (!this.className.match(/\bcol-md-\d+/)) {
+                            $(this).addClass('col-md-12');
+                            console.log('Added "col-md-12" class to:', this);
+                        }
+                    });
+                }
+
+                //end of Update 900
+
                 // Enhance formData with Bootstrap grid classes before saving
                 function enhanceFormData(formData) {
                     $('#fb-editor .form-field').each(function (index, elem) {
                         var classes = $(elem).attr('class').match(/\bcol-md-\d+\b/g);
                         if (classes && formData[index]) {
                             formData[index].className += ' ' + classes.join(' ');
-                        }
+                        } 
                     });
                     return formData;
                 }
@@ -1224,16 +1254,136 @@
                 var savedData = StorageModule.load('formData');
                 var options;
 
+
+
+               
+
                 if (savedData) {
                     // If there is saved data, use it to initialize the form builder
                     console.log('Form data loaded from local storage.');
+
+                    function sayHi() {
+                        console.log('hey man this works');
+                    }
+
+                    sayHi();
+
+
+                    function applyGridClassesToAllFields() {
+    console.log('Applying grid classes to general fields');
+    $('.stage-wrap .text-field, .stage-wrap .select-field, .stage-wrap .file-field, .stage-wrap .autocomplete-field, .stage-wrap .button-field, .stage-wrap .date-field, .stage-wrap .number-field, .stage-wrap .textarea-field').each(function() {
+        var $this = $(this);
+        // Check if none of the specific col-md-* classes are present
+        if (!$this.hasClass('col-md-4') && !$this.hasClass('col-md-6') &&
+            !$this.hasClass('col-md-8') && !$this.hasClass('col-md-12')) {
+            $this.addClass('col-md-12');
+            console.log('Yo big dawg I Added "col-md-12" to:', $this.attr('class'));
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
                     options = {
                         scrollToFieldOnAdd: false,
                         controlPosition: 'left',
                         formData: savedData,
                         dataType: 'json',
-                        fields: [{
+                        onAddField: function () {
+                            // Delay execution to allow the DOM to update
+                            setTimeout(function () {
+                                // Select all divs in .rendered-form
+                                const divs = document.querySelectorAll('.rendered-form > div');
+                                updateElementsSmoothly(divs); // Apply 'col-md-12' using the smooth update function
+                                console.log('col-md-12 applied where needed in .rendered-form');
+
+                                // Apply 'col-md-12' to the latest added form field in the .stage-wrap
+                                const latestField = document.querySelector('.stage-wrap .form-field:last-child');
+                                if (latestField && !latestField.className.includes('col-md-')) {
+                                    latestField.classList.add('col-md-12');
+                                    console.log('\'col-md-12\' added to the new form field in stage-wrap');
+                                }
+                            }, 100);
+                        },
+                        fields: [
+                            {
+                                type: "header",
+                                subtype: "h1",
+                                label: "Header Custom",
+                                className: "col-md-12"
+                            },
+                            {
+                                type: "paragraph",
+                                subtype: "p",
+                                label: "Paragraph Custom",
+                                className: "col-md-12"
+                            },
+                            {
+                                type: "checkbox-group",
+                                className: "col-md-12",
+                                required: false,
+                                label: "Checkbox Group Custom",
+                                toggle: false,
+                                inline: false,
+                                name: "checkbox-group-1718908772805-0",
+                                access: false,
+                                other: false,
+                                values: [
+                                {
+                                    label: "Option 1",
+                                    value: "option-1",
+                                    selected: true
+                                }
+                                ]
+                            },
+
+                            {
+                                type: "hidden",
+                                className: "col-md-12",
+                                label: "Hidden Custom",
+                                name: "hidden-1718908775509-0",
+                                access: false
+                            },
+
+                            {
+                                type: "radio-group",
+                                className: "col-md-12",
+                                required: false,
+                                label: "Radio Group Custom",
+                                inline: false,
+                                name: "radio-group-1718908781342-0",
+                                access: false,
+                                other: false,
+                                values: [
+                                {
+                                    label: "Option 1",
+                                    value: "option-1",
+                                    selected: false
+                                },
+                                {
+                                    label: "Option 2",
+                                    value: "option-2",
+                                    selected: false
+                                },
+                                {
+                                    label: "Option 3",
+                                    value: "option-3",
+                                    selected: false
+                                }
+                                ]
+                            },
+
+                            {
                                 label: "Email",
                                 className: "form-control",
                                 type: "text",
@@ -1515,9 +1665,15 @@
                                             }
                                         }
 
+
+                                       
+
+
+
                                         // Remaining operations related to template saving
                                         const formData = formBuilder.actions.getData('json', true);
                                         if (formData) {
+                                            
                                             $('#render-container').formRender({
                                                 formData: formData
                                             });
@@ -1526,6 +1682,8 @@
                                             const wrappedContent = wrapContentWithFormTemplate(
                                                 transformedHTML);
                                             $('#render-container').html(wrappedContent);
+
+                                           
                                         }
 
                                         $('#copyHTMLBtn').show();
@@ -1635,16 +1793,121 @@
 
 
                     };
+
+                    // Initialize the form builder
+                    var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options); //new new
+
+
+                    
+
+
+
+                    
+
+
+
+
                     // Delayed call to ensure form fields have been rendered
                     setTimeout(function () {
+                        // ensureAllFieldsHaveDefaultGridClasses(); //New update 900 to make sure after data loads on reload of page those that ddont have a col md ill get a 12 in their class
                         applyGridClasses(JSON.parse(savedData)); // Parse JSON before applying classes
+
+                        // applyGridClassesToAllFields(); //new new
+
+applyGridClassesToAllFields();  // Apply general grid classes
+// enforceGridClassesForSpecificFields();  // Force specific fields to have correct classes
                     }, 500); // May need to adjust this delay based on your specific conditions
+
+                    
                 } else {
                     options = {
                         scrollToFieldOnAdd: false,
                         controlPosition: 'left',
                         dataType: 'json',
-                        fields: [{
+                        onAddField: function () {
+                            // Delay execution to allow the DOM to update
+                            setTimeout(function () {
+                                // Select all divs in .rendered-form
+                                const divs = document.querySelectorAll('.rendered-form > div');
+                                updateElementsSmoothly(divs); // Apply 'col-md-12' using the smooth update function
+                                console.log('col-md-12 applied where needed in .rendered-form');
+
+                                // Apply 'col-md-12' to the latest added form field in the .stage-wrap
+                                const latestField = document.querySelector('.stage-wrap .form-field:last-child');
+                                if (latestField && !latestField.className.includes('col-md-')) {
+                                    latestField.classList.add('col-md-12');
+                                    console.log('\'col-md-12\' added to the new form field in stage-wrap');
+                                }
+                            }, 100);
+                        },
+                        fields: [
+                            {
+                                type: "header",
+                                subtype: "h1",
+                                label: "Header Custom",
+                                className: "col-md-12"
+                            },
+                            {
+                                type: "paragraph",
+                                subtype: "p",
+                                label: "Paragraph Custom",
+                                className: "col-md-12"
+                            },
+                            {
+                                type: "checkbox-group",
+                                className: "col-md-12",
+                                required: false,
+                                label: "Checkbox Group Custom",
+                                toggle: false,
+                                inline: false,
+                                name: "checkbox-group-1718908772805-0",
+                                access: false,
+                                other: false,
+                                values: [
+                                {
+                                    label: "Option 1",
+                                    value: "option-1",
+                                    selected: true
+                                }
+                                ]
+                            },
+
+                            {
+                                type: "hidden",
+                                className: "col-md-12",
+                                label: "Hidden Custom",
+                                name: "hidden-1718908775509-0",
+                                access: false
+                            },
+
+                            {
+                                type: "radio-group",
+                                className: "col-md-12",
+                                required: false,
+                                label: "Radio Group Custom",
+                                inline: false,
+                                name: "radio-group-1718908781342-0",
+                                access: false,
+                                other: false,
+                                values: [
+                                {
+                                    label: "Option 1",
+                                    value: "option-1",
+                                    selected: false
+                                },
+                                {
+                                    label: "Option 2",
+                                    value: "option-2",
+                                    selected: false
+                                },
+                                {
+                                    label: "Option 3",
+                                    value: "option-3",
+                                    selected: false
+                                }
+                                ]
+                            },
+                            {
                                 label: "Email",
                                 className: "form-control",
                                 type: "text",
@@ -2047,14 +2310,64 @@
 
                     };
 
+
+                    // Initialize the form builder with default settings - new new
+                    var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
+
+                    // Optionally apply default classes after initialization - new new
+                    // setTimeout(function () {
+                    //     applyGridClassesToAllFields(); 
+                    // }, 500);
+
                 }
+
+
+
+
+                $(document).ready(function() {
+                        
+
+                        function hideDefaultControls() {
+                            // Hide default controls using CSS 'display' property
+                            $('li[data-type="header"]:not([data-type*="-"])').css('display', 'none');
+                            $('li[data-type="hidden"]:not([data-type*="-"])').css('display', 'none');
+                            $('li[data-type="checkbox-group"]:not([data-type*="-"])').css('display', 'none');
+                            $('li[data-type="paragraph"]:not([data-type*="-"])').css('display', 'none');
+                            $('li[data-type="radio-group"]:not([data-type*="-"])').css('display', 'none');
+                        }
+
+                        // Execute the function after the form builder has been initialized and rendered
+                        setTimeout(hideDefaultControls, 100);
+
+                        
+                    });
+
+
+                //new new function
+                // function applyGridClassesToAllFields() {
+                //     $('.stage-wrap .form-field').each(function () {
+                //         if (!this.className.includes('col-md-')) {
+                //             $(this).addClass('col-md-12');
+                //             console.log('Added "col-md-12" class to:', this);
+                //         }
+                //     });
+                // }
+
+
+                
+
+
+
+                
+
+
 
                 // end of 014 Huge Save and Load Data Update
 
 
 
 
-                var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options);
+                // var formBuilder = $(document.getElementById('fb-editor')).formBuilder(options); - original initialization before new new updates as this is likely to be redundant since it is now in both the if and else saved data scenarios above
 
                 //Update 014 This is Also Part of the Huge Auto Save and Load Update - Adds Bootstrap classes to the data that is saved also 
 
@@ -3351,6 +3664,29 @@
 
                 //Update 022 Adding An Autosave and Render To Occur On Every Change in the Stage-Wrap to auto show the current state of the rendered form
                 $(document).ready(function () {
+                    // Define the function to ensure default grid classes
+                    function ensureDefaultGridClasses() {
+                        $('#render-container .rendered-form > div').each(function() {
+                            if (!this.className.match(/\bcol-md-\d+/)) {
+                                $(this).addClass('col-md-12');
+                                console.log('Added "col-md-12" class to:', this);
+                            }
+                        });
+                    }
+
+                    //Make sure any form-field that doesnt already have a col set will automatically get col md 12 by default
+                    function ensureDefaultStageWrapClasses() {
+                        setTimeout(() => { // Delay the execution to ensure all elements are loaded
+                            $('.stage-wrap .form-field').each(function() {
+                                if (!this.className.match(/\bcol-md-\d+/)) {
+                                    $(this).addClass('col-md-12');
+                                    console.log('Added "col-md-12" class to:', this);
+                                }
+                            });
+                        }, 100); // 100 milliseconds delay
+                    }
+
+
                     function setupObserverWhenReady() {
                         const stageWrap = $('.stage-wrap').get(
                             0); // Get the native DOM element from jQuery object
@@ -3386,6 +3722,10 @@
                                     const transformedHTML = transformHTML(html);
                                     const wrappedContent = wrapContentWithFormTemplate(transformedHTML);
                                     $('#render-container').html(wrappedContent);
+
+                                    // Call to ensure default grid classes are applied
+                                    ensureDefaultGridClasses();
+                                   
                                 }
 
                                 // $('#copyHTMLBtn').show();
@@ -3404,6 +3744,7 @@
                     }
 
                     setupObserverWhenReady(); // Start the checking process
+                    // ensureDefaultStageWrapClasses(); // Apply default classes on page load
                 });
 
 
@@ -3600,51 +3941,48 @@
                 //End of 500
 
 
-                //Update 600 - Setting All Fields That Get Added To Col-MD-12 By Default
 
-                $(document).ready(function () {
-                    function setupObserver() {
-                        var stageWrap = document.querySelector('.stage-wrap');
+                //Update 1001 Hypothetically this could set all Header, Paragraph, Radio Groups, CheckBox Groups, Hidden Fields to default 12 
+                //You will just need to see if the loaded data on these if the user does try to set them with the other ui buttons for col-md that those take priority over this default setter
+                // $(document).ready(function() {
 
-                        if (stageWrap) {
-                            console.log('.stage-wrap found, setting up observer.');
-                            var observer = new MutationObserver(function (mutations) {
-                                mutations.forEach(function (mutation) {
-                                    if (mutation.addedNodes.length) {
-                                        mutation.addedNodes.forEach(function (node) {
-                                            if (node.nodeName === 'LI' && node
-                                                .classList.contains(
-                                                    'form-field')) {
-                                                node.classList.add('col-md-12');
-                                                console.log(
-                                                    `Added 'col-md-12' class to new field with ID: ${node.dataset.fieldId}`
-                                                    );
-                                            }
-                                        });
-                                    }
-                                });
-                            });
 
-                            var config = {
-                                childList: true
-                            };
+                //     function enforceGridClassesForSpecificFields() {
+                //         console.log('Enforcing grid classes for specific fields');
 
-                            observer.observe(stageWrap, config);
-                            console.log('Observer is now monitoring .stage-wrap.');
-                        } else {
-                            console.log('.stage-wrap not found, retrying in 500ms...');
-                            setTimeout(setupObserver, 500);
-                        }
-                    }
+                //         // Directly add 'col-md-12' to all specified fields
+                //         $('.stage-wrap .header-field, .stage-wrap .radio-group-field, .stage-wrap .paragraph-field, ' +
+                //         '.stage-wrap .checkbox-group-field, .stage-wrap .hidden-field').each(function() {
+                //             $(this).addClass('col-md-12');
+                //             console.log('Yo homie Set "col-md-12" for:', $(this).attr('class'));
+                //         });
+                //     }
 
-                    setupObserver(); // Start the checking and setup process
-                });
+
+                //     setTimeout(function () {
+                //         // Invoke the function to apply grid classes
+                //         enforceGridClassesForSpecificFields(); 
+                //     }, 100);
+
+                    
+                    
+
+                    
+                // });
 
 
 
-                //End of 600
+                //End of 1001
 
 
+                
+
+
+
+
+
+
+//UPdate 1000
 
 
 
@@ -3658,6 +3996,15 @@
         } //end of mainScript
 
         document.addEventListener('DOMContentLoaded', mainScript);
+
+
+
+        
+
+        
+
+
+
     </script>
 </body>
 

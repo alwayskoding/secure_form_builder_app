@@ -1865,6 +1865,21 @@ copyCssButton.addEventListener('click', function () {
 
             loadGlobalStyles(); // Load stored global styles on ready
         });
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const renderedFormDivs = document.querySelectorAll('.rendered-form > div');
+
+    renderedFormDivs.forEach(function(div) {
+        // Check if the div does not have any col-md-* class
+        if (!div.className.match(/\bcol-md-\d+\b/)) {
+            div.classList.add('col-md-12');
+            console.log('Added "col-md-12" to:', div);
+        }
+    });
+});
+
     </script>
 </body>
 
