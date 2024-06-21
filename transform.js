@@ -54,5 +54,10 @@ function transformHTML(inputHTML) {
         elem.setAttribute('pattern', '\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}');
     });
 
+    // Additional step to ensure no leading spaces in class attributes
+    doc.querySelectorAll('[class]').forEach(elem => {
+        elem.setAttribute('class', elem.getAttribute('class').trim());
+    });
+
     return doc.body.innerHTML;
 }

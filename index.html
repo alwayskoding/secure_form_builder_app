@@ -304,45 +304,46 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Check if there is recent activity (formData in localStorage)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Existing initialization code
+            updateLastSavedDisplay();
+        });
+    
+        // Function to update the last saved display
+        function updateLastSavedDisplay() {
             if (localStorage.getItem('formData')) {
-                // Show the div indicating recent activity
                 document.querySelector('.last_form_you_were_working_on').style.display = 'flex';
-
-                // Display the last saved datetime
                 const lastSavedDateTime = new Date(Number(localStorage.getItem('lastSavedDateTime')));
-                document.querySelector('.savedTime').textContent = lastSavedDateTime
-                    .toLocaleString(); // Display in a human-readable format
+                document.querySelector('.savedTime').textContent = lastSavedDateTime.toLocaleString();
             } else {
-                // Hide the div indicating recent activity
                 document.querySelector('.last_form_you_were_working_on').style.display = 'none';
             }
+        }
+    
+        // Event listener for pageshow to handle cache scenarios
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+                updateLastSavedDisplay();
+            }
         });
-
-        // If click on blank option, take to blank page using hash and clear localStorage
-        document.querySelector('.build_form_from_scratch').addEventListener('click', function () {
+    
+        // Existing event handlers for page interactions
+        document.querySelector('.build_form_from_scratch').addEventListener('click', function() {
             localStorage.clear();
             window.location.href = 'form_builder_app.html#blank';
         });
-
-        // If click on template, take to builder with template hash
-        document.querySelector('.build_form_from_template').addEventListener('click', function () {
+    
+        document.querySelector('.build_form_from_template').addEventListener('click', function() {
             window.location.href = 'form_builder_app.html#template';
         });
-
-        // If click on previousSave and localStorage has data, take to previousSave page without clearing localStorage
-        document.querySelector('.last_form_you_were_working_on').addEventListener('click', function () {
-            // Check if formData is present in localStorage
+    
+        document.querySelector('.last_form_you_were_working_on').addEventListener('click', function() {
             if (localStorage.getItem('formData')) {
-                // If present, redirect to the blank page without clearing localStorage
                 window.location.href = 'form_builder_app.html#blank';
-            } else {
-                // If not present, do nothing
-                // Alternatively, you can redirect to a default page or display a message
             }
         });
     </script>
+    
 
 
 

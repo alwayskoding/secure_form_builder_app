@@ -1539,6 +1539,11 @@
                                                         mailboxInput.value = window
                                                             .mailboxID;
                                                     }
+                                                } else {
+                                                    window.isMailboxForm = false; // Reset the mailbox form state if canceled
+                                                    toggleButton.classList.remove('mailbox');
+                                                    toggleButton.classList.add('normal');
+                                                    toggleButton.title = 'Convert To Mailbox Form';
                                                 }
                                             });
                                         } else {
@@ -2063,6 +2068,11 @@ applyGridClassesToAllFields();  // Apply general grid classes
                                                         mailboxInput.value = window
                                                             .mailboxID;
                                                     }
+                                                } else {
+                                                    window.isMailboxForm = false; // Reset the mailbox form state if canceled
+                                                    toggleButton.classList.remove('mailbox');
+                                                    toggleButton.classList.add('normal');
+                                                    toggleButton.title = 'Convert To Mailbox Form';
                                                 }
                                             });
                                         } else {
