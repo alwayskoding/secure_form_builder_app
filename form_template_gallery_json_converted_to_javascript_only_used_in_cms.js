@@ -1,0 +1,119 @@
+
+var initialTemplatesData = [
+    {
+        "category": "User Forms",
+        "templates": [
+            {
+                "id": "user",
+                "title": "New User Form",
+                "imageURL": "path/to/image_card-img1.jpg",
+                "description": "Form for new users."
+            },
+            {
+                "id": "user-agreement",
+                "title": "User Agreement Form",
+                "imageURL": "path/to/image_card-img1-a.jpg",
+                "description": "Agreement for new users."
+            },
+            {
+                "id": "medical-provider",
+                "title": "Medical Provider Form",
+                "imageURL": "path/to/image_card-img1-b.jpg",
+                "description": "Form for medical providers."
+            },
+            {
+                "id": "release",
+                "title": "Release Form",
+                "imageURL": "path/to/image_card-img1-c.jpg",
+                "description": "Release form for procedures."
+            }
+        ]
+    },
+    {
+        "category": "Terms and Agreements",
+        "templates": [
+            {
+                "id": "agreement",
+                "title": "Agreement Form",
+                "imageURL": "path/to/image_card-img2.jpg",
+                "description": "General agreement form."
+            },
+            {
+                "id": "terms-of-liability",
+                "title": "Terms of Liability Form",
+                "imageURL": "path/to/image_card-img2.jpg",
+                "description": "Terms of liability details."
+            },
+            {
+                "id": "approval",
+                "title": "Approval Form",
+                "imageURL": "path/to/image_card-img2.jpg",
+                "description": "Form for obtaining approvals."
+            },
+            {
+                "id": "doctor-summary",
+                "title": "Doctor Summary Form",
+                "imageURL": "path/to/image_card-img2.jpg",
+                "description": "Summary form for doctors."
+            }
+        ]
+    },
+    {
+        "category": "Complaints and Issues",
+        "templates": [
+            {
+                "id": "complaint",
+                "title": "Complaint Form",
+                "imageURL": "path/to/image_card-img3.jpg",
+                "description": "Form to register complaints."
+            },
+            {
+                "id": "issues",
+                "title": "Issues Form",
+                "imageURL": "path/to/image_card-img3.jpg",
+                "description": "Form to report issues."
+            },
+            {
+                "id": "reassurance",
+                "title": "Reassurance Form",
+                "imageURL": "path/to/image_card-img3.jpg",
+                "description": "Form for obtaining reassurance."
+            },
+            {
+                "id": "qa",
+                "title": "Q&A Form",
+                "imageURL": "path/to/image_card-img3.jpg",
+                "description": "Question and answer form."
+            }
+        ]
+    },
+    {
+        "category": "Registration and Membership",
+        "templates": [
+            {
+                "id": "registration",
+                "title": "Registration Form",
+                "imageURL": "path/to/image_card-img4.jpg",
+                "description": "Form for new member registration."
+            },
+            {
+                "id": "new-member",
+                "title": "New Member Form",
+                "imageURL": "path/to/image_card-img4.jpg",
+                "description": "Form for new members to fill out."
+            },
+            {
+                "id": "resolution",
+                "title": "Resolution Form",
+                "imageURL": "path/to/image_card-img4.jpg",
+                "description": "Form for conflict resolution."
+            },
+            {
+                "id": "medicaid",
+                "title": "Medicaid Form",
+                "imageURL": "path/to/image_card-img4.jpg",
+                "description": "Form for Medicaid applications."
+            }
+        ]
+    }
+];

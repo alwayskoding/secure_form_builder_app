@@ -19,20 +19,26 @@ window.addAttachmentToForm = function(content) {
 
     let attachmentSection = '';
     if (window.hasAttachment) {
-        attachmentSection = '<div class="attachments-titleContainer"><div class="subtitle attachments-title">Secure Attachments</div> <span class="attachments-title-hint">Max 20 files, 126MB file size</span></div>' +
+        attachmentSection = '<div class="attachments-titleContainer col-md-12"><div class="subtitle attachments-title">Secure Attachments</div> <span class="attachments-title-hint">Max 20 files, 126MB file size</span></div>' +
             '<script src="/lib/secureForms/attachments.js"></script>' +
             '<div id="sf:attachmentsContainer"></div>' +
-            '<button id="sf:addAttachment" class="btn">Add Attachment</button>';
+            '<div class="col-md-12">' +  // Wrap button in a div with class col-md-12
+            '<button id="sf:addAttachment" class="btn">Add Attachment</button>' +
+            '</div>';
     }
 
     const formContent = content + attachmentSection;
+
+    const formEnd = '</form>';
+
+    return formStart + formContent + formEnd;
 
     // const formEnd = '<div class="submit_btn">' +
     //     '<input type="submit" value="Submit">' +
     //     '</div></form>';
 
     // return formStart + formContent + formEnd;
-    return formStart + formContent;
+    // return formStart + formContent;
 };
 
 
