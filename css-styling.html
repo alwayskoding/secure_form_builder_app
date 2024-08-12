@@ -1115,6 +1115,8 @@
         <button id="toggleButton" class="button">Show Code</button>
         <button id="copyHtmlButton" class="button">Copy HTML</button>
         <button id="copyCssButton" class="button">Copy CSS</button>
+        <button id="copyAllCodeButton" class="button">Copy All Form Code</button>
+
     </div>
     <div class="outer_container_for_styles_page" style="display: flex; height: 100vh;">
         <div id="htmlPreview" style="width: 50%; overflow: auto;"></div>
@@ -1878,6 +1880,70 @@ copyCssButton.addEventListener('click', function () {
             console.log('Added "col-md-12" to:', div);
         }
     });
+});
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    var copyAllCodeButton = document.getElementById('copyAllCodeButton');
+
+    copyAllCodeButton.addEventListener('click', function () {
+        // Include Bootstrap link and custom box-sizing style
+        var bootstrapLink = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">\n';
+        var boxSizingStyle = '<style>\n.ht-legacy *, .modal * {\nbox-sizing: border-box !important;\n}\n</style>\n';
+
+        // Get the current HTML code from the preview
+        var htmlPreview = document.getElementById('htmlPreview').innerHTML;
+        var rawHTML = localStorage.getItem('renderedHTML') || htmlPreview;
+
+        // Get the existing CSS from the independent, global, and editor styles
+        var cssFromIndependent = document.getElementById('dynamicStylesIndependent')?.innerHTML || "";
+        var cssFromGlobal = document.getElementById('dynamicStylesGlobal')?.innerHTML || "";
+        var cssFromEditor = document.getElementById('editorStyles')?.innerHTML || "";
+
+        // Combine and clean the CSS
+        var allCss = cssFromIndependent + "\n" + cssFromGlobal + "\n" + cssFromEditor;
+        var cleanedCss = cleanUpCss(allCss);
+
+        // Combine everything into the final code to be copied
+        var finalCode = bootstrapLink + boxSizingStyle + '<style>\n' + cleanedCss + '</style>\n' + rawHTML;
+
+        // Create a temporary textarea to copy the code
+        var temporaryTextarea = document.createElement('textarea');
+        document.body.appendChild(temporaryTextarea);
+        temporaryTextarea.value = finalCode;
+        temporaryTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(temporaryTextarea);
+
+        alert('All form code copied to clipboard!');
+    });
+
+    // Function to clean up CSS (same as in your existing code)
+    function cleanUpCss(cssString) {
+        const cssRules = cssString.split("}");
+        const cleanedRules = cssRules.map(rule => {
+            const parts = rule.split("{");
+            if (parts.length < 2) return "";
+            const declarations = parts[1]
+                .split(";")
+                .map(decl => decl.trim())
+                .filter(decl => {
+                    const colonIndex = decl.indexOf(":");
+                    if (colonIndex === -1) return false;
+                    const property = decl.substring(0, colonIndex).trim();
+                    const value = decl.substring(colonIndex + 1).trim();
+                    return value !== "";
+                })
+                .join("; ");
+            if (declarations) {
+                return `${parts[0].trim()} { ${declarations}; }`;
+            }
+            return "";
+        }).filter(rule => rule !== "");
+        return cleanedRules.join(" ");
+    }
 });
 
     </script>
