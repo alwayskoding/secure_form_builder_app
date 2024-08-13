@@ -6,12 +6,17 @@
     <title>CSS Styling</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-css.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify-html.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
     <style>
         #buttonPanel {
             display: flex;
@@ -1949,6 +1954,18 @@ copyCssButton.addEventListener('click', function () {
 });
 
     </script>
+
+
+<script>
+    $(document).ready(function() {
+        var editor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+            mode: "css",
+            lineNumbers: true,
+            theme: "default", // You can change the theme if desired
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+        });
+    });
+</script>
 </body>
 
 </html>
