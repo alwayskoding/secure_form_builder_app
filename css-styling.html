@@ -2052,19 +2052,19 @@ copyCssButton.addEventListener('click', function () {
     ];
 
     $('#cssEditor').on('input', function(e) {
-        var inputText = this.value;
+        var inputText = $(this).val();
         var cursorPosition = this.selectionStart;
 
         // Get the part of the text before the cursor
         var textBeforeCursor = inputText.substring(0, cursorPosition);
-        var lastWord = textBeforeCursor.split(/\s|;|:/).pop(); // Get the last word
+        var lastWord = textBeforeCursor.split(/[\s:;]/).pop(); // Get the last word before space, colon, or semicolon
 
         // Check if the last word matches any CSS properties
         var matches = cssProperties.filter(function(prop) {
             return prop.startsWith(lastWord);
         });
 
-        // Auto-complete if there's only one match and it hasn't already been completed
+        // Auto-complete if there's only one match
         if (matches.length === 1 && lastWord !== matches[0]) {
             var match = matches[0];
             var newValue = inputText.substring(0, cursorPosition - lastWord.length) + match + inputText.substring(cursorPosition);
@@ -2088,7 +2088,6 @@ copyCssButton.addEventListener('click', function () {
             const end = this.selectionEnd;
             const value = $(this).val();
 
-            // Set textarea value to: text before caret + tab + text after caret
             $(this).val(value.substring(0, start) + '  ' + value.substring(end)); // Two spaces for tab
 
             // Put caret at right position again
