@@ -1987,32 +1987,34 @@ copyCssButton.addEventListener('click', function () {
 
     </script>
     
+    <!--Sync TextArea aka cssEditor with Prism .highlighted code its pre code stuff-->
     <script>
         $(document).ready(function() {
-    // Synchronize the textarea input with Prism's highlighted code
-    $('#cssEditor').on('input', function() {
-        var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        
-        // Debugging to check content
-        console.log("Textarea content: ", $(this).val());
-        console.log("Escaped code content: ", code);
+            // Synchronize the textarea input with Prism's highlighted code
+            $('#cssEditor').on('input', function() {
+                var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                // Debugging to check content
+                console.log("Textarea content: ", $(this).val());
+                console.log("Escaped code content: ", code);
 
-        // Update the Prism code block
-        $('#highlightedCode code').html(code);
+                // Update the Prism code block
+                $('#highlightedCode code').html(code);
 
-        // Re-run Prism to highlight the new content
-        Prism.highlightElement($('#highlightedCode code')[0]);
-    });
+                // Re-run Prism to highlight the new content
+                Prism.highlightElement($('#highlightedCode code')[0]);
+            });
 
-    // Initial synchronization on page load
-    var initialCode = $('#cssEditor').val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    $('#highlightedCode code').html(initialCode);
-    Prism.highlightElement($('#highlightedCode code')[0]);
-});
+            // Initial synchronization on page load
+            var initialCode = $('#cssEditor').val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            $('#highlightedCode code').html(initialCode);
+            Prism.highlightElement($('#highlightedCode code')[0]);
+        });
 
 
     </script>
 
+<!--Script below handles adding tabbing feature to cssEditor while typing-->
     <script>
         $(document).ready(function() {
         // Define the tab size (number of spaces)
@@ -2036,6 +2038,35 @@ copyCssButton.addEventListener('click', function () {
         });
     });
 
+
+    </script>
+
+<!--Script below adds auto completion inside of the cssEditor-->
+    <script>
+        $(document).ready(function() {
+            var cssProperties = [
+                "color", "background-color", "font-size", "margin", "padding", 
+                "border", "width", "height", "display", "position", "top", "right",
+                "bottom", "left", "z-index", "opacity", "visibility", "overflow", 
+                "text-align", "vertical-align", "flex", "grid", "transform", "transition",
+                "box-shadow", "border-radius"
+            ];
+
+            $('#cssEditor').on('input', function() {
+                var inputText = $(this).val();
+                var lastWord = inputText.split(/\s/).pop();
+
+                // Basic auto-completion by finding matches in the cssProperties array
+                var matches = cssProperties.filter(function(prop) {
+                    return prop.startsWith(lastWord);
+                });
+
+                if (matches.length === 1) {
+                    var replacement = matches[0].substring(lastWord.length);
+                    $(this).val(inputText + replacement);
+                }
+            });
+        });
 
     </script>
 
