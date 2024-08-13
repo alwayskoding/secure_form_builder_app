@@ -1990,36 +1990,27 @@ copyCssButton.addEventListener('click', function () {
     
     <script>
         $(document).ready(function() {
-    // Handle indentation when Tab is pressed
-    $('#cssEditor').on('keydown', function(e) {
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            const start = this.selectionStart;
-            const end = this.selectionEnd;
-            const value = $(this).val();
-
-            // Set textarea value to: text before caret + tab + text after caret
-            $(this).val(value.substring(0, start) + '\t' + value.substring(end));
-
-            // Put caret at right position again
-            this.selectionStart = this.selectionEnd = start + 1;
-        }
-    });
-
     // Synchronize the textarea input with Prism's highlighted code
     $('#cssEditor').on('input', function() {
         var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        $('#prism-code').html(code);
+        
+        // Debugging to check content
+        console.log("Textarea content: ", $(this).val());
+        console.log("Escaped code content: ", code);
+
+        // Update the Prism code block
+        $('#highlightedCode code').html(code);
 
         // Re-run Prism to highlight the new content
-        Prism.highlightElement($('#prism-code')[0]);
+        Prism.highlightElement($('#highlightedCode code')[0]);
     });
 
-    // Initial call to update Prism's highlighted code on page load
+    // Initial synchronization on page load
     var initialCode = $('#cssEditor').val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    $('#prism-code').html(initialCode);
-    Prism.highlightElement($('#prism-code')[0]);
+    $('#highlightedCode code').html(initialCode);
+    Prism.highlightElement($('#highlightedCode code')[0]);
 });
+
 
     </script>
 
