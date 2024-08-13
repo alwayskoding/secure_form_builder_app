@@ -53,9 +53,9 @@
 
         }
 
-        /* #cssEditor {
+        #cssEditor {
             border: none;
-            background-color: #232222;
+            background-color: transparent;
             color: #adb6ff;
             padding: 20px;
             font-size: 13px;
@@ -64,15 +64,12 @@
             top: 0;
             height: 100vh;
             width: 33% !important;
-        } */
+            z-index: 2;
+            color: transparent;
+            caret-color: white;
+        }
 
-        #cssEditor {
-    position: relative;
-    z-index: 2;
-    background-color: transparent;
-    color: white;
-    caret-color: white; /* Make caret visible */
-}
+        
 
         #copyHtmlButton {
             position: relative;
@@ -1131,10 +1128,10 @@
 
 
         #highlightedCode {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+            position: absolute;
+    top: 130px;
+    right: -21px;
+    width: 50%;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -1144,6 +1141,7 @@
     color: transparent;
     z-index: 1;
     white-space: pre-wrap; /* To ensure it wraps like a textarea */
+    background-color: #232222;
 }
     </style>
 </head>
