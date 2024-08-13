@@ -2015,20 +2015,27 @@ copyCssButton.addEventListener('click', function () {
 
     <script>
         $(document).ready(function() {
-            $('#cssEditor').on('keydown', function(e) {
-                if (e.key === 'Tab') {
-                    e.preventDefault();
-                    const start = this.selectionStart;
-                    const end = this.selectionEnd;
+        // Define the tab size (number of spaces)
+        var tabSize = 2;  // You can adjust this number to your liking
 
-                    // Insert the tab character at the current cursor position
-                    $(this).val($(this).val().substring(0, start) + "\t" + $(this).val().substring(end));
+        // Create the tab string based on the defined tab size
+        var tabString = ' '.repeat(tabSize);
 
-                    // Move the cursor to the correct position after the tab
-                    this.selectionStart = this.selectionEnd = start + 1;
-                }
-            });
+        $('#cssEditor').on('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+
+                // Insert the tab string at the current cursor position
+                $(this).val($(this).val().substring(0, start) + tabString + $(this).val().substring(end));
+
+                // Move the cursor to the correct position after the tab
+                this.selectionStart = this.selectionEnd = start + tabSize;
+            }
         });
+    });
+
 
     </script>
 
