@@ -2045,28 +2045,61 @@ copyCssButton.addEventListener('click', function () {
     <script>
         $(document).ready(function() {
             var cssProperties = [
-                "color", "background-color", "font-size", "margin", "padding", 
-                "border", "width", "height", "display", "position", "top", "right",
-                "bottom", "left", "z-index", "opacity", "visibility", "overflow", 
-                "text-align", "vertical-align", "flex", "grid", "transform", "transition",
-                "box-shadow", "border-radius"
+                "color", "background-color", "border", "border-radius", "margin", 
+                "margin-top", "margin-right", "margin-bottom", "margin-left", 
+                "padding", "padding-top", "padding-right", "padding-bottom", 
+                "padding-left", "width", "height", "font-size", "font-family"
+                // You can add more CSS properties as needed
             ];
 
-            $('#cssEditor').on('input', function() {
-                var inputText = $(this).val();
-                var lastWord = inputText.split(/\s/).pop();
+            var currentWord = "";
 
-                // Basic auto-completion by finding matches in the cssProperties array
+            $('#cssEditor').on('input', function(e) {
+                var inputText = this.value;
+
+                // Get the current word being typed
+                var lastChar = inputText.slice(-1);
+                if (/\s/.test(lastChar) || lastChar === ":") {
+                    currentWord = "";
+                } else {
+                    currentWord += lastChar;
+                }
+
+                // Check if current word matches any CSS properties
                 var matches = cssProperties.filter(function(prop) {
-                    return prop.startsWith(lastWord);
+                    return prop.startsWith(currentWord);
                 });
 
+                // Auto-complete if there's only one match
                 if (matches.length === 1) {
-                    var replacement = matches[0].substring(lastWord.length);
-                    $(this).val(inputText + replacement);
+                    var match = matches[0];
+                    this.value = inputText.slice(0, -currentWord.length) + match;
+                    currentWord = match;
+                }
+
+                // Update Prism highlighting
+                var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                $('#highlightedCode code').html(code);
+                Prism.highlightElement($('#highlightedCode code')[0]);
+            });
+
+            // Handle tab for indentation
+            $('#cssEditor').on('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    const value = $(this).val();
+
+                    // Set textarea value to: text before caret + tab + text after caret
+                    $(this).val(value.substring(0, start) + '  ' + value.substring(end)); // Two spaces for tab
+
+                    // Put caret at right position again
+                    this.selectionStart = this.selectionEnd = start + 2; // Move caret by two spaces
                 }
             });
         });
+
 
     </script>
 
