@@ -55,18 +55,20 @@
 
         #cssEditor {
             border: none;
-            background-color: transparent;
-            color: #adb6ff;
-            padding: 20px;
-            font-size: 13px;
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100vh;
-            width: 33% !important;
-            z-index: 2;
-            color: transparent;
-            caret-color: white;
+    background-color: transparent;
+    padding: 20px;
+    font-size: 13px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 33% !important;
+    z-index: 2;
+    color: transparent;
+    caret-color: white;
+    line-height: 1.5; /* Match the line-height with highlightedCode */
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Use the same font family */
+    overflow: hidden;
         }
 
         
@@ -1129,18 +1131,18 @@
 
         #highlightedCode {
             padding: 20px;
-            font-size: 13px;
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100vh;
-            width: 33% !important;
+    font-size: 13px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 33% !important;
     overflow: hidden;
     pointer-events: none;
-    color: transparent;
     z-index: 1;
-    white-space: pre-wrap; /* To ensure it wraps like a textarea */
+    white-space: pre-wrap; /* Ensures it wraps like a textarea */
     background-color: #232222;
+    line-height: 1.5; /* Adjust this if needed to match textarea line height */
 }
     </style>
 </head>
