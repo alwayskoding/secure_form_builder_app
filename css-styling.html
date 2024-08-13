@@ -2044,61 +2044,58 @@ copyCssButton.addEventListener('click', function () {
 <!--Script below adds auto completion inside of the cssEditor-->
     <script>
         $(document).ready(function() {
-            var cssProperties = [
-                "color", "background-color", "border", "border-radius", "margin", 
-                "margin-top", "margin-right", "margin-bottom", "margin-left", 
-                "padding", "padding-top", "padding-right", "padding-bottom", 
-                "padding-left", "width", "height", "font-size", "font-family"
-                // You can add more CSS properties as needed
-            ];
+    var cssProperties = [
+        "color", "background-color", "border", "border-radius", "margin", 
+        "margin-top", "margin-right", "margin-bottom", "margin-left", 
+        "padding", "padding-top", "padding-right", "padding-bottom", 
+        "padding-left", "width", "height", "font-size", "font-family"
+    ];
 
-            var currentWord = "";
+    $('#cssEditor').on('input', function(e) {
+        var inputText = this.value;
+        var cursorPosition = this.selectionStart;
 
-            $('#cssEditor').on('input', function(e) {
-                var inputText = this.value;
+        // Get the part of the text before the cursor
+        var textBeforeCursor = inputText.substring(0, cursorPosition);
+        var lastWord = textBeforeCursor.split(/\s|;|:/).pop(); // Get the last word
 
-                // Get the current word being typed
-                var lastChar = inputText.slice(-1);
-                if (/\s/.test(lastChar) || lastChar === ":") {
-                    currentWord = "";
-                } else {
-                    currentWord += lastChar;
-                }
-
-                // Check if current word matches any CSS properties
-                var matches = cssProperties.filter(function(prop) {
-                    return prop.startsWith(currentWord);
-                });
-
-                // Auto-complete if there's only one match
-                if (matches.length === 1) {
-                    var match = matches[0];
-                    this.value = inputText.slice(0, -currentWord.length) + match;
-                    currentWord = match;
-                }
-
-                // Update Prism highlighting
-                var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                $('#highlightedCode code').html(code);
-                Prism.highlightElement($('#highlightedCode code')[0]);
-            });
-
-            // Handle tab for indentation
-            $('#cssEditor').on('keydown', function(e) {
-                if (e.key === 'Tab') {
-                    e.preventDefault();
-                    const start = this.selectionStart;
-                    const end = this.selectionEnd;
-                    const value = $(this).val();
-
-                    // Set textarea value to: text before caret + tab + text after caret
-                    $(this).val(value.substring(0, start) + '  ' + value.substring(end)); // Two spaces for tab
-
-                    // Put caret at right position again
-                    this.selectionStart = this.selectionEnd = start + 2; // Move caret by two spaces
-                }
-            });
+        // Check if the last word matches any CSS properties
+        var matches = cssProperties.filter(function(prop) {
+            return prop.startsWith(lastWord);
         });
+
+        // Auto-complete if there's only one match and it hasn't already been completed
+        if (matches.length === 1 && lastWord !== matches[0]) {
+            var match = matches[0];
+            var newValue = inputText.substring(0, cursorPosition - lastWord.length) + match + inputText.substring(cursorPosition);
+            $(this).val(newValue);
+            
+            // Update the cursor position
+            this.selectionStart = this.selectionEnd = cursorPosition + (match.length - lastWord.length);
+        }
+
+        // Update Prism highlighting
+        var code = $(this).val().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        $('#highlightedCode code').html(code);
+        Prism.highlightElement($('#highlightedCode code')[0]);
+    });
+
+    // Handle tab for indentation
+    $('#cssEditor').on('keydown', function(e) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            const value = $(this).val();
+
+            // Set textarea value to: text before caret + tab + text after caret
+            $(this).val(value.substring(0, start) + '  ' + value.substring(end)); // Two spaces for tab
+
+            // Put caret at right position again
+            this.selectionStart = this.selectionEnd = start + 2; // Move caret by two spaces
+        }
+    });
+});
 
 
     </script>
